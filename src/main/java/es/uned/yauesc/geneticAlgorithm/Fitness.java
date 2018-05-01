@@ -1,5 +1,5 @@
 package es.uned.yauesc.geneticAlgorithm;
 
-public interface Fitness {
+public interface Fitness extends Comparable<Fitness> {
 
 }

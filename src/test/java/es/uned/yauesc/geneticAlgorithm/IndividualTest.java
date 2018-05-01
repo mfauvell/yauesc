@@ -80,6 +80,29 @@ class IndividualTest {
 	public void testExcpetionIfGetFitnessAndIsNotEvaluated() {
 		Individual individual = new Individual(GENOTYPE);
 		
-		assertThrows(UnsupportedOperationException.class,()->{individual.getFitness();},"Here should be throw a UnsupportedOperationException because evaluate is false");
+		assertThrows(UnsupportedOperationException.class,()->{individual.getFitness();},"Here should be throw a UnsupportedOperationException because evaluated is false");
 	}
+	
+	@Test
+	public void testCompareTwoIndividuals() {
+		Individual bestIndividual = new Individual(GENOTYPE);
+		Individual worstIndividual = new Individual(OTHERGENOTYPE);
+		Individual equealBestIndividual = new Individual(GENOTYPE);
+		
+		Fitness bestFitness = mock(Fitness.class);
+		Fitness worstFitness = mock(Fitness.class);
+		
+		when(bestFitness.compareTo(worstFitness)).thenReturn(1);
+		when(bestFitness.compareTo(bestFitness)).thenReturn(0);
+		when(worstFitness.compareTo(bestFitness)).thenReturn(-1);
+		
+		bestIndividual.setFitness(bestFitness);
+		worstIndividual.setFitness(worstFitness);
+		equealBestIndividual.setFitness(bestFitness);
+		
+		assertThat(bestIndividual.compareTo(worstIndividual)).isGreaterThan(0);
+		assertThat(bestIndividual.compareTo(equealBestIndividual)).isEqualTo(0);
+		assertThat(worstIndividual.compareTo(bestIndividual)).isLessThan(0);
+	}
+	
 }
