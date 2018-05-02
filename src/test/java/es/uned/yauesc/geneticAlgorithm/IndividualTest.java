@@ -6,7 +6,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.Test;
 
-class IndividualTest {
+public class IndividualTest {
 
 	private static final int[] GENOTYPE = {0,1,2,3,4,5}; 
 	private static final int[] OTHERGENOTYPE = {6,7,8,9,10,11}; 
@@ -77,7 +77,7 @@ class IndividualTest {
 	}
 	
 	@Test
-	public void testExcpetionIfGetFitnessAndIsNotEvaluated() {
+	public void testExceptionIfGetFitnessAndIsNotEvaluated() {
 		Individual individual = new Individual(GENOTYPE);
 		
 		assertThrows(UnsupportedOperationException.class,()->{individual.getFitness();},"Here should be throw a UnsupportedOperationException because evaluated is false");
