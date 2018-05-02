@@ -16,6 +16,7 @@ public class PopulationTest {
 	private static Collection<Individual> collectionThreeBestIndividuals;
 	private static Collection<Individual> collectionSortedIndividuals;
 	private static Collection<Individual> collectionIndividualsOther;
+	private static Collection<Individual> collectionSortedIndividualsOther;
 	
 	@BeforeAll
 	public static void setUp() {
@@ -61,35 +62,31 @@ public class PopulationTest {
 		collectionIndividualsOther.add(fourthIndividual);
 		collectionIndividualsOther.add(thirdIndividual);
 		collectionIndividualsOther.add(secondIndividual);
+		
+		collectionSortedIndividualsOther = new ArrayList<Individual>();
+		collectionSortedIndividualsOther.add(firstIndividual);
+		collectionSortedIndividualsOther.add(firstIndividual);
+		collectionSortedIndividualsOther.add(secondIndividual);
+		collectionSortedIndividualsOther.add(thirdIndividual);
 	}
 
 	@Test
-	public void constructorStaticSizeShouldSetIndividualsAndSizeOfPopulation() {
-		Population population;
-		try {
-			population = new Population(collectionIndividuals);
-			
-			assertThat(population.getAllIndividual()).isEqualTo(collectionSortedIndividuals);
-			assertThat(population.getSize()).isEqualTo(collectionSortedIndividuals.size());
-		} catch (IllegalParameterValueCheckedException e) {
-			e.printStackTrace();
-		}
+	public void constructorStaticSizeShouldSetIndividualsAndSizeOfPopulation() throws IllegalParameterValueCheckedException {
+		Population population = new Population(collectionIndividuals);
+		assertThat(population.getAllIndividual()).isEqualTo(collectionSortedIndividuals);
+		assertThat(population.getSize()).isEqualTo(collectionSortedIndividuals.size());
 	}
 	
 	@Test
-	public void constructorDynamicSizeShouldSetIndividualsAndSizeMaxMinOfPopulation() {
+	public void constructorDynamicSizeShouldSetIndividualsAndSizeMaxMinOfPopulation() throws IllegalParameterValueCheckedException {
 		int MAX = 6;
 		int MIN = 2;
-		Population population;
-		try {
-			population = new Population(collectionIndividuals, MAX, MIN);
-			assertThat(population.getAllIndividual()).isEqualTo(collectionSortedIndividuals);
-			assertThat(population.getSize()).isEqualTo(collectionSortedIndividuals.size());
-			assertThat(population.getMaxSize()).isEqualTo(MAX);
-			assertThat(population.getMinSize()).isEqualTo(MIN);
-		} catch (IllegalParameterValueCheckedException e) {
-			e.printStackTrace();
-		}
+		Population population = new Population(collectionIndividuals, MAX, MIN);
+		
+		assertThat(population.getAllIndividual()).isEqualTo(collectionSortedIndividuals);
+		assertThat(population.getSize()).isEqualTo(collectionSortedIndividuals.size());
+		assertThat(population.getMaxSize()).isEqualTo(MAX);
+		assertThat(population.getMinSize()).isEqualTo(MIN);
 	}
 	
 	@Test
@@ -111,41 +108,76 @@ public class PopulationTest {
 	}
 	
 	@Test
-	public void testGetThreeBestIndividuals() {
-		Population population;
-		try {
-			population = new Population(collectionIndividuals);
+	public void testGetThreeBestIndividuals() throws IllegalParameterValueCheckedException {
+		Population population = new Population(collectionIndividuals);
 			
-			assertThat(population.getBestIndividual(3)).isEqualTo(collectionThreeBestIndividuals);
-		} catch (IllegalParameterValueCheckedException e) {
-			e.printStackTrace();
-		}
+		assertThat(population.getBestIndividual(3)).isEqualTo(collectionThreeBestIndividuals);
 	}
 	
 	@Test
-	public void testGetAllInvidiualsIfNumberBestIndividualsGreaterSize() {
-		Population population;
-		try {
-			population = new Population(collectionIndividuals);
+	public void testGetAllInvidiualsIfNumberBestIndividualsGreaterSize() throws IllegalParameterValueCheckedException {
+		Population population = new Population(collectionIndividuals);
 			
-			assertThat(population.getBestIndividual(5)).isEqualTo(collectionSortedIndividuals);
-		} catch (IllegalParameterValueCheckedException e) {
-			e.printStackTrace();
-		}
+		assertThat(population.getBestIndividual(5)).isEqualTo(collectionSortedIndividuals);
 	}
 	
 	@Test
-	public void testSubstituteAllIndividuals() {
-		Population population;
-		try {
-			population = new Population(collectionIndividualsOther);
+	public void testSubstituteAllIndividuals() throws IllegalParameterValueCheckedException {
+		Population population = new Population(collectionIndividualsOther);
 			
-			population.substituteAllIndividual(collectionIndividuals);
+		population.substituteAllIndividual(collectionIndividuals);
 			
-			assertThat(population.getAllIndividual()).isEqualTo(collectionSortedIndividuals);
-		} catch (IllegalParameterValueCheckedException e) {
-			e.printStackTrace();
-		}
+		assertThat(population.getAllIndividual()).isEqualTo(collectionSortedIndividuals);
+	}
+	
+	@Test
+	public void testSubstituteAllIndividualsNumberLowerThanMinThrowException () throws IllegalParameterValueCheckedException {
+		int MIN = 4;
+		int MAX = 5;
+		Population population = new Population(collectionIndividualsOther, MAX, MIN);
+		
+		assertThrows(IllegalArgumentException.class, ()->{population.substituteAllIndividual(collectionThreeBestIndividuals); }, 
+					"Must be throw IllegalArgumentException because new individuals are lower than MIN");
+	}
+	
+	@Test
+	public void testSubstituteAllIndividualsNumberGreaterThanMaxThrowException () throws IllegalParameterValueCheckedException {
+		int MIN = 3;
+		int MAX = 3;
+		Population population = new Population(collectionThreeBestIndividuals, MAX, MIN);
+		
+		assertThrows(IllegalArgumentException.class, ()->{population.substituteAllIndividual(collectionIndividuals); }, 
+					"Must be throw IllegalArgumentException because new individuals are greater than MAX");
+	}
+	
+	@Test
+	public void testSubstituteThreeWorstIndividuals() throws IllegalParameterValueCheckedException {
+		Population population = new Population(collectionIndividuals);
+		
+		population.substituteWorstIndividual(collectionThreeBestIndividuals);
+			
+		assertThat(population.getAllIndividual()).isEqualTo(collectionSortedIndividualsOther);
+	}
+	
+	@Test
+	public void testSubstituteWorstIndividualsNumberGreaterThanMaxThrowException() throws IllegalParameterValueCheckedException {
+		int MIN = 3;
+		int MAX = 3;
+		Population population = new Population(collectionThreeBestIndividuals, MAX, MIN);
+		
+		assertThrows(IllegalArgumentException.class, ()->{population.substituteWorstIndividual(collectionIndividuals); }, 
+					"Must be throw IllegalArgumentException because new substitute individuals are greater than MAX");
+	}
+	
+	@Test
+	public void testSubstituteWorstIndividualsNumberGreaterThanSizeButLowerThanMax () throws IllegalParameterValueCheckedException {
+		int MIN = 3;
+		int MAX = 4;
+		Population population = new Population(collectionThreeBestIndividuals, MAX, MIN);
+		
+		population.substituteWorstIndividual(collectionIndividuals);
+		
+		assertThat(population.getAllIndividual()).isEqualTo(collectionSortedIndividuals);
 	}
 	
 }

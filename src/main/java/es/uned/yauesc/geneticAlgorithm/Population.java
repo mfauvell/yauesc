@@ -20,8 +20,7 @@ public class Population {
 			throw new IllegalParameterValueCheckedException("Max value must be greater or equal than population initial size.");
 		} else {
 			individuals = new ArrayList<Individual>(collectionIndividuals);
-			Collections.sort(individuals);
-			Collections.reverse(individuals);
+			sortIndividuals();
 			this.size = size;
 			this.max = max;
 			this.min = min;
@@ -30,6 +29,14 @@ public class Population {
 	
 	public Population(Collection<Individual> collectionIndividuals) throws IllegalParameterValueCheckedException {
 		this(collectionIndividuals,collectionIndividuals.size(),collectionIndividuals.size());
+	}
+	
+	public Collection<Individual> getBestIndividual(int number) {
+		if (number >= size) {
+			return individuals;
+		} else {
+			return individuals.subList(0, number);
+		}
 	}
 
 	public Collection<Individual> getAllIndividual() {
@@ -48,18 +55,68 @@ public class Population {
 		return min;
 	}
 
-	public Collection<Individual> getBestIndividual(int number) {
-		if (number >= size) {
-			return individuals;
+	public void substituteAllIndividual(Collection<Individual> newIndividuals) {
+		int newSize = newIndividuals.size();
+		if (min > newSize) {
+			throw new IllegalArgumentException("New population can not be lower than min");
+		} else if (max < newSize) {
+			throw new IllegalArgumentException("New population can not be greater than max");
 		} else {
-			return individuals.subList(0, number);
+			this.individuals = new ArrayList<Individual>(newIndividuals);
+			sortIndividuals();
 		}
 	}
 
-	public void substituteAllIndividual(Collection<Individual> newIndividuals) {
-		this.individuals = new ArrayList<Individual>(newIndividuals);
-		Collections.sort(this.individuals);
-		Collections.reverse(this.individuals);
+	public void substituteWorstIndividual(Collection<Individual> newIndividuals) {
+		int newSize = newIndividuals.size();
+		List<Individual> futureIndividuals; 
+		if ((newSize > size) && (newSize <= max)) {
+			futureIndividuals = new ArrayList<Individual>();
+		} else {
+			futureIndividuals = new ArrayList<Individual>(individuals);
+			Collections.reverse(futureIndividuals);
+			futureIndividuals = futureIndividuals.subList(newSize, size);
+		}
+		futureIndividuals.addAll(newIndividuals);
+		individuals = futureIndividuals;
+		sortIndividuals();
+	}
+	
+	private void sortIndividuals() {
+		Collections.sort(individuals);
+		Collections.reverse(individuals);
 	}
 
+	@Override
+	public boolean equals(Object object) {
+		if (object == this) {
+			return true;
+		}
+		if (object == null) {
+			return false;
+		}
+		if (object instanceof Population) {
+			Population population = (Population) object;
+			return population.getAllIndividual().equals(individuals) && (population.getSize() == size) 
+					&& (population.getMaxSize() == max) && (population.getMinSize() == min);
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return ((individuals.hashCode() + size) / 23) * (max + min);
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder individualString = new StringBuilder();
+		individualString.append("Population: (");
+		individualString.append("Individuals: " + individuals.toString());
+		individualString.append(" Size: " + size);
+		individualString.append(" MaxSize: " + max);
+		individualString.append(" MinSize: " + min + ")");
+		return individualString.toString();
+	}
 }
