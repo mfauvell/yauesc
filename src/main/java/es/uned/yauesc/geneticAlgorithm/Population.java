@@ -32,8 +32,8 @@ public class Population {
 	}
 	
 	public Collection<Individual> getBestIndividual(int number) {
-		if (number >= size) {
-			return individuals;
+		if (number > size) {
+			throw new IllegalArgumentException("Asked for more individuals that the population has");
 		} else {
 			return individuals.subList(0, number);
 		}

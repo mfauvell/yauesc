@@ -115,10 +115,11 @@ public class PopulationTest {
 	}
 	
 	@Test
-	public void testGetAllInvidiualsIfNumberBestIndividualsGreaterSize() throws IllegalParameterValueCheckedException {
+	public void testGetBestInvidiualsIfNumberBestIndividualsGreaterSizeThrowException() throws IllegalParameterValueCheckedException {
 		Population population = new Population(collectionIndividuals);
-			
-		assertThat(population.getBestIndividual(5)).isEqualTo(collectionSortedIndividuals);
+		
+		assertThrows(IllegalArgumentException.class,()->{population.getBestIndividual(5);},
+				"Must be throw IllegalArgumentException because we ask for more individuals that individual in population");
 	}
 	
 	@Test
