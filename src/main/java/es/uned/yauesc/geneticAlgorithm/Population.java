@@ -31,6 +31,10 @@ public class Population {
 		this(collectionIndividuals,collectionIndividuals.size(),collectionIndividuals.size());
 	}
 	
+	public Individual getBestIndividual() {
+		return individuals.get(0);
+	}
+	
 	public Collection<Individual> getBestIndividual(int number) {
 		if (number > size) {
 			throw new IllegalArgumentException("Asked for more individuals that the population has");

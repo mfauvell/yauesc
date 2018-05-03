@@ -17,10 +17,11 @@ public class PopulationTest {
 	private static Collection<Individual> collectionSortedIndividuals;
 	private static Collection<Individual> collectionIndividualsOther;
 	private static Collection<Individual> collectionSortedIndividualsOther;
+	private static Individual firstIndividual;
 	
 	@BeforeAll
 	public static void setUp() {
-		Individual firstIndividual = mock(Individual.class);
+		firstIndividual = mock(Individual.class);
 		Individual secondIndividual = mock(Individual.class);
 		Individual thirdIndividual = mock(Individual.class);
 		Individual fourthIndividual = mock(Individual.class);
@@ -112,6 +113,13 @@ public class PopulationTest {
 		Population population = new Population(collectionIndividuals);
 			
 		assertThat(population.getBestIndividual(3)).isEqualTo(collectionThreeBestIndividuals);
+	}
+	
+	@Test
+	public void testGetBestIndividual() throws IllegalParameterValueCheckedException {
+		Population population = new Population(collectionIndividuals);
+			
+		assertThat(population.getBestIndividual()).isEqualTo(firstIndividual);
 	}
 	
 	@Test
