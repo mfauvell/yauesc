@@ -1,5 +1,6 @@
 package es.uned.yauesc.geneticAlgorithm;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class GeneticAlgorithmSingle implements GeneticAlgorithm {
@@ -13,6 +14,8 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 	private int generations;
 	private Fitness optimalFitness;
 	private boolean finished;
+	
+	private Collection<GeneticAlgorithmObserver> observers;
 
 	public GeneticAlgorithmSingle(Population population, EvaluationFunction evaluationFunction,
 			ParentSelector parentSelector, RecombinationOperator recombinationOperator,
@@ -26,10 +29,21 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 		this.generations = generations;
 		this.optimalFitness = optimalFitness;
 		
+		observers = new ArrayList<GeneticAlgorithmObserver>();
+		
 		population.substituteAllIndividual(evaluationFunction.evaluate(population.getAllIndividual()));
 		finished = false;
 	}
 
+	@Override
+	public Individual getSolution() {
+		return population.getBestIndividual();
+	}
+
+	public Collection<Individual> getBestIndividual(int number) {
+		return population.getBestIndividual(number);
+	}
+	
 	@Override
 	public void run() {
 		int index = 0;
@@ -51,17 +65,34 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 			} else {
 				index++;
 			}
+			notifyObserver();
 		}
 	}
-
+	
 	@Override
 	public boolean isFinished() {
 		return finished;
 	}
 
-	@Override
-	public Individual getSolution() {
-		return population.getBestIndividual();
+	public void substituteWorstIndividual(Collection<Individual> newIndividual) {
+		population.substituteWorstIndividual(newIndividual);
 	}
 
+	@Override
+	public void registerObserver(GeneticAlgorithmObserver geneticAlgorithmObserver) {
+		if (!(observers.contains(geneticAlgorithmObserver))) {
+			observers.add(geneticAlgorithmObserver);
+		}
+	}
+	
+	@Override
+	public void removeObserver(GeneticAlgorithmObserver geneticAlgorithmObserver) {
+		observers.remove(geneticAlgorithmObserver);	
+	}
+
+	@Override
+	public void notifyObserver() {
+		observers.parallelStream().forEach(geneticAlgorithmObserver -> geneticAlgorithmObserver.updateGeneticAlgorithmObserver(this));
+		
+	}
 }

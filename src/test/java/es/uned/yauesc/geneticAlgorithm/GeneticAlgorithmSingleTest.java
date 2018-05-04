@@ -1,6 +1,5 @@
 package es.uned.yauesc.geneticAlgorithm;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -150,6 +149,226 @@ public class GeneticAlgorithmSingleTest {
 				mutationOperator, survivorSelector, 1, optimalFitness);
 		
 		assertThat(geneticAlgorithmSingle.getSolution()).isEqualTo(firstIndividual);
+	}
+	
+	@Test
+	public void testGetThreeBestIndividuals() {
+		Population population = mock(Population.class);
+		EvaluationFunction evaluationFunction = mock(EvaluationFunction.class);
+		ParentSelector parentSelector = mock(ParentSelector.class);
+		RecombinationOperator recombinationOperator = mock(RecombinationOperator.class);
+		MutationOperator mutationOperator = mock(MutationOperator.class);
+		SurvivorSelector survivorSelector = mock(SurvivorSelector.class);
+		Fitness optimalFitness = mock(Fitness.class);
+		
+		Individual firstIndividual = mock(Individual.class);
+		Individual secondIndividual = mock(Individual.class);
+		Individual thirdIndividual = mock(Individual.class);
+		Individual fourthIndividual = mock(Individual.class);
+		
+		Collection<Individual> initialPopulation = new ArrayList<Individual>();
+		initialPopulation.add(firstIndividual);
+		initialPopulation.add(secondIndividual);
+		initialPopulation.add(thirdIndividual);
+		initialPopulation.add(fourthIndividual);
+		
+		Collection<Individual> threeBestIndividual = new ArrayList<Individual>();
+		threeBestIndividual.add(firstIndividual);
+		threeBestIndividual.add(secondIndividual);
+		threeBestIndividual.add(thirdIndividual);
+		
+		
+		when(population.getAllIndividual()).thenReturn(initialPopulation);
+		when(population.getBestIndividual(3)).thenReturn(threeBestIndividual);
+		
+		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
+				mutationOperator, survivorSelector, 1, optimalFitness);
+		
+		assertThat(geneticAlgorithmSingle.getBestIndividual(3)).isEqualTo(threeBestIndividual);
+	}
+	
+	@Test
+	public void testSubstituteThreeWorstIndividuals() {
+		Population population = mock(Population.class);
+		EvaluationFunction evaluationFunction = mock(EvaluationFunction.class);
+		ParentSelector parentSelector = mock(ParentSelector.class);
+		RecombinationOperator recombinationOperator = mock(RecombinationOperator.class);
+		MutationOperator mutationOperator = mock(MutationOperator.class);
+		SurvivorSelector survivorSelector = mock(SurvivorSelector.class);
+		Fitness optimalFitness = mock(Fitness.class);
+		
+		Individual firstIndividual = mock(Individual.class);
+		Individual secondIndividual = mock(Individual.class);
+		Individual thirdIndividual = mock(Individual.class);
+		Individual fourthIndividual = mock(Individual.class);
+		
+		Collection<Individual> initialPopulation = new ArrayList<Individual>();
+		initialPopulation.add(firstIndividual);
+		initialPopulation.add(secondIndividual);
+		initialPopulation.add(thirdIndividual);
+		initialPopulation.add(fourthIndividual);
+		
+		Collection<Individual> threeIndividual = new ArrayList<Individual>();
+		threeIndividual.add(firstIndividual);
+		threeIndividual.add(secondIndividual);
+		threeIndividual.add(thirdIndividual);
+		
+		when(population.getAllIndividual()).thenReturn(initialPopulation);
+		
+		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
+				mutationOperator, survivorSelector, 1, optimalFitness);
+		
+		geneticAlgorithmSingle.substituteWorstIndividual(threeIndividual);
+		
+		verify(population).substituteWorstIndividual(threeIndividual);
+	}
+	
+	@Test
+	public void testAddTwoObserverAndBeingNotified() {
+		Population population = mock(Population.class);
+		EvaluationFunction evaluationFunction = mock(EvaluationFunction.class);
+		ParentSelector parentSelector = mock(ParentSelector.class);
+		RecombinationOperator recombinationOperator = mock(RecombinationOperator.class);
+		MutationOperator mutationOperator = mock(MutationOperator.class);
+		SurvivorSelector survivorSelector = mock(SurvivorSelector.class);
+		Fitness optimalFitness = mock(Fitness.class);
+		GeneticAlgorithmObserver geneticAlgorithmObserverOne = mock(GeneticAlgorithmObserver.class);
+		GeneticAlgorithmObserver geneticAlgorithmObserverTwo = mock(GeneticAlgorithmObserver.class);
+		
+		Individual firstIndividual = mock(Individual.class);
+		Individual secondIndividual = mock(Individual.class);
+		Individual thirdIndividual = mock(Individual.class);
+		Individual fourthIndividual = mock(Individual.class);
+		
+		Collection<Individual> initialPopulation = new ArrayList<Individual>();
+		initialPopulation.add(firstIndividual);
+		initialPopulation.add(secondIndividual);
+		initialPopulation.add(thirdIndividual);
+		initialPopulation.add(fourthIndividual);
+		
+		when(population.getAllIndividual()).thenReturn(initialPopulation);
+		
+		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
+				mutationOperator, survivorSelector, 1, optimalFitness);
+		
+		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverOne);
+		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverTwo);
+				
+		geneticAlgorithmSingle.notifyObserver();
+		
+		verify(geneticAlgorithmObserverOne).updateGeneticAlgorithmObserver(geneticAlgorithmSingle);
+		verify(geneticAlgorithmObserverTwo).updateGeneticAlgorithmObserver(geneticAlgorithmSingle);
+	}
+	
+	@Test
+	public void testAddTwoObserverOneRemovedAndBeingNotifiedOnlyOne() {
+		Population population = mock(Population.class);
+		EvaluationFunction evaluationFunction = mock(EvaluationFunction.class);
+		ParentSelector parentSelector = mock(ParentSelector.class);
+		RecombinationOperator recombinationOperator = mock(RecombinationOperator.class);
+		MutationOperator mutationOperator = mock(MutationOperator.class);
+		SurvivorSelector survivorSelector = mock(SurvivorSelector.class);
+		Fitness optimalFitness = mock(Fitness.class);
+		GeneticAlgorithmObserver geneticAlgorithmObserverOne = mock(GeneticAlgorithmObserver.class);
+		GeneticAlgorithmObserver geneticAlgorithmObserverTwo = mock(GeneticAlgorithmObserver.class);
+		
+		Individual firstIndividual = mock(Individual.class);
+		Individual secondIndividual = mock(Individual.class);
+		Individual thirdIndividual = mock(Individual.class);
+		Individual fourthIndividual = mock(Individual.class);
+		
+		Collection<Individual> initialPopulation = new ArrayList<Individual>();
+		initialPopulation.add(firstIndividual);
+		initialPopulation.add(secondIndividual);
+		initialPopulation.add(thirdIndividual);
+		initialPopulation.add(fourthIndividual);
+		
+		when(population.getAllIndividual()).thenReturn(initialPopulation);
+		
+		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
+				mutationOperator, survivorSelector, 1, optimalFitness);
+		
+		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverOne);
+		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverTwo);		
+		geneticAlgorithmSingle.removeObserver(geneticAlgorithmObserverTwo);
+		
+		geneticAlgorithmSingle.notifyObserver();
+		
+		verify(geneticAlgorithmObserverOne).updateGeneticAlgorithmObserver(geneticAlgorithmSingle);
+		verify(geneticAlgorithmObserverTwo, never()).updateGeneticAlgorithmObserver(geneticAlgorithmSingle);
+	}
+	
+	@Test
+	public void testTryRemoveNoAddedObserver() {
+		Population population = mock(Population.class);
+		EvaluationFunction evaluationFunction = mock(EvaluationFunction.class);
+		ParentSelector parentSelector = mock(ParentSelector.class);
+		RecombinationOperator recombinationOperator = mock(RecombinationOperator.class);
+		MutationOperator mutationOperator = mock(MutationOperator.class);
+		SurvivorSelector survivorSelector = mock(SurvivorSelector.class);
+		Fitness optimalFitness = mock(Fitness.class);
+		GeneticAlgorithmObserver geneticAlgorithmObserverOne = mock(GeneticAlgorithmObserver.class);
+		GeneticAlgorithmObserver geneticAlgorithmObserverTwo = mock(GeneticAlgorithmObserver.class);
+		
+		Individual firstIndividual = mock(Individual.class);
+		Individual secondIndividual = mock(Individual.class);
+		Individual thirdIndividual = mock(Individual.class);
+		Individual fourthIndividual = mock(Individual.class);
+		
+		Collection<Individual> initialPopulation = new ArrayList<Individual>();
+		initialPopulation.add(firstIndividual);
+		initialPopulation.add(secondIndividual);
+		initialPopulation.add(thirdIndividual);
+		initialPopulation.add(fourthIndividual);
+		
+		when(population.getAllIndividual()).thenReturn(initialPopulation);
+		
+		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
+				mutationOperator, survivorSelector, 1, optimalFitness);
+		
+		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverOne);
+				
+		geneticAlgorithmSingle.removeObserver(geneticAlgorithmObserverTwo);
+		
+		geneticAlgorithmSingle.notifyObserver();
+		
+		verify(geneticAlgorithmObserverOne).updateGeneticAlgorithmObserver(geneticAlgorithmSingle);
+		verify(geneticAlgorithmObserverTwo, never()).updateGeneticAlgorithmObserver(geneticAlgorithmSingle);
+	}
+	
+	@Test
+	public void testAddOnlyOneTimeEachObserver() {
+		Population population = mock(Population.class);
+		EvaluationFunction evaluationFunction = mock(EvaluationFunction.class);
+		ParentSelector parentSelector = mock(ParentSelector.class);
+		RecombinationOperator recombinationOperator = mock(RecombinationOperator.class);
+		MutationOperator mutationOperator = mock(MutationOperator.class);
+		SurvivorSelector survivorSelector = mock(SurvivorSelector.class);
+		Fitness optimalFitness = mock(Fitness.class);
+		GeneticAlgorithmObserver geneticAlgorithmObserverOne = mock(GeneticAlgorithmObserver.class);
+		
+		Individual firstIndividual = mock(Individual.class);
+		Individual secondIndividual = mock(Individual.class);
+		Individual thirdIndividual = mock(Individual.class);
+		Individual fourthIndividual = mock(Individual.class);
+		
+		Collection<Individual> initialPopulation = new ArrayList<Individual>();
+		initialPopulation.add(firstIndividual);
+		initialPopulation.add(secondIndividual);
+		initialPopulation.add(thirdIndividual);
+		initialPopulation.add(fourthIndividual);
+		
+		when(population.getAllIndividual()).thenReturn(initialPopulation);
+		
+		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
+				mutationOperator, survivorSelector, 1, optimalFitness);
+		
+		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverOne);
+		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverOne);		
+		
+		geneticAlgorithmSingle.notifyObserver();
+		
+		verify(geneticAlgorithmObserverOne).updateGeneticAlgorithmObserver(geneticAlgorithmSingle);
 	}
 
 }
