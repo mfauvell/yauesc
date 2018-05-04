@@ -11,10 +11,38 @@ import org.junit.jupiter.api.Test;
 
 public class GeneticAlgorithmSingleTest {
 	
-	
+	@Test
+	public void testConstructorMustEvaluatePopulationInitial() {
+		Population population = mock(Population.class);
+		EvaluationFunction evaluationFunction = mock(EvaluationFunction.class);
+		ParentSelector parentSelector = mock(ParentSelector.class);
+		RecombinationOperator recombinationOperator = mock(RecombinationOperator.class);
+		MutationOperator mutationOperator = mock(MutationOperator.class);
+		SurvivorSelector survivorSelector = mock(SurvivorSelector.class);
+		Fitness optimalFitness = mock(Fitness.class);
+		
+		Individual firstIndividual = mock(Individual.class);
+		Individual secondIndividual = mock(Individual.class);
+		Individual thirdIndividual = mock(Individual.class);
+		Individual fourthIndividual = mock(Individual.class);
+		
+		Collection<Individual> initialPopulation = new ArrayList<Individual>();
+		initialPopulation.add(firstIndividual);
+		initialPopulation.add(secondIndividual);
+		initialPopulation.add(thirdIndividual);
+		initialPopulation.add(fourthIndividual);
+		
+		when(population.getAllIndividual()).thenReturn(initialPopulation);
+		
+		@SuppressWarnings("unused")
+		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
+				mutationOperator, survivorSelector, 1, optimalFitness);
+		
+		verify(evaluationFunction).evaluate(initialPopulation);
+	}
 
 	@Test
-	void testRunOneIteration() {
+	public void testRunOneIteration() {
 		Population population = mock(Population.class);
 		EvaluationFunction evaluationFunction = mock(EvaluationFunction.class);
 		ParentSelector parentSelector = mock(ParentSelector.class);
@@ -59,6 +87,7 @@ public class GeneticAlgorithmSingleTest {
 		
 		when(population.getAllIndividual()).thenReturn(initialPopulation);
 		when(population.getSize()).thenReturn(initialPopulation.size());
+		when(population.getMinSize()).thenReturn(initialPopulation.size());
 		when(population.getBestIndividual()).thenReturn(mutatedIndividual);
 		
 		when(parentSelector.selectParents(initialPopulation, initialPopulation.size())).thenReturn(parents);
@@ -79,8 +108,48 @@ public class GeneticAlgorithmSingleTest {
 		
 		geneticAlgorithmSingle.run();
 		
+		verify(parentSelector).selectParents(initialPopulation, initialPopulation.size());
+		
+		verify(recombinationOperator).recombine(parents);
+		
+		verify(mutationOperator).mutate(recombinatedOffspring);
+		
+		verify(evaluationFunction).evaluate(mutatedOffspring);
+		
+		verify(survivorSelector).getSurvivor(population, evaluatedOffspring);
+				
 		assertThat(geneticAlgorithmSingle.isFinished()).isTrue();
-		assertThat(geneticAlgorithmSingle.getSolution()).isEqualTo(mutatedIndividual);
+		
+	}
+	
+	@Test
+	public void testGetBestSolution() {
+		Population population = mock(Population.class);
+		EvaluationFunction evaluationFunction = mock(EvaluationFunction.class);
+		ParentSelector parentSelector = mock(ParentSelector.class);
+		RecombinationOperator recombinationOperator = mock(RecombinationOperator.class);
+		MutationOperator mutationOperator = mock(MutationOperator.class);
+		SurvivorSelector survivorSelector = mock(SurvivorSelector.class);
+		Fitness optimalFitness = mock(Fitness.class);
+		
+		Individual firstIndividual = mock(Individual.class);
+		Individual secondIndividual = mock(Individual.class);
+		Individual thirdIndividual = mock(Individual.class);
+		Individual fourthIndividual = mock(Individual.class);
+		
+		Collection<Individual> initialPopulation = new ArrayList<Individual>();
+		initialPopulation.add(firstIndividual);
+		initialPopulation.add(secondIndividual);
+		initialPopulation.add(thirdIndividual);
+		initialPopulation.add(fourthIndividual);
+		
+		when(population.getAllIndividual()).thenReturn(initialPopulation);
+		when(population.getBestIndividual()).thenReturn(firstIndividual);
+		
+		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
+				mutationOperator, survivorSelector, 1, optimalFitness);
+		
+		assertThat(geneticAlgorithmSingle.getSolution()).isEqualTo(firstIndividual);
 	}
 
 }
