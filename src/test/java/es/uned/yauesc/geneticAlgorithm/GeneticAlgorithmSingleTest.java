@@ -1,7 +1,6 @@
 package es.uned.yauesc.geneticAlgorithm;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -118,6 +117,8 @@ public class GeneticAlgorithmSingleTest {
 		when(mutatedIndividual.getFitness()).thenReturn(optimalFitness);
 		when(mutatedIndividual.compareTo(firstIndividual)).thenReturn(1);
 		
+		when(optimalFitness.compareTo(optimalFitness)).thenReturn(0);
+		
 		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
 				mutationOperator, survivorSelector, 1, optimalFitness);
 		
@@ -138,6 +139,108 @@ public class GeneticAlgorithmSingleTest {
 		assertThat(geneticAlgorithmSingle.isFinished()).isTrue();
 		assertThat(geneticAlgorithmSingle.getSolution()).isEqualTo(mutatedIndividual);
 		assertThat(geneticAlgorithmSingle.foundOptimal()).isTrue();
+	}
+	
+	@Test
+	public void testSetTwoGenerationsAndMakeTwoIterations() {
+		Population population = mock(Population.class);
+		EvaluationFunction evaluationFunction = mock(EvaluationFunction.class);
+		ParentSelector parentSelector = mock(ParentSelector.class);
+		RecombinationOperator recombinationOperator = mock(RecombinationOperator.class);
+		MutationOperator mutationOperator = mock(MutationOperator.class);
+		SurvivorSelector survivorSelector = mock(SurvivorSelector.class);
+		Fitness optimalFitness = mock(Fitness.class);
+		Fitness noOptimalFitness = mock(Fitness.class);
+		
+		Individual firstIndividual = mock(Individual.class);
+		Individual secondIndividual = mock(Individual.class);
+		Individual thirdIndividual = mock(Individual.class);
+		Individual fourthIndividual = mock(Individual.class);
+		Individual firstSonIndividual = mock(Individual.class);
+		Individual secondSonIndividual = mock(Individual.class);
+		Individual mutatedIndividual = mock(Individual.class);
+		
+		Collection<Individual> initialPopulation = new ArrayList<Individual>();
+		initialPopulation.add(firstIndividual);
+		initialPopulation.add(secondIndividual);
+		initialPopulation.add(thirdIndividual);
+		initialPopulation.add(fourthIndividual);
+		
+		Collection<Individual> parents = new ArrayList<Individual>();
+		parents.add(firstIndividual);
+		parents.add(firstIndividual);
+		parents.add(thirdIndividual);
+		parents.add(secondIndividual);
+		
+		Collection<Individual> recombinatedOffspring = new ArrayList<Individual>();
+		recombinatedOffspring.add(firstSonIndividual);
+		recombinatedOffspring.add(secondSonIndividual);
+		recombinatedOffspring.add(thirdIndividual);
+		recombinatedOffspring.add(secondIndividual);
+		
+		Collection<Individual> mutatedOffspring = new ArrayList<Individual>();
+		mutatedOffspring.add(firstSonIndividual);
+		mutatedOffspring.add(secondSonIndividual);
+		mutatedOffspring.add(thirdIndividual);
+		mutatedOffspring.add(mutatedIndividual);
+		
+		Collection<Individual> evaluatedOffspring = new ArrayList<Individual>(initialPopulation);
+		
+		when(population.getAllIndividual()).thenReturn(initialPopulation);
+		when(population.getSize()).thenReturn(initialPopulation.size());
+		when(population.getMinSize()).thenReturn(initialPopulation.size());
+		Answer<Individual> answer = new Answer<Individual>() {
+			private int count = 0;
+			
+			public Individual answer(InvocationOnMock invocation) {
+				if (count++ == 1)
+					return mutatedIndividual;
+				return firstIndividual;
+			}
+		};
+		when(population.getBestIndividual()).thenAnswer(answer);
+		
+		when(parentSelector.selectParents(initialPopulation, initialPopulation.size())).thenReturn(parents);
+		
+		when(recombinationOperator.recombine(parents)).thenReturn(recombinatedOffspring);
+		
+		when(mutationOperator.mutate(recombinatedOffspring)).thenReturn(mutatedOffspring);
+		
+		when(survivorSelector.getSurvivor(population, evaluatedOffspring)).thenReturn(evaluatedOffspring);
+		
+		when(evaluationFunction.evaluate(initialPopulation)).thenReturn(initialPopulation);
+		when(evaluationFunction.evaluate(mutatedOffspring)).thenReturn(evaluatedOffspring);
+		
+		when(mutatedIndividual.getFitness()).thenReturn(noOptimalFitness);
+		when(mutatedIndividual.compareTo(firstIndividual)).thenReturn(1);
+		when(firstIndividual.compareTo(mutatedIndividual)).thenReturn(-1);
+		
+		when(optimalFitness.compareTo(optimalFitness)).thenReturn(0);
+		when(noOptimalFitness.compareTo(optimalFitness)).thenReturn(-1);
+		
+		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
+				mutationOperator, survivorSelector, 1, optimalFitness);
+		
+		assertThat(geneticAlgorithmSingle.getSolution()).isEqualTo(firstIndividual);
+		
+		geneticAlgorithmSingle.setGenerations(2);
+		
+		geneticAlgorithmSingle.run();
+		
+		verify(parentSelector, times(2)).selectParents(initialPopulation, initialPopulation.size());
+		
+		
+		verify(recombinationOperator, times(2)).recombine(parents);
+		
+		verify(mutationOperator, times(2)).mutate(recombinatedOffspring);
+		
+		verify(evaluationFunction, times(2)).evaluate(mutatedOffspring);
+		
+		verify(survivorSelector, times(2)).getSurvivor(population, evaluatedOffspring);
+				
+		assertThat(geneticAlgorithmSingle.isFinished()).isTrue();
+		assertThat(geneticAlgorithmSingle.getSolution()).isEqualTo(mutatedIndividual);
+		assertThat(geneticAlgorithmSingle.foundOptimal()).isFalse();
 	}
 	
 	@Test
@@ -243,7 +346,7 @@ public class GeneticAlgorithmSingleTest {
 		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverOne);
 		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverTwo);
 				
-		geneticAlgorithmSingle.notifyObserver();
+		geneticAlgorithmSingle.notifyObservers();
 		
 		verify(geneticAlgorithmObserverOne).updateGeneticAlgorithmObserver(geneticAlgorithmSingle);
 		verify(geneticAlgorithmObserverTwo).updateGeneticAlgorithmObserver(geneticAlgorithmSingle);
@@ -281,7 +384,7 @@ public class GeneticAlgorithmSingleTest {
 		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverTwo);		
 		geneticAlgorithmSingle.removeObserver(geneticAlgorithmObserverTwo);
 		
-		geneticAlgorithmSingle.notifyObserver();
+		geneticAlgorithmSingle.notifyObservers();
 		
 		verify(geneticAlgorithmObserverOne).updateGeneticAlgorithmObserver(geneticAlgorithmSingle);
 		verify(geneticAlgorithmObserverTwo, never()).updateGeneticAlgorithmObserver(geneticAlgorithmSingle);
@@ -319,7 +422,7 @@ public class GeneticAlgorithmSingleTest {
 				
 		geneticAlgorithmSingle.removeObserver(geneticAlgorithmObserverTwo);
 		
-		geneticAlgorithmSingle.notifyObserver();
+		geneticAlgorithmSingle.notifyObservers();
 		
 		verify(geneticAlgorithmObserverOne).updateGeneticAlgorithmObserver(geneticAlgorithmSingle);
 		verify(geneticAlgorithmObserverTwo, never()).updateGeneticAlgorithmObserver(geneticAlgorithmSingle);
@@ -355,7 +458,7 @@ public class GeneticAlgorithmSingleTest {
 		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverOne);
 		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverOne);		
 		
-		geneticAlgorithmSingle.notifyObserver();
+		geneticAlgorithmSingle.notifyObservers();
 		
 		verify(geneticAlgorithmObserverOne).updateGeneticAlgorithmObserver(geneticAlgorithmSingle);
 	}

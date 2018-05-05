@@ -8,7 +8,7 @@ public interface GeneticAlgorithm extends Runnable {
 
 	public void registerObserver(GeneticAlgorithmObserver geneticAlgorithmObserver);
 
-	public void notifyObserver();
+	public void notifyObservers();
 
 	public void removeObserver(GeneticAlgorithmObserver geneticAlgorithmObserver);
 }

@@ -2,7 +2,6 @@ package es.uned.yauesc.geneticAlgorithm;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.function.IntPredicate;
 
 public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 	
@@ -51,11 +50,18 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 		return population.getBestIndividual(number);
 	}
 	
+	public void setGenerations(int number) {
+		generations = number;	
+	}
+	
 	@Override
 	public void run() {
 		int index = 0;
-		finished = false;
-		while (!foundOptimal && index < generations ) {
+		if (generations == 0)
+			finished = true;
+		else
+			finished = false;
+		while (!finished) {
 			
 			Collection<Individual> parents = parentSelector.selectParents(population.getAllIndividual(), population.getMinSize());
 			
@@ -76,13 +82,16 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 			int comparedFitness = solution.getFitness().compareTo(optimalFitness);
 			if (comparedFitness >= 0 ) {
 				foundOptimal = true;
+				finished = true;
 			} else {
 				index++;
 			}
 			
-			notifyObserver();
+			if (index >= generations)
+				finished = true;
+			
+			notifyObservers();
 		}
-		finished = true;
 	}
 	
 	@Override
@@ -111,9 +120,8 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 	}
 
 	@Override
-	public void notifyObserver() {
+	public void notifyObservers() {
 		observers.parallelStream().forEach(geneticAlgorithmObserver -> geneticAlgorithmObserver.updateGeneticAlgorithmObserver(this));
-		
 	}
 
 }
