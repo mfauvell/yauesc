@@ -1,19 +1,21 @@
 package es.uned.yauesc.geneticAlgorithm;
 
+import java.util.List;
+
 public class Individual implements Comparable<Individual>{
 	
-	private int[] genotype;
+	private List<Integer> genotype;
 	private Fitness fitness;
 	private boolean evaluated;
 	private int age;
 
-	public Individual(int[] genotype) {
+	public Individual(List<Integer> genotype) {
 		this.genotype = genotype;
 		age = 1;
 		evaluated = false;
 	}
 
-	public int[] getGenotype() {
+	public List<Integer> getGenotype() {
 		return genotype;
 	}
 
@@ -42,7 +44,7 @@ public class Individual implements Comparable<Individual>{
 		}
 	}
 
-	public void setGenotype(int[] genotype) {
+	public void setGenotype(List<Integer> genotype) {
 		this.genotype = genotype;
 		evaluated = false;
 	}
@@ -72,7 +74,7 @@ public class Individual implements Comparable<Individual>{
 		}
 		if (object instanceof Individual) {
 			Individual individual = (Individual) object;
-			return individual.getGenotype().equals(genotype) && (individual.getAge() == age) && individual.getFitness().equals(fitness)
+			return individual.getGenotype().equals(genotype) && (individual.getAge() == age) && ((evaluated)? individual.getFitness().equals(fitness): true)
 					&& (individual.isEvaluated() == evaluated);
 		} else {
 			return false;
@@ -81,7 +83,7 @@ public class Individual implements Comparable<Individual>{
 	
 	@Override
 	public int hashCode() {
-		return ((genotype.hashCode() + age) / 23) * ((evaluated? 1 : 0) + fitness.hashCode());
+		return ((genotype.hashCode() + age) / 23) * (evaluated? fitness.hashCode() : 1);
 	}
 	
 	@Override
@@ -89,7 +91,10 @@ public class Individual implements Comparable<Individual>{
 		StringBuilder individualString = new StringBuilder();
 		individualString.append("Individual: (");
 		individualString.append("Genotype: " + genotype.toString());
-		individualString.append(" Fitness: " + fitness.toString());
+		if (evaluated) 
+			individualString.append(" Fitness: " + fitness.toString());
+		else
+			individualString.append(" Fitness: Not evaluated.");
 		individualString.append(" Age: " + age);
 		individualString.append(" Evaluated: " + evaluated + ")");
 		return individualString.toString();

@@ -4,12 +4,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 public class IndividualTest {
 
-	private static final int[] GENOTYPE = {0,1,2,3,4,5}; 
-	private static final int[] OTHERGENOTYPE = {6,7,8,9,10,11}; 
+	private static final List<Integer> GENOTYPE = new ArrayList<Integer>(Arrays.asList(0,1,2,3,4,5)); 
+	private static final List<Integer> OTHERGENOTYPE = new ArrayList<Integer>(Arrays.asList(6,7,8,9,10,11)); 
 	
 	@Test
 	public void constructorShouldSetGenotypeAndSetEvaluatedToFalseAndAgeDefaultValorToOne() {
