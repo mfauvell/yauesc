@@ -2,6 +2,7 @@ package es.uned.yauesc.geneticAlgorithm;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.IntPredicate;
 
 public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 	
@@ -14,6 +15,8 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 	private int generations;
 	private Fitness optimalFitness;
 	private boolean finished;
+	private boolean foundOptimal;
+	private Individual solution;
 	
 	private Collection<GeneticAlgorithmObserver> observers;
 
@@ -32,12 +35,16 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 		observers = new ArrayList<GeneticAlgorithmObserver>();
 		
 		population.substituteAllIndividual(evaluationFunction.evaluate(population.getAllIndividual()));
+		
+		solution = population.getBestIndividual();
+		
 		finished = false;
+		foundOptimal = false;
 	}
 
 	@Override
 	public Individual getSolution() {
-		return population.getBestIndividual();
+		return solution;
 	}
 
 	public Collection<Individual> getBestIndividual(int number) {
@@ -47,7 +54,8 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 	@Override
 	public void run() {
 		int index = 0;
-		while (!finished && index < generations ) {
+		finished = false;
+		while (!foundOptimal && index < generations ) {
 			
 			Collection<Individual> parents = parentSelector.selectParents(population.getAllIndividual(), population.getMinSize());
 			
@@ -59,14 +67,22 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 			
 			population.substituteAllIndividual(survivorSelector.getSurvivor(population, offspring));
 			
-			int comparedFitness = this.getSolution().getFitness().compareTo(optimalFitness);
+			Individual bestOfGeneration = population.getBestIndividual();
+			int compareSolution = bestOfGeneration.compareTo(solution);
+			if (compareSolution > 0) {
+				solution = bestOfGeneration;
+			}
+			
+			int comparedFitness = solution.getFitness().compareTo(optimalFitness);
 			if (comparedFitness >= 0 ) {
-				finished = true;
+				foundOptimal = true;
 			} else {
 				index++;
 			}
+			
 			notifyObserver();
 		}
+		finished = true;
 	}
 	
 	@Override
@@ -74,6 +90,10 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 		return finished;
 	}
 
+	public boolean foundOptimal() {
+		return foundOptimal;
+	}
+	
 	public void substituteWorstIndividual(Collection<Individual> newIndividual) {
 		population.substituteWorstIndividual(newIndividual);
 	}
@@ -95,4 +115,5 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 		observers.parallelStream().forEach(geneticAlgorithmObserver -> geneticAlgorithmObserver.updateGeneticAlgorithmObserver(this));
 		
 	}
+
 }
