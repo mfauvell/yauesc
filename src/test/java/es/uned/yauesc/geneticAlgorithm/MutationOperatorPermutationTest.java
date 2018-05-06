@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-class testMutationOperatorPermutation {
+class MutationOperatorPermutationTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
@@ -41,7 +41,7 @@ class testMutationOperatorPermutation {
 		offspring.add(thirdIndividual);
 		offspring.add(fourthIndividual);
 		
-		GeneticAlgorithmUtils geneticAlgorithmUtils = new fakeGeneticAlgorithmUtils();
+		GeneticAlgorithmUtils geneticAlgorithmUtils = new GeneticAlgorithmUtilsFake();
 		
 		double probability = 1;
 		
@@ -74,7 +74,7 @@ class testMutationOperatorPermutation {
 		offspring.add(thirdIndividual);
 		offspring.add(fourthIndividual);
 		
-		GeneticAlgorithmUtils geneticAlgorithmUtils = new fakeGeneticAlgorithmUtils();
+		GeneticAlgorithmUtils geneticAlgorithmUtils = new GeneticAlgorithmUtilsFake();
 		
 		double probability = 0;
 		

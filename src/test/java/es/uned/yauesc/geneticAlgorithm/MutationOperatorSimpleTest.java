@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-class testMutationOperatorSimple {
+class MutationOperatorSimpleTest {
 
 	@Test
 	public void testMutateCollectionTwoIndividualsAllGensMutated() {
