@@ -12,4 +12,9 @@ public class GeneticAlgorithmUtils {
 		return 0;
 	}
 
+	public int getGenPosition() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
