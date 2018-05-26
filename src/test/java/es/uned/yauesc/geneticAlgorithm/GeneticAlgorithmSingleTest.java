@@ -37,7 +37,7 @@ public class GeneticAlgorithmSingleTest {
 		when(population.getBestIndividual()).thenReturn(firstIndividual);
 		
 		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
-				mutationOperator, survivorSelector, 1, optimalFitness);
+				mutationOperator, survivorSelector, 1, optimalFitness, initialPopulation.size());
 		
 		verify(evaluationFunction).evaluate(initialPopulation);
 		assertThat(geneticAlgorithmSingle.getSolution()).isEqualTo(firstIndividual);
@@ -46,7 +46,7 @@ public class GeneticAlgorithmSingleTest {
 	}
 
 	@Test
-	public void testRunOneIterationAndChangeSolutionToBestOfGenerationAndOptimalFound() {
+	public void testRunOneIterationAndChangeSolutionToBestOfGenerationAndOptimalFoundCheckSizeOffspringSet() {
 		Population population = mock(Population.class);
 		EvaluationFunction evaluationFunction = mock(EvaluationFunction.class);
 		ParentSelector parentSelector = mock(ParentSelector.class);
@@ -91,7 +91,7 @@ public class GeneticAlgorithmSingleTest {
 		
 		when(population.getAllIndividual()).thenReturn(initialPopulation);
 		when(population.getSize()).thenReturn(initialPopulation.size());
-		when(population.getMinSize()).thenReturn(initialPopulation.size());
+		when(population.getMinSize()).thenReturn(2);
 		Answer<Individual> answer = new Answer<Individual>() {
 			private int count = 0;
 			
@@ -103,7 +103,7 @@ public class GeneticAlgorithmSingleTest {
 		};
 		when(population.getBestIndividual()).thenAnswer(answer);
 		
-		when(parentSelector.selectParents(initialPopulation, initialPopulation.size())).thenReturn(parents);
+		when(parentSelector.selectParents(initialPopulation, 2)).thenReturn(parents);
 		
 		when(recombinationOperator.recombine(parents)).thenReturn(recombinatedOffspring);
 		
@@ -120,13 +120,13 @@ public class GeneticAlgorithmSingleTest {
 		when(optimalFitness.compareTo(optimalFitness)).thenReturn(0);
 		
 		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
-				mutationOperator, survivorSelector, 1, optimalFitness);
+				mutationOperator, survivorSelector, 1, optimalFitness, 2);
 		
 		assertThat(geneticAlgorithmSingle.getSolution()).isEqualTo(firstIndividual);
 		
 		geneticAlgorithmSingle.run();
 		
-		verify(parentSelector).selectParents(initialPopulation, initialPopulation.size());
+		verify(parentSelector).selectParents(initialPopulation, 2);
 		
 		verify(recombinationOperator).recombine(parents);
 		
@@ -219,7 +219,7 @@ public class GeneticAlgorithmSingleTest {
 		when(noOptimalFitness.compareTo(optimalFitness)).thenReturn(-1);
 		
 		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
-				mutationOperator, survivorSelector, 1, optimalFitness);
+				mutationOperator, survivorSelector, 1, optimalFitness, initialPopulation.size());
 		
 		assertThat(geneticAlgorithmSingle.getSolution()).isEqualTo(firstIndividual);
 		
@@ -274,7 +274,7 @@ public class GeneticAlgorithmSingleTest {
 		when(population.getBestIndividual(3)).thenReturn(threeBestIndividual);
 		
 		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
-				mutationOperator, survivorSelector, 1, optimalFitness);
+				mutationOperator, survivorSelector, 1, optimalFitness, initialPopulation.size());
 		
 		assertThat(geneticAlgorithmSingle.getBestIndividual(3)).isEqualTo(threeBestIndividual);
 	}
@@ -308,7 +308,7 @@ public class GeneticAlgorithmSingleTest {
 		when(population.getAllIndividual()).thenReturn(initialPopulation);
 		
 		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
-				mutationOperator, survivorSelector, 1, optimalFitness);
+				mutationOperator, survivorSelector, 1, optimalFitness, initialPopulation.size());
 		
 		geneticAlgorithmSingle.substituteWorstIndividual(threeIndividual);
 		
@@ -341,7 +341,7 @@ public class GeneticAlgorithmSingleTest {
 		when(population.getAllIndividual()).thenReturn(initialPopulation);
 		
 		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
-				mutationOperator, survivorSelector, 1, optimalFitness);
+				mutationOperator, survivorSelector, 1, optimalFitness, initialPopulation.size());
 		
 		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverOne);
 		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverTwo);
@@ -378,7 +378,7 @@ public class GeneticAlgorithmSingleTest {
 		when(population.getAllIndividual()).thenReturn(initialPopulation);
 		
 		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
-				mutationOperator, survivorSelector, 1, optimalFitness);
+				mutationOperator, survivorSelector, 1, optimalFitness, initialPopulation.size());
 		
 		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverOne);
 		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverTwo);		
@@ -416,7 +416,7 @@ public class GeneticAlgorithmSingleTest {
 		when(population.getAllIndividual()).thenReturn(initialPopulation);
 		
 		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
-				mutationOperator, survivorSelector, 1, optimalFitness);
+				mutationOperator, survivorSelector, 1, optimalFitness,initialPopulation.size());
 		
 		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverOne);
 				
@@ -453,7 +453,7 @@ public class GeneticAlgorithmSingleTest {
 		when(population.getAllIndividual()).thenReturn(initialPopulation);
 		
 		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
-				mutationOperator, survivorSelector, 1, optimalFitness);
+				mutationOperator, survivorSelector, 1, optimalFitness, initialPopulation.size());
 		
 		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverOne);
 		geneticAlgorithmSingle.registerObserver(geneticAlgorithmObserverOne);		

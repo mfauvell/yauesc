@@ -12,6 +12,7 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 	private MutationOperator mutationOperator;
 	private SurvivorSelector survivorSelector;
 	private int generations;
+	private int sizeOffspring;
 	private Fitness optimalFitness;
 	private boolean finished;
 	private boolean foundOptimal;
@@ -21,7 +22,7 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 
 	public GeneticAlgorithmSingle(Population population, EvaluationFunction evaluationFunction,
 			ParentSelector parentSelector, RecombinationOperator recombinationOperator,
-			MutationOperator mutationOperator, SurvivorSelector survivorSelector, int generations, Fitness optimalFitness) {
+			MutationOperator mutationOperator, SurvivorSelector survivorSelector, int generations, Fitness optimalFitness, int sizeOffspring) {
 		this.population = population;
 		this.evaluationFunction = evaluationFunction;
 		this.parentSelector = parentSelector;
@@ -30,6 +31,7 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 		this.survivorSelector = survivorSelector;
 		this.generations = generations;
 		this.optimalFitness = optimalFitness;
+		this.sizeOffspring = sizeOffspring;
 		
 		observers = new ArrayList<GeneticAlgorithmObserver>();
 		
@@ -63,7 +65,8 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 			finished = false;
 		while (!finished) {
 			
-			Collection<Individual> parents = parentSelector.selectParents(population.getAllIndividual(), population.getMinSize());
+			//TODO Esto tiene que cambiar, no siempre será el mínimo tamaño
+			Collection<Individual> parents = parentSelector.selectParents(population.getAllIndividual(), sizeOffspring);
 			
 			Collection<Individual> recombinatedOffspring = recombinationOperator.recombine(parents);
 			

@@ -16,8 +16,7 @@ public class MutationOperatorPermutation implements MutationOperator {
 
 	@Override
 	public Collection<Individual> mutate(Collection<Individual> offspring) {
-		return offspring.parallelStream().
-			map(individual -> doMutation(individual)).collect(Collectors.toList());
+		return offspring.parallelStream().map(individual -> doMutation(individual)).collect(Collectors.toList());
 	}
 	
 	private Individual doMutation(Individual individual) {
