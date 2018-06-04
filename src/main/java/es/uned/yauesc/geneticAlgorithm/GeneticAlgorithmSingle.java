@@ -65,7 +65,6 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 			finished = false;
 		while (!finished) {
 			
-			//TODO Esto tiene que cambiar, no siempre será el mínimo tamaño
 			Collection<Individual> parents = parentSelector.selectParents(population.getAllIndividual(), sizeOffspring);
 			
 			Collection<Individual> recombinatedOffspring = recombinationOperator.recombine(parents);
