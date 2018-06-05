@@ -1,5 +1,6 @@
 package es.uned.yauesc.geneticAlgorithm;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -10,11 +11,11 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-class RecombinationOperatorSimpleTest {
+class RecombinationOperatorUniformTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testRecombinationSimpleToAllPairsAllMade() {
+	public void testRecombinationUniformToAllPairsAllMade() {
 		Individual firstIndividual = mock(Individual.class);
 		Individual secondIndividual = mock(Individual.class);
 		Individual thirdIndividual = mock(Individual.class);
@@ -25,10 +26,10 @@ class RecombinationOperatorSimpleTest {
 		List<Integer> genotypeThird = new ArrayList<Integer>(Arrays.asList(3, 4, 8, 9, 2));
 		List<Integer> genotypeFourth = new ArrayList<Integer>(Arrays.asList(6, 9, 7, 7, 2));
 		
-		List<Integer> genotypeFirstSon = new ArrayList<Integer>(Arrays.asList(0, 5, 9, 1, 0));
-		List<Integer> genotypeSecondSon = new ArrayList<Integer>(Arrays.asList(4, 3, 2, 3, 5));
-		List<Integer> genotypeThirdSon = new ArrayList<Integer>(Arrays.asList(3, 4, 8, 7, 2));
-		List<Integer> genotypeFourthSon = new ArrayList<Integer>(Arrays.asList(6, 9, 7, 9, 2));
+		List<Integer> genotypeFirstSon = new ArrayList<Integer>(Arrays.asList(0, 3, 9, 1, 5));
+		List<Integer> genotypeSecondSon = new ArrayList<Integer>(Arrays.asList(4, 5, 2, 3, 0));
+		List<Integer> genotypeThirdSon = new ArrayList<Integer>(Arrays.asList(3, 9, 8, 7, 2));
+		List<Integer> genotypeFourthSon = new ArrayList<Integer>(Arrays.asList(6, 4, 7, 9, 2));
 		
 		when(firstIndividual.getGenotype()).thenReturn(genotypeFirst);
 		when(secondIndividual.getGenotype()).thenReturn(genotypeSecond);
@@ -43,18 +44,18 @@ class RecombinationOperatorSimpleTest {
 		
         GeneticAlgorithmUtils geneticAlgorithmUtils = mock(GeneticAlgorithmUtils.class);
         when(geneticAlgorithmUtils.getProbability()).thenReturn(0.1);
-        when(geneticAlgorithmUtils.getCrossPoint()).thenReturn(2);
+        when(geneticAlgorithmUtils.getBinaryMask()).thenReturn(new ArrayList<Integer>(Arrays.asList(1, 0, 1, 0, 1)));
 		
 		double probability = 1;
 		
-		RecombinationOperatorSimple recombinationOperatorSimple = new RecombinationOperatorSimple(probability, geneticAlgorithmUtils);
+		RecombinationOperatorUniform recombinationOperatorUniform = new RecombinationOperatorUniform(probability, geneticAlgorithmUtils);
 		
-		assertThat(recombinationOperatorSimple.recombine(parents)).hasSize(4).extracting(individual->individual.getGenotype()).
+		assertThat(recombinationOperatorUniform.recombine(parents)).hasSize(4).extracting(individual->individual.getGenotype()).
 			contains(genotypeFirstSon, genotypeSecondSon, genotypeThirdSon, genotypeFourthSon);
 	}
-
+	
 	@Test
-	public void testRecombinationSimpleToAllPairsNoneMade() {
+	public void testRecombinationUniformToAllPairsNoneMade() {
 		Individual firstIndividual = mock(Individual.class);
 		Individual secondIndividual = mock(Individual.class);
 		Individual thirdIndividual = mock(Individual.class);
@@ -78,13 +79,12 @@ class RecombinationOperatorSimpleTest {
 		
         GeneticAlgorithmUtils geneticAlgorithmUtils = mock(GeneticAlgorithmUtils.class);
         when(geneticAlgorithmUtils.getProbability()).thenReturn(0.1);
-        when(geneticAlgorithmUtils.getCrossPoint()).thenReturn(2);
-        
+        when(geneticAlgorithmUtils.getBinaryMask()).thenReturn(new ArrayList<Integer>(Arrays.asList(1, 0, 1, 0, 1)));
+		
 		double probability = 0;
 		
-		RecombinationOperatorSimple recombinationOperatorSimple = new RecombinationOperatorSimple(probability, geneticAlgorithmUtils);
+		RecombinationOperatorUniform recombinationOperatorUniform = new RecombinationOperatorUniform(probability, geneticAlgorithmUtils);
 		
-		assertThat(recombinationOperatorSimple.recombine(parents)).isEqualTo(parents);
+		assertThat(recombinationOperatorUniform.recombine(parents)).isEqualTo(parents);
 	}
-	
 }

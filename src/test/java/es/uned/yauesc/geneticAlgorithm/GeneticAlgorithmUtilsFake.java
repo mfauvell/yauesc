@@ -17,9 +17,4 @@ public class GeneticAlgorithmUtilsFake extends GeneticAlgorithmUtils {
 			return 0;
 		}
 	}
-	
-	public int getCrossPoint() {
-		return 2;
-	}
-
 }

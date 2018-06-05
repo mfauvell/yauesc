@@ -1,5 +1,7 @@
 package es.uned.yauesc.geneticAlgorithm;
 
+import java.util.List;
+
 public class GeneticAlgorithmUtils {
 
 	public double getProbability() {
@@ -20,6 +22,11 @@ public class GeneticAlgorithmUtils {
 	public int getCrossPoint() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public List<Integer> getBinaryMask() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
