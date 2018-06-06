@@ -1,6 +1,6 @@
 package es.uned.yauesc.geneticAlgorithm;
 
-public class GeneticAlgorithmUtilsFake extends GeneticAlgorithmUtils {
+public class GeneticAlgorithmUtilsFakeForTestMutationRefactor extends GeneticAlgorithmUtils {
 	
 	private boolean flag = false;
 	
