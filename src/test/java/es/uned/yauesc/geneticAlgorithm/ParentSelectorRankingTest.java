@@ -1,6 +1,7 @@
 package es.uned.yauesc.geneticAlgorithm;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -9,6 +10,14 @@ import org.junit.jupiter.api.Test;
 
 class ParentSelectorRankingTest {
 
+	@Test
+	void testSParameterInvalidThrowException() {
+		double sParameter = 1;
+		GeneticAlgorithmUtils geneticAlgorithmUtils = mock(GeneticAlgorithmUtils.class);
+		
+		assertThrows(IllegalArgumentException.class,()->{new ParentSelectorRanking(geneticAlgorithmUtils, sParameter);},"If sParameter <=1 or >2 then must be throw a IllegalArgumentException");
+	}
+	
 	@Test
 	void testSelectTwoParentsOfFourIndividuals() {
 		int numberParent = 2;

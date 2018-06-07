@@ -29,4 +29,9 @@ public class GeneticAlgorithmUtils {
 		return null;
 	}
 
+	public int getRandomInt(int max) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

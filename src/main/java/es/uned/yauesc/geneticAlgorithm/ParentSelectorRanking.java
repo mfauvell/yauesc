@@ -12,6 +12,9 @@ public class ParentSelectorRanking implements ParentSelector {
 
 	public ParentSelectorRanking(GeneticAlgorithmUtils geneticAlgorithmUtils, double sParameter) {
 		this.geneticAlgorithmUtils = geneticAlgorithmUtils;
+		if (sParameter <= 1.0 || sParameter > 2) {
+			throw new IllegalArgumentException("SParameter must be 1> sParameter <= 2");
+		}
 		this.sParameter = sParameter;
 	}
 
