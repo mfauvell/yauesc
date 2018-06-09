@@ -5,7 +5,7 @@ public class GeneticAlgorithmUtilsFakeForParentSelectorTournament extends Geneti
 	private int count = 0;
 	
 	@Override
-	public int getRandomInt(int max) {
+	public synchronized int getRandomInt(int max) {
 		int result = 0;
 		if ( count == 0) {
 			result = 1;
