@@ -1,7 +1,6 @@
 package es.uned.yauesc.geneticAlgorithm;
 
 import static org.assertj.core.api.Assertions.*;
-
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
