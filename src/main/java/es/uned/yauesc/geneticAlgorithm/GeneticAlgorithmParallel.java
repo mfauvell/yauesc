@@ -13,7 +13,7 @@ public class GeneticAlgorithmParallel implements GeneticAlgorithm {
 	private GeneticAlgorithmSingle thirdGeneticAlgorithmSingle;
 	
 	private int generations;
-	private int migration;
+	private int migrationGenerations;
 	private int numberMigration;
 	private int times;
 	
@@ -25,17 +25,17 @@ public class GeneticAlgorithmParallel implements GeneticAlgorithm {
 
 	public GeneticAlgorithmParallel(GeneticAlgorithmSingle firstGeneticAlgorithmSingle,
 			GeneticAlgorithmSingle secondGeneticAlgorithmSingle, GeneticAlgorithmSingle thirdGeneticAlgorithmSingle,
-			int generations, int migration, int numberMigration) {
+			int generations, int migrationGenerations, int numberMigration) {
 		this.firstGeneticAlgorithmSingle = firstGeneticAlgorithmSingle;
 		this.secondGeneticAlgorithmSingle = secondGeneticAlgorithmSingle;
 		this.thirdGeneticAlgorithmSingle = thirdGeneticAlgorithmSingle;
 		
 		this.generations = generations;
-		this.migration = migration;
-		if (migration == 0)
+		this.migrationGenerations = migrationGenerations;
+		if (migrationGenerations == 0)
 			times = 1;
 		else
-			times = (int) Math.ceil((float) generations /(float) migration);
+			times = (int) Math.ceil((float) generations /(float) migrationGenerations);
 		this.numberMigration = numberMigration;
 		
 		observers = new ArrayList<GeneticAlgorithmObserver>();
@@ -52,14 +52,14 @@ public class GeneticAlgorithmParallel implements GeneticAlgorithm {
 			finished = false;
 		while (!finished) {
 			if (index == times -1) {
-				int lastGenerations = generations - (index * migration);
+				int lastGenerations = generations - (index * migrationGenerations);
 				firstGeneticAlgorithmSingle.setGenerations(lastGenerations);
 				secondGeneticAlgorithmSingle.setGenerations(lastGenerations);
 				thirdGeneticAlgorithmSingle.setGenerations(lastGenerations);
 			} else {
-				firstGeneticAlgorithmSingle.setGenerations(migration);
-				secondGeneticAlgorithmSingle.setGenerations(migration);
-				thirdGeneticAlgorithmSingle.setGenerations(migration);
+				firstGeneticAlgorithmSingle.setGenerations(migrationGenerations);
+				secondGeneticAlgorithmSingle.setGenerations(migrationGenerations);
+				thirdGeneticAlgorithmSingle.setGenerations(migrationGenerations);
 			}
 			
 			ExecutorService executor = Executors.newFixedThreadPool(3);
