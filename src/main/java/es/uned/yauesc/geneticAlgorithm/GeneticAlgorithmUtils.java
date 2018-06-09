@@ -1,37 +1,47 @@
 package es.uned.yauesc.geneticAlgorithm;
 
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class GeneticAlgorithmUtils {
+	
+	private Random randomGenerator;
+	private GeneticAlgorithmConfig geneticAlgorithmConfig;
+	
+	public GeneticAlgorithmUtils(GeneticAlgorithmConfig geneticAlgorithmConfig) {
+		randomGenerator = new Random();	
+		this.geneticAlgorithmConfig = geneticAlgorithmConfig;
+	}
 
 	public double getProbability() {
-		// TODO Auto-generated method stub
-		return 0;
+		Double result = randomGenerator.nextDouble();
+		return ((Math.round(result)*1000.0)/1000.0);
 	}
 
 	public int getNewGenValue() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getRandomInt(geneticAlgorithmConfig.getNumberValuesGen());
 	}
 
 	public int getGenPosition() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getRandomInt(geneticAlgorithmConfig.getGenotypeLong());
 	}
 
 	public int getCrossPoint() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getRandomInt(geneticAlgorithmConfig.getGenotypeLong() - 1);
 	}
 
 	public List<Integer> getBinaryMask() {
-		// TODO Auto-generated method stub
-		return null;
+		return IntStream.range(0, geneticAlgorithmConfig.getGenotypeLong())
+				.parallel()
+				.map(i -> getRandomInt(2))
+				.boxed()
+				.collect(Collectors.toList());
 	}
 
 	public int getRandomInt(int max) {
-		// TODO Auto-generated method stub
-		return 0;
+		return randomGenerator.nextInt(max);
 	}
 
 }

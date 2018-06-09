@@ -41,7 +41,8 @@ class MutationOperatorPermutationTest {
 		offspring.add(thirdIndividual);
 		offspring.add(fourthIndividual);
 		
-		GeneticAlgorithmUtils geneticAlgorithmUtils = new GeneticAlgorithmUtilsFakeForTestMutationRefactor();
+		GeneticAlgorithmConfig geneticAlgorithmConfig = mock(GeneticAlgorithmConfig.class);
+		GeneticAlgorithmUtils geneticAlgorithmUtils = new GeneticAlgorithmUtilsFakeForTestMutationRefactor(geneticAlgorithmConfig);
 		
 		double probability = 1;
 		
@@ -74,7 +75,8 @@ class MutationOperatorPermutationTest {
 		offspring.add(thirdIndividual);
 		offspring.add(fourthIndividual);
 		
-		GeneticAlgorithmUtils geneticAlgorithmUtils = new GeneticAlgorithmUtilsFakeForTestMutationRefactor();
+		GeneticAlgorithmConfig geneticAlgorithmConfig = mock(GeneticAlgorithmConfig.class);
+		GeneticAlgorithmUtils geneticAlgorithmUtils = new GeneticAlgorithmUtilsFakeForTestMutationRefactor(geneticAlgorithmConfig);
 		
 		double probability = 0;
 		

@@ -33,8 +33,9 @@ class ParentSelectorRankingTest {
 		collectionIndividuals.add(secondIndividual);
 		collectionIndividuals.add(thirdIndividual);
 		collectionIndividuals.add(fourthIndividual);
-				
-		GeneticAlgorithmUtils geneticAlgorithmUtils = new GeneticAlgorithmUtilsFakeForParentSelectorRanking();
+		
+		GeneticAlgorithmConfig geneticAlgorithmConfig = mock(GeneticAlgorithmConfig.class);
+		GeneticAlgorithmUtils geneticAlgorithmUtils = new GeneticAlgorithmUtilsFakeForParentSelectorRanking(geneticAlgorithmConfig);
 		
 		ParentSelectorRanking parentSelectorRanking = new ParentSelectorRanking(geneticAlgorithmUtils, sParameter);
 		

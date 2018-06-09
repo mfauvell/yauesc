@@ -2,6 +2,10 @@ package es.uned.yauesc.geneticAlgorithm;
 
 public class GeneticAlgorithmUtilsFakeForParentSelectorRanking extends GeneticAlgorithmUtils {
 
+	public GeneticAlgorithmUtilsFakeForParentSelectorRanking(GeneticAlgorithmConfig geneticAlgorithmConfig) {
+		super(geneticAlgorithmConfig);
+	}
+
 	private boolean flag = false;
 	
 	public double getProbability() {

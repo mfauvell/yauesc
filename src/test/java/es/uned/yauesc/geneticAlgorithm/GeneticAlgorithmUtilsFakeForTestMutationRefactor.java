@@ -2,6 +2,10 @@ package es.uned.yauesc.geneticAlgorithm;
 
 public class GeneticAlgorithmUtilsFakeForTestMutationRefactor extends GeneticAlgorithmUtils {
 	
+	public GeneticAlgorithmUtilsFakeForTestMutationRefactor(GeneticAlgorithmConfig geneticAlgorithmConfig) {
+		super(geneticAlgorithmConfig);
+	}
+
 	private boolean flag = false;
 	
 	public double getProbability() {

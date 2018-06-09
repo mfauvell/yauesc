@@ -2,6 +2,10 @@ package es.uned.yauesc.geneticAlgorithm;
 
 public class GeneticAlgorithmUtilsFakeForParentSelectorTournament extends GeneticAlgorithmUtils {
 	
+	public GeneticAlgorithmUtilsFakeForParentSelectorTournament(GeneticAlgorithmConfig geneticAlgorithmConfig) {
+		super(geneticAlgorithmConfig);
+	}
+
 	private int count = 0;
 	
 	@Override

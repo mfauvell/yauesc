@@ -38,7 +38,8 @@ class ParentSelectorTournamentTest {
 		when(fourthIndividual.compareTo(secondIndividual)).thenReturn(-1);
 		when(fourthIndividual.compareTo(thirdIndividual)).thenReturn(-1);
 				
-		GeneticAlgorithmUtils geneticAlgorithmUtils = new GeneticAlgorithmUtilsFakeForParentSelectorTournament();
+		GeneticAlgorithmConfig geneticAlgorithmConfig = mock(GeneticAlgorithmConfig.class);
+		GeneticAlgorithmUtils geneticAlgorithmUtils = new GeneticAlgorithmUtilsFakeForParentSelectorTournament(geneticAlgorithmConfig);
 		
 		ParentSelectorTournament parentSelectorTournament = new ParentSelectorTournament(geneticAlgorithmUtils);
 		
