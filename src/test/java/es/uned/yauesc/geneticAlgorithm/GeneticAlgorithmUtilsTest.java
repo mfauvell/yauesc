@@ -9,6 +9,7 @@ class GeneticAlgorithmUtilsTest {
 
 	@Test
 	public void testBinaryMaskGenerator() {
+		//TODO sometimes fail
 		GeneticAlgorithmConfig geneticAlgorithmConfig = mock(GeneticAlgorithmConfig.class);
 		when(geneticAlgorithmConfig.getGenotypeLong()).thenReturn(5);
 		
