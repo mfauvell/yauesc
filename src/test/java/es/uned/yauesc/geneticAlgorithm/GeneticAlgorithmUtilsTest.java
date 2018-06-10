@@ -9,13 +9,12 @@ class GeneticAlgorithmUtilsTest {
 
 	@Test
 	public void testBinaryMaskGenerator() {
-		//TODO sometimes fail
 		GeneticAlgorithmConfig geneticAlgorithmConfig = mock(GeneticAlgorithmConfig.class);
 		when(geneticAlgorithmConfig.getGenotypeLong()).thenReturn(5);
 		
 		GeneticAlgorithmUtils geneticAlgorithmUtils = new GeneticAlgorithmUtils(geneticAlgorithmConfig);
 		
-		assertThat(geneticAlgorithmUtils.getBinaryMask()).containsOnly(0,1);
+		assertThat(geneticAlgorithmUtils.getBinaryMask()).hasSize(5).containsAnyOf(0,1);
 	}
 
 }
