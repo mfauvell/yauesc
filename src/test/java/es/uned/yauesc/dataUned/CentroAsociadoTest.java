@@ -9,12 +9,10 @@ class CentroAsociadoTest {
 	@Test
 	public void testIfCreateNewCentroAsociadoIsSetCorretcly() {
 		String name = "Place";
-		int id = 0;
 		int capacity = 150;
 		
-		CentroAsociado centroAsociado = new CentroAsociado(id, name, capacity);
+		CentroAsociado centroAsociado = new CentroAsociado(name, capacity);
 		
-		assertThat(centroAsociado.getId()).isEqualTo(id);
 		assertThat(centroAsociado.getName()).isEqualTo(name);
 		assertThat(centroAsociado.getCapacity()).isEqualTo(capacity);
 	}

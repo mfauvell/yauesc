@@ -7,15 +7,13 @@ class ExamTimeTest {
 
 	@Test
 	public void testCreateExamTimeIsSetCorrectly() {
-		int id = 0;
 		int day = 1;
 		String dayName = "Day";
 		int hour = 1;
 		String hourName = "Hour";
 		
-		ExamTime examTime = new ExamTime(id, day, dayName, hour, hourName);
+		ExamTime examTime = new ExamTime(day, dayName, hour, hourName);
 		
-		assertThat(examTime.getId()).isEqualTo(id);
 		assertThat(examTime.getDay()).isEqualTo(day);
 		assertThat(examTime.getDayName()).isEqualTo(dayName);
 		assertThat(examTime.getHour()).isEqualTo(hour);

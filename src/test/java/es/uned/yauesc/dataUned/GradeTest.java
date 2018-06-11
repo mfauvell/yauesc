@@ -14,6 +14,7 @@ class GradeTest {
 	public void testCreateGradeIsSetCorrectly() {
 		String name = "Grade";
 		int code = 73;
+		int years = 4;
 		
 		Course courseOne = mock(Course.class);
 		Course courseTwo = mock(Course.class);
@@ -22,10 +23,11 @@ class GradeTest {
 		courseList.add(courseOne);
 		courseList.add(courseTwo);
 		
-		Grade grade = new Grade(code, name, courseList);
+		Grade grade = new Grade(code, name, years, courseList);
 		
 		assertThat(grade.getCode()).isEqualTo(code);
 		assertThat(grade.getName()).isEqualTo(name);
+		assertThat(grade.getYears()).isEqualTo(years);
 		assertThat(grade.getAllCourses()).isEqualTo(courseList);
 	}
 
@@ -33,6 +35,7 @@ class GradeTest {
 	public void testObtainCoursesOfYear() {
 		String name = "Grade";
 		int code = 73;
+		int years = 4;
 		
 		Course courseOne = mock(Course.class);
 		Course courseTwo = mock(Course.class);
@@ -53,7 +56,7 @@ class GradeTest {
 		List<Course> courseFirstYear = new ArrayList<Course>();
 		courseFirstYear.add(courseOne);
 		
-		Grade grade = new Grade(code, name, courseList);
+		Grade grade = new Grade(code, name, years, courseList);
 		
 		assertThat(grade.getCourseYear(1)).isEqualTo(courseFirstYear);
 	}

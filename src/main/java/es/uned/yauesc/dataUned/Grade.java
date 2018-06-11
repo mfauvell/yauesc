@@ -7,11 +7,13 @@ public class Grade {
 	
 	private int code;
 	private String name;
+	private int years;
 	private List<Course> courseList;
 
-	public Grade(int code, String name, List<Course> courseList) {
+	public Grade(int code, String name, int years, List<Course> courseList) {
 		this.code = code;
 		this.name = name;
+		this.years = years;
 		this.courseList = courseList;
 	}
 
@@ -32,6 +34,10 @@ public class Grade {
 				.parallelStream()
 				.filter(course -> course.getDataCourse().getSchoolYear() == year)
 				.collect(Collectors.toList());
+	}
+
+	public int getYears() {
+		return years;
 	}
 
 }
