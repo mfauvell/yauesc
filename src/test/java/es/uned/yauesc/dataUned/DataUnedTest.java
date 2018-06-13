@@ -75,6 +75,69 @@ class DataUnedTest {
 	
 	@Test
 	public void testAddExamTimeAndGetNumberExamTime() {
+		ExamTime firstExamTime = mock(ExamTime.class);
+		ExamTime secondExamTime = mock(ExamTime.class);
 		
+		when(firstExamTime.getDay()).thenReturn(1);
+		when(secondExamTime.getDay()).thenReturn(2);
+		
+		int numberExamTime = 2;
+		
+		List<ExamTime> examTimeList = new ArrayList<>();
+		examTimeList.add(firstExamTime);
+		examTimeList.add(secondExamTime);
+		
+		List<ExamTime> dayOneExamTime = new ArrayList<>();
+		dayOneExamTime.add(firstExamTime);
+		
+		DataUned dataUned = new DataUned();
+		
+		dataUned.addExamTime(firstExamTime);
+		dataUned.addExamTime(secondExamTime);
+		
+		assertThat(dataUned.getExamTimeList()).isEqualTo(examTimeList);
+		assertThat(dataUned.getExamTimeDay(1)).isEqualTo(dayOneExamTime);
+		assertThat(dataUned.getExamTimeDay(4)).isNull();
+		assertThat(dataUned.getNumberExamTime()).isEqualTo(numberExamTime);
+		assertThat(dataUned.getExamTime(1)).isEqualTo(secondExamTime);
+		assertThat(dataUned.getExamTime(3)).isNull();
+	}
+	
+	@Test
+	public void testAddEnrolmentAndGetNumberEnrolInACourseAndACentroAsociado() {
+		CentroAsociado firstCentroAsociado = mock(CentroAsociado.class);
+		CentroAsociado secondCentroAsociado = mock(CentroAsociado.class);
+		String nameFirstCentroAsociado = "First";
+		String nameSecondCentroAsociado = "Second";
+		when(firstCentroAsociado.getName()).thenReturn(nameFirstCentroAsociado);
+		when(secondCentroAsociado.getName()).thenReturn(nameSecondCentroAsociado);
+		
+		Course firstCourse = mock(Course.class);
+		Course secondCourse = mock(Course.class);
+		int codeFisrtCourse = 71;
+		int codeSecondCourse = 72;
+		when(firstCourse.getCode()).thenReturn(codeFisrtCourse);
+		when(firstCourse.getCode()).thenReturn(codeSecondCourse);
+		
+		int numberEnroledFirstCaFirstCourse = 10;
+		int numberEnroledSecondCaSecondCourse = 13;
+		
+		DataUned dataUned = new DataUned();
+		
+		dataUned.addCentroAsociado(firstCentroAsociado);
+		dataUned.addCentroAsociado(secondCentroAsociado);
+		dataUned.addCourse(firstCourse);
+		dataUned.addCourse(secondCourse);
+		
+		dataUned.addEnrolment(nameFirstCentroAsociado, codeFisrtCourse, numberEnroledFirstCaFirstCourse);
+		dataUned.addEnrolment(nameSecondCentroAsociado, codeSecondCourse, numberEnroledSecondCaSecondCourse);
+		
+		assertThrows(IllegalArgumentException.class, () -> dataUned.addEnrolment("Error", codeFisrtCourse, numberEnroledFirstCaFirstCourse), "Here must be thrown IllegalArgumentException");
+		assertThrows(IllegalArgumentException.class, () -> dataUned.addEnrolment(nameFirstCentroAsociado, -1, numberEnroledFirstCaFirstCourse), "Here must be thrown IllegalArgumentException");
+		assertThat(dataUned.getNumberEnrolment(nameFirstCentroAsociado, codeFisrtCourse)).isEqualTo(numberEnroledFirstCaFirstCourse);
+		assertThat(dataUned.getNumberEnrolment(nameSecondCentroAsociado, codeSecondCourse)).isEqualTo(numberEnroledSecondCaSecondCourse);
+		assertThat(dataUned.getNumberEnrolment(nameFirstCentroAsociado, codeSecondCourse)).isEqualTo(0);
+		assertThrows(IllegalArgumentException.class, () -> dataUned.getNumberEnrolment("Error", codeFisrtCourse), "Here must be thrown IllegalArgumentException");
+		assertThrows(IllegalArgumentException.class, () -> dataUned.getNumberEnrolment(nameFirstCentroAsociado, -1), "Here must be thrown IllegalArgumentException");
 	}
 }

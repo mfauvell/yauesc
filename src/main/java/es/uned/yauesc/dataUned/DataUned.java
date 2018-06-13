@@ -15,6 +15,10 @@ public class DataUned {
 	
 	private LinkedHashMap<String, CentroAsociado> nameCentroAsociadoMap;
 	
+	private ArrayList<ExamTime> idExamTimeList;
+	private LinkedHashMap<Integer, List<ExamTime>> dayListExamTimeMap;
+	private int examTimeNumber;
+	
 	public DataUned() {
 		idCodeCourseList =  new ArrayList<>();
 		codeCourseMap = new LinkedHashMap<>();
@@ -23,6 +27,10 @@ public class DataUned {
 		codeGradeMap = new LinkedHashMap<>();
 		
 		nameCentroAsociadoMap = new LinkedHashMap<>();
+		
+		idExamTimeList = new ArrayList<>();
+		dayListExamTimeMap = new LinkedHashMap<>();
+		examTimeNumber = 0;
 	}
 
 	public void addCourse(Course firstCourse) {
@@ -64,6 +72,46 @@ public class DataUned {
 		return nameCentroAsociadoMap.get(name);
 	}
 
+	public void addExamTime(ExamTime examTime) {
+		idExamTimeList.add(examTime);
+		int day = examTime.getDay();
+		if (dayListExamTimeMap.containsKey(day)) {
+			dayListExamTimeMap.get(day).add(examTime);
+		} else {
+			List<ExamTime> examTimeDayList = new ArrayList<>();
+			examTimeDayList.add(examTime);
+			dayListExamTimeMap.put(day, examTimeDayList);
+		}
+		examTimeNumber++;
+	}
 	
+	public List<ExamTime> getExamTimeList() {
+		return idExamTimeList;
+	}
 
+	public int getNumberExamTime() {
+		return examTimeNumber;
+	}
+
+	public List<ExamTime> getExamTimeDay(int day) {
+		return dayListExamTimeMap.get(day);
+	}
+
+	public ExamTime getExamTime(int id) {
+		ExamTime result = null;
+		if (examTimeNumber >= id) {
+			result = idExamTimeList.get(id);
+		}
+		return result;
+	}
+
+	public void addEnrolment(String nameFirstCentroAsociado, int codeFisrtCourse, int numberEnroledFirstCaFirstCourse) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public IntPredicate getNumberEnrolment(String nameFirstCentroAsociado, int codeFisrtCourse) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
