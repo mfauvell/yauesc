@@ -16,5 +16,4 @@ class CentroAsociadoTest {
 		assertThat(centroAsociado.getName()).isEqualTo(name);
 		assertThat(centroAsociado.getCapacity()).isEqualTo(capacity);
 	}
-
 }

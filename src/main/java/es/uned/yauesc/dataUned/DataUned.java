@@ -3,7 +3,6 @@ package es.uned.yauesc.dataUned;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.function.IntPredicate;
 
 public class DataUned {
 	
@@ -19,6 +18,8 @@ public class DataUned {
 	private LinkedHashMap<Integer, List<ExamTime>> dayListExamTimeMap;
 	private int examTimeNumber;
 	
+	private LinkedHashMap<String, LinkedHashMap<Integer, Integer>> centroAsociadoCourseNumberEnrolMap;
+	
 	public DataUned() {
 		idCodeCourseList =  new ArrayList<>();
 		codeCourseMap = new LinkedHashMap<>();
@@ -31,6 +32,8 @@ public class DataUned {
 		idExamTimeList = new ArrayList<>();
 		dayListExamTimeMap = new LinkedHashMap<>();
 		examTimeNumber = 0;
+		
+		centroAsociadoCourseNumberEnrolMap = new LinkedHashMap<>();
 	}
 
 	public void addCourse(Course firstCourse) {
@@ -105,13 +108,36 @@ public class DataUned {
 		return result;
 	}
 
-	public void addEnrolment(String nameFirstCentroAsociado, int codeFisrtCourse, int numberEnroledFirstCaFirstCourse) {
-		// TODO Auto-generated method stub
-		
+	public void addEnrolment(String nameCentroAsociado, int codeCourse, int numberEnroled) {
+		if (!(codeCourseMap.containsKey(codeCourse))) {
+			throw new IllegalArgumentException("Course not exist");
+		}
+		if (!(nameCentroAsociadoMap.containsKey(nameCentroAsociado))) {
+			throw new IllegalArgumentException("CentroAsociado not exist");
+		}
+		if (centroAsociadoCourseNumberEnrolMap.containsKey(nameCentroAsociado)) {
+			centroAsociadoCourseNumberEnrolMap.get(nameCentroAsociado).put(codeCourse, numberEnroled);
+		} else {
+			LinkedHashMap<Integer, Integer> codeCourseNumberEnroled = new LinkedHashMap<>();
+			codeCourseNumberEnroled.put(codeCourse, numberEnroled);
+			centroAsociadoCourseNumberEnrolMap.put(nameCentroAsociado, codeCourseNumberEnroled);
+		}
 	}
 
-	public IntPredicate getNumberEnrolment(String nameFirstCentroAsociado, int codeFisrtCourse) {
-		// TODO Auto-generated method stub
-		return null;
+	public int getNumberEnrolment(String nameCentroAsociado, int codeCourse) {
+		if (!(codeCourseMap.containsKey(codeCourse))) {
+			throw new IllegalArgumentException("Course not exist");
+		}
+		if (!(nameCentroAsociadoMap.containsKey(nameCentroAsociado))) {
+			throw new IllegalArgumentException("CentroAsociado not exist");
+		}
+		int result = 0;
+		if (centroAsociadoCourseNumberEnrolMap.containsKey(nameCentroAsociado)) {
+			LinkedHashMap<Integer, Integer> codeCourseNumberEnroled = centroAsociadoCourseNumberEnrolMap.get(nameCentroAsociado);
+			if (codeCourseNumberEnroled.containsKey(codeCourse)) {
+				result = codeCourseNumberEnroled.get(codeCourse);
+			}
+		}
+		return result;
 	}
 }

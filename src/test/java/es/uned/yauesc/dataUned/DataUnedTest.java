@@ -117,7 +117,7 @@ class DataUnedTest {
 		int codeFisrtCourse = 71;
 		int codeSecondCourse = 72;
 		when(firstCourse.getCode()).thenReturn(codeFisrtCourse);
-		when(firstCourse.getCode()).thenReturn(codeSecondCourse);
+		when(secondCourse.getCode()).thenReturn(codeSecondCourse);
 		
 		int numberEnroledFirstCaFirstCourse = 10;
 		int numberEnroledSecondCaSecondCourse = 13;

@@ -40,4 +40,36 @@ public class Grade {
 		return years;
 	}
 
+	@Override
+	public boolean equals(Object object) {
+		if (object == this) {
+			return true;
+		}
+		if (object == null) {
+			return false;
+		}
+		if (object instanceof Grade) {
+			Grade grade = (Grade) object;
+			return ((this.code == grade.getCode()) && (this.name.equals(grade.getName())) && (this.years == grade.getYears())
+					&& (this.courseList.equals(grade.getAllCourses())));
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return (code + name.hashCode() * 23) / (years + courseList.hashCode());
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder gradeString = new StringBuilder();
+		gradeString.append("Grade: (");
+		gradeString.append("Code: " + code);
+		gradeString.append(" Name: " + name);
+		gradeString.append(" CourseList: " + courseList.toString());
+		gradeString.append(")");
+		return gradeString.toString();
+	}
 }

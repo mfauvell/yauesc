@@ -30,4 +30,37 @@ public class ExamTime {
 		return hourName;
 	}
 
+	@Override
+	public boolean equals(Object object) {
+		if (object == this) {
+			return true;
+		}
+		if (object == null) {
+			return false;
+		}
+		if (object instanceof ExamTime) {
+			ExamTime examTime = (ExamTime) object;
+			return ((this.day == examTime.getDay()) && (this.dayName.equals(examTime.getDayName())) && (this.hour == examTime.getHour())
+					&& (this.hourName.equals(examTime.getHourName())));
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return ((day + hour) * 23) + dayName.hashCode() + hourName.hashCode();
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder examTimeString = new StringBuilder();
+		examTimeString.append("ExamTime: (");
+		examTimeString.append("Day: " + day);
+		examTimeString.append(" DayName: " + dayName);
+		examTimeString.append(" Hour: " + hour);
+		examTimeString.append(" HourName: " + hourName);
+		examTimeString.append(")");
+		return examTimeString.toString();
+	}
 }

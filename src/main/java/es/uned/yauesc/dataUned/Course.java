@@ -24,4 +24,35 @@ public class Course {
 		return dataCourse;
 	}
 
+	@Override
+	public boolean equals(Object object) {
+		if (object == this) {
+			return true;
+		}
+		if (object == null) {
+			return false;
+		}
+		if (object instanceof Course) {
+			Course course = (Course) object;
+			return ((this.code == course.getCode()) && (this.name.equals(course.getName())) && this.dataCourse.equals(course.getDataCourse()));
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return (code + name.hashCode() -23) / dataCourse.hashCode();
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder courseString = new StringBuilder();
+		courseString.append("Course: (");
+		courseString.append("Code: " + code);
+		courseString.append(" Name: " + name);
+		courseString.append(dataCourse.toString());
+		courseString.append(")");
+		return courseString.toString();
+	}
 }
