@@ -11,6 +11,7 @@ public class Population {
 	private int size;
 	private int max;
 	private int min;
+	private boolean aged;
 	
 	public Population(Collection<Individual> collectionIndividuals, int max, int min) throws IllegalParameterValueCheckedException {
 		int size = collectionIndividuals.size();
@@ -24,11 +25,13 @@ public class Population {
 			this.size = size;
 			this.max = max;
 			this.min = min;
+			aged = true;
 		}
 	}
 	
 	public Population(Collection<Individual> collectionIndividuals) throws IllegalParameterValueCheckedException {
 		this(collectionIndividuals,collectionIndividuals.size(),collectionIndividuals.size());
+		aged = false;
 	}
 	
 	public Individual getBestIndividual() {
@@ -84,6 +87,11 @@ public class Population {
 		futureIndividuals.addAll(newIndividuals);
 		individuals = futureIndividuals;
 		sortIndividuals();
+	}
+	
+
+	public boolean isAged() {
+		return aged;
 	}
 	
 	private void sortIndividuals() {

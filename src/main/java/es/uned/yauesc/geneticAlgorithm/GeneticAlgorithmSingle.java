@@ -2,6 +2,7 @@ package es.uned.yauesc.geneticAlgorithm;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 	
@@ -36,6 +37,13 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 		observers = new ArrayList<GeneticAlgorithmObserver>();
 		
 		population.substituteAllIndividual(evaluationFunction.evaluate(population.getAllIndividual()));
+		
+		if (population.isAged()) {
+			List<Individual> individualList = new ArrayList<>(population.getAllIndividual());
+			Fitness max = individualList.get(0).getFitness();
+			Fitness min = individualList.get(individualList.size() -1).getFitness();
+			population.substituteAllIndividual(evaluationFunction.setAge(max, min, individualList));
+		}
 		
 		solution = population.getBestIndividual();
 		

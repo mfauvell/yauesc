@@ -8,11 +8,12 @@ public class Individual implements Comparable<Individual>{
 	private Fitness fitness;
 	private boolean evaluated;
 	private int age;
+	private boolean aged;
 
 	public Individual(List<Integer> genotype) {
 		this.genotype = genotype;
-		age = 1;
 		evaluated = false;
+		aged = false;
 	}
 
 	public List<Integer> getGenotype() {
@@ -28,6 +29,9 @@ public class Individual implements Comparable<Individual>{
 	}
 
 	public int getAge() {
+		if (!aged) {
+			throw new UnsupportedOperationException("Individual must be aged first");
+		}
 		return age;
 	}
 
@@ -42,6 +46,7 @@ public class Individual implements Comparable<Individual>{
 		} else {
 			this.age = age;
 		}
+		aged = true;
 	}
 
 	public void setGenotype(List<Integer> genotype) {
@@ -50,6 +55,9 @@ public class Individual implements Comparable<Individual>{
 	}
 
 	public void decAge() {
+		if (!aged) {
+			throw new UnsupportedOperationException("Individual must be aged first");
+		}
 		if (!(age == 0)) {
 			age = age -1;
 		}
@@ -57,6 +65,10 @@ public class Individual implements Comparable<Individual>{
 	
 	public boolean isEvaluated() {
 		return evaluated;
+	}
+	
+	public boolean isAged() {
+		return aged;
 	}
 
 	@Override

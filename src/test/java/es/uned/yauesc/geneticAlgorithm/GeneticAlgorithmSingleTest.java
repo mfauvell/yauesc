@@ -27,6 +27,9 @@ public class GeneticAlgorithmSingleTest {
 		Individual thirdIndividual = mock(Individual.class);
 		Individual fourthIndividual = mock(Individual.class);
 		
+		when(firstIndividual.getFitness()).thenReturn(optimalFitness);
+		when(fourthIndividual.getFitness()).thenReturn(optimalFitness);
+		
 		Collection<Individual> initialPopulation = new ArrayList<Individual>();
 		initialPopulation.add(firstIndividual);
 		initialPopulation.add(secondIndividual);
@@ -40,6 +43,45 @@ public class GeneticAlgorithmSingleTest {
 				mutationOperator, survivorSelector, 1, optimalFitness, initialPopulation.size());
 		
 		verify(evaluationFunction).evaluate(initialPopulation);
+		verify(evaluationFunction, never()).setAge(optimalFitness, optimalFitness, initialPopulation);
+		assertThat(geneticAlgorithmSingle.getSolution()).isEqualTo(firstIndividual);
+		assertThat(geneticAlgorithmSingle.isFinished()).isFalse();
+		assertThat(geneticAlgorithmSingle.foundOptimal()).isFalse();
+	}
+	
+	@Test
+	public void testConstructorWithPopulationAgedMustBeThisPopulationAgedAndIsSetCorrectlyAll() {
+		Population population = mock(Population.class);
+		EvaluationFunction evaluationFunction = mock(EvaluationFunction.class);
+		ParentSelector parentSelector = mock(ParentSelector.class);
+		RecombinationOperator recombinationOperator = mock(RecombinationOperator.class);
+		MutationOperator mutationOperator = mock(MutationOperator.class);
+		SurvivorSelector survivorSelector = mock(SurvivorSelector.class);
+		Fitness optimalFitness = mock(Fitness.class);
+		
+		Individual firstIndividual = mock(Individual.class);
+		Individual secondIndividual = mock(Individual.class);
+		Individual thirdIndividual = mock(Individual.class);
+		Individual fourthIndividual = mock(Individual.class);
+		
+		when(firstIndividual.getFitness()).thenReturn(optimalFitness);
+		when(fourthIndividual.getFitness()).thenReturn(optimalFitness);
+		
+		Collection<Individual> initialPopulation = new ArrayList<Individual>();
+		initialPopulation.add(firstIndividual);
+		initialPopulation.add(secondIndividual);
+		initialPopulation.add(thirdIndividual);
+		initialPopulation.add(fourthIndividual);
+		
+		when(population.getAllIndividual()).thenReturn(initialPopulation);
+		when(population.getBestIndividual()).thenReturn(firstIndividual);
+		when(population.isAged()).thenReturn(true);
+		
+		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
+				mutationOperator, survivorSelector, 1, optimalFitness, initialPopulation.size());
+		
+		verify(evaluationFunction).evaluate(initialPopulation);
+		verify(evaluationFunction).setAge(optimalFitness, optimalFitness, initialPopulation);
 		assertThat(geneticAlgorithmSingle.getSolution()).isEqualTo(firstIndividual);
 		assertThat(geneticAlgorithmSingle.isFinished()).isFalse();
 		assertThat(geneticAlgorithmSingle.foundOptimal()).isFalse();

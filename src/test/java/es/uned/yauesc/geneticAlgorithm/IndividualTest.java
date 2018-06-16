@@ -16,16 +16,16 @@ public class IndividualTest {
 	private static final List<Integer> OTHERGENOTYPE = new ArrayList<Integer>(Arrays.asList(6,7,8,9,10,11)); 
 	
 	@Test
-	public void constructorShouldSetGenotypeAndSetEvaluatedToFalseAndAgeDefaultValorToOne() {
+	public void constructorShouldSetGenotypeAndSetEvaluatedAndAgedToFalse() {
 		Individual individual = new Individual(GENOTYPE);
 		
 		assertThat(individual.getGenotype()).isEqualTo(GENOTYPE);
 		assertThat(individual.isEvaluated()).isFalse();
-		assertThat(individual.getAge()).isEqualTo(1);
+		assertThat(individual.isAged()).isFalse();
 	}
 	
 	@Test
-	public void testAddGenetypeAndEvaluatedMustBeFalse() {
+	public void testAddGenetypeAndEvaluatedAndAgedMustBeFalse() {
 		Individual individual = new Individual(GENOTYPE);
 		Fitness fitness = mock(Fitness.class);
 		
@@ -34,6 +34,7 @@ public class IndividualTest {
 		
 		assertThat(individual.getGenotype()).isEqualTo(OTHERGENOTYPE);
 		assertThat(individual.isEvaluated()).isFalse();
+		assertThat(individual.isAged()).isFalse();
 	}
 	
 	@Test
@@ -48,12 +49,13 @@ public class IndividualTest {
 	}
 	
 	@Test
-	public void testAddAge() {
+	public void testAddAgeAndAgedIsSetToTrue() {
 		Individual individual = new Individual(GENOTYPE);
 		
 		individual.setAge(5);
 		
 		assertThat(individual.getAge()).isEqualTo(5);
+		assertThat(individual.isAged()).isTrue();
 	}
 
 	@Test
@@ -85,6 +87,14 @@ public class IndividualTest {
 		Individual individual = new Individual(GENOTYPE);
 		
 		assertThrows(UnsupportedOperationException.class,()->{individual.getFitness();},"Here should be throw a UnsupportedOperationException because evaluated is false");
+	}
+	
+	@Test
+	public void testExceptionIfGetAgedOrDecAgeAndIsNotEvaluated() {
+		Individual individual = new Individual(GENOTYPE);
+		
+		assertThrows(UnsupportedOperationException.class,()->{individual.getAge();},"Here should be throw a UnsupportedOperationException because aged is false");
+		assertThrows(UnsupportedOperationException.class,()->{individual.decAge();},"Here should be throw a UnsupportedOperationException because aged is false");
 	}
 	
 	@Test

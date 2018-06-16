@@ -72,14 +72,15 @@ public class PopulationTest {
 	}
 
 	@Test
-	public void constructorStaticSizeShouldSetIndividualsAndSizeOfPopulation() throws IllegalParameterValueCheckedException {
+	public void constructorStaticSizeShouldSetIndividualsAndSizeOfPopulationAgedMustBeFalse() throws IllegalParameterValueCheckedException {
 		Population population = new Population(collectionIndividuals);
 		assertThat(population.getAllIndividual()).isEqualTo(collectionSortedIndividuals);
 		assertThat(population.getSize()).isEqualTo(collectionSortedIndividuals.size());
+		assertThat(population.isAged()).isFalse();
 	}
 	
 	@Test
-	public void constructorDynamicSizeShouldSetIndividualsAndSizeMaxMinOfPopulation() throws IllegalParameterValueCheckedException {
+	public void constructorDynamicSizeShouldSetIndividualsAndSizeMaxMinOfPopulationAgedMustBeTrue() throws IllegalParameterValueCheckedException {
 		int MAX = 6;
 		int MIN = 2;
 		Population population = new Population(collectionIndividuals, MAX, MIN);
@@ -88,6 +89,7 @@ public class PopulationTest {
 		assertThat(population.getSize()).isEqualTo(collectionSortedIndividuals.size());
 		assertThat(population.getMaxSize()).isEqualTo(MAX);
 		assertThat(population.getMinSize()).isEqualTo(MIN);
+		assertThat(population.isAged()).isTrue();
 	}
 	
 	@Test
