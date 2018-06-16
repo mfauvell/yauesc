@@ -1,15 +1,18 @@
 package es.uned.yauesc.dataUned;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Course {
 	
 	private int code;
 	private String name;
-	private DataCourse dataCourse;
+	private List<DataCourse> dataCourseList;
 
-	public Course(int code, String name, DataCourse dataCourse) {
+	public Course(int code, String name) {
 		this.code = code;
 		this.name = name;
-		this.dataCourse = dataCourse;
+		dataCourseList = new ArrayList<>();
 	}
 
 	public int getCode() {
@@ -20,10 +23,16 @@ public class Course {
 		return name;
 	}
 
-	public DataCourse getDataCourse() {
-		return dataCourse;
+	public List<DataCourse> getDataCourseList() {
+		return dataCourseList;
 	}
 
+	public void addDataCourse(DataCourse dataCourse) {
+		if (!dataCourseList.contains(dataCourse)) {
+			dataCourseList.add(dataCourse);
+		}
+	}
+	
 	@Override
 	public boolean equals(Object object) {
 		if (object == this) {
@@ -34,7 +43,7 @@ public class Course {
 		}
 		if (object instanceof Course) {
 			Course course = (Course) object;
-			return ((this.code == course.getCode()) && (this.name.equals(course.getName())) && this.dataCourse.equals(course.getDataCourse()));
+			return ((this.code == course.getCode()) && (this.name.equals(course.getName())) && this.dataCourseList.equals(course.getDataCourseList()));
 		} else {
 			return false;
 		}
@@ -42,7 +51,7 @@ public class Course {
 	
 	@Override
 	public int hashCode() {
-		return (code + name.hashCode() -23) / dataCourse.hashCode();
+		return (code + name.hashCode() -23) / dataCourseList.hashCode();
 	}
 	
 	@Override
@@ -51,7 +60,7 @@ public class Course {
 		courseString.append("Course: (");
 		courseString.append("Code: " + code);
 		courseString.append(" Name: " + name);
-		courseString.append(dataCourse.toString());
+		courseString.append(dataCourseList.toString());
 		courseString.append(")");
 		return courseString.toString();
 	}

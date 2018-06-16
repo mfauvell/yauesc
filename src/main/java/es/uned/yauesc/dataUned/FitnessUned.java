@@ -48,4 +48,35 @@ public class FitnessUned implements Fitness {
 		return thirdLevel;
 	}
 
+	@Override
+	public boolean equals(Object object) {
+		if (object == this) {
+			return true;
+		}
+		if (object == null) {
+			return false;
+		}
+		if (object instanceof FitnessUned) {
+			FitnessUned fitnessUned = (FitnessUned) object;
+			return ((this.firstLevel == fitnessUned.getFirstLevel()) && (this.secondLevel == fitnessUned.getSecondLevel()) && (this.thirdLevel == fitnessUned.getThirdLevel()));
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return (firstLevel + secondLevel) * (thirdLevel + 23);
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder fitnessUnedString = new StringBuilder();
+		fitnessUnedString.append("FitnessUned: (");
+		fitnessUnedString.append("FirstLevel: " + firstLevel);
+		fitnessUnedString.append(" SecondLevel: " + secondLevel);
+		fitnessUnedString.append(" ThirdLevel: " + thirdLevel);
+		fitnessUnedString.append(")");
+		return fitnessUnedString.toString();
+	}
 }

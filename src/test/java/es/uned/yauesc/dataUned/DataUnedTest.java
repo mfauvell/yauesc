@@ -90,6 +90,10 @@ class DataUnedTest {
 		List<ExamTime> dayOneExamTime = new ArrayList<>();
 		dayOneExamTime.add(firstExamTime);
 		
+		List<Integer> dayList = new ArrayList<>();
+		dayList.add(1);
+		dayList.add(2);
+		
 		DataUned dataUned = new DataUned();
 		
 		dataUned.addExamTime(firstExamTime);

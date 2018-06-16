@@ -32,7 +32,15 @@ public class Grade {
 	public List<Course> getCourseYear(int year) {
 		return courseList
 				.parallelStream()
-				.filter(course -> course.getDataCourse().getSchoolYear() == year)
+				.filter(course -> 
+					!course.getDataCourseList()
+					.parallelStream()
+					.filter(dataCourse -> dataCourse.getGrade() == code)
+					.collect(Collectors.toList())
+					.parallelStream()
+					.filter(dataCourse -> dataCourse.getSchoolYear() == year)
+					.collect(Collectors.toList())
+					.isEmpty())
 				.collect(Collectors.toList());
 	}
 
