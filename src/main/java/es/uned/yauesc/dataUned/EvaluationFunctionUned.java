@@ -14,6 +14,11 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 
 	private DataUned dataUned;
 	
+	private long firstAgeDivisor;
+	private long secondAgeDivisor;
+	private long thirdAgeDivisor;
+	private long fourthAgeDivisor;
+	
 	public EvaluationFunctionUned(DataUned dataUned) {
 		this.dataUned = dataUned;
 	}
@@ -262,13 +267,46 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 					}).
 					sum()).
 			sum();
-		return new FitnessUned(firstLevel, secondLevel, thirdLevel);
+		return UnedFactory.getFitnessUned(firstLevel, secondLevel, thirdLevel);
 	}
 
 	@Override
 	public Collection<Individual> setAge(Fitness max, Fitness min, Collection<Individual> offspring) {
-		// TODO Auto-generated method stub
-		return null;
+		setDivisorAge((FitnessUned) max, (FitnessUned) min);
+		offspring.parallelStream()
+			.forEach(individual -> {
+				int age = getAge((FitnessUned) individual.getFitness());
+				individual.setAge(age);
+		});
+		return offspring;
+	}
+	
+	private long convertFitness(FitnessUned fitness) {
+		return ((fitness.getFirstLevel()* 1000000) + (fitness.getSecondLevel()*1000) + fitness.getThirdLevel());
 	}
 
+	private void setDivisorAge(FitnessUned maxFitness, FitnessUned minFitness) {
+		long max = convertFitness(maxFitness);
+		long min = convertFitness(minFitness);
+		long difference = ((min - max) / 5);
+		firstAgeDivisor = max + difference;
+		secondAgeDivisor = firstAgeDivisor + difference;
+		thirdAgeDivisor = secondAgeDivisor + difference;
+		fourthAgeDivisor = thirdAgeDivisor + difference;
+	}
+	
+	private int getAge(FitnessUned fitness) {
+		int result = 1;
+		long fitnessConvert = convertFitness(fitness);
+		if (fitnessConvert < firstAgeDivisor) {
+			result = 5;
+		} else if (fitnessConvert < secondAgeDivisor) {
+			result = 4;
+		} else if (fitnessConvert < thirdAgeDivisor) {
+			result = 3;
+		} else if (fitnessConvert < fourthAgeDivisor) {
+			result = 2;
+		}
+		return result;
+	}
 }
