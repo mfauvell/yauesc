@@ -21,6 +21,19 @@ test {
     useJUnitPlatform()
 }
 
+sourceSets {
+    intTest {
+        java.srcDir file('src/intTest/java')
+        resources.srcDir file('src/intTest/resources')
+        compileClasspath += sourceSets.main.output + configurations.testRuntime
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+configurations {
+    intTestImplementation.extendsFrom implementation
+}
+
 sourceCompatibility = 1.8
 version = '0.1'
 jar {
@@ -38,8 +51,8 @@ dependencies {
     //OpenCsv
     compile 'com.opencsv:opencsv:4.1'
 
-    // Use JUnit test framework
-    //testCompile 'junit:junit:4.12'
+	//Unit Test
+    //Junit
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
     
@@ -50,8 +63,28 @@ dependencies {
     //AssertJ Fluent Assertions
     testImplementation "org.assertj:assertj-core:3.9.0"
     testRuntimeOnly "org.assertj:assertj-core:3.9.0"
-	
+    
+    //Integration Test
+    //Junit
+    intTestImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    intTestRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+    
+    //AssertJ Fluent Assertions
+    intTestImplementation "org.assertj:assertj-core:3.9.0"
+    intTestRuntimeOnly "org.assertj:assertj-core:3.9.0"
 }
+
+task integrationTest(type: Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+
+	useJUnitPlatform()
+    testClassesDirs = sourceSets.intTest.output.classesDirs
+    classpath = sourceSets.intTest.runtimeClasspath
+    mustRunAfter test
+}
+
+check.dependsOn integrationTest
 
 // In this section you declare where to find the dependencies of your project
 repositories {

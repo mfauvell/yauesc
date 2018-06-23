@@ -1,7 +1,5 @@
 package es.uned.yauesc.dataUned;
 
-import java.util.List;
-
 public final class UnedFactory {
 	
 	private UnedFactory() {
@@ -32,8 +30,8 @@ public final class UnedFactory {
 		return new DataCourse(gradeCode, schoolYear, obligatory);
 	}
 	
-	public static Grade getGrade(int code, String name, int years, List<Course> courseList) {
-		return new Grade(code, name, years, courseList);
+	public static Grade getGrade(int code, String name, int years) {
+		return new Grade(code, name, years);
 	}
 	
 	public static ExamTime getExamTime(int day, String dayName, int hour, String hourName) {

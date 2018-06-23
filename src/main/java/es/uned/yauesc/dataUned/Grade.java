@@ -1,20 +1,15 @@
 package es.uned.yauesc.dataUned;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class Grade {
 	
 	private int code;
 	private String name;
 	private int years;
-	private List<Course> courseList;
 
-	public Grade(int code, String name, int years, List<Course> courseList) {
+	public Grade(int code, String name, int years) {
 		this.code = code;
 		this.name = name;
 		this.years = years;
-		this.courseList = courseList;
 	}
 
 	public int getCode() {
@@ -23,25 +18,6 @@ public class Grade {
 
 	public String getName() {
 		return name;
-	}
-
-	public List<Course> getAllCourses() {
-		return courseList;
-	}
-
-	public List<Course> getCourseYear(int year) {
-		return courseList
-				.parallelStream()
-				.filter(course -> 
-					!course.getDataCourseList()
-					.parallelStream()
-					.filter(dataCourse -> dataCourse.getGrade() == code)
-					.collect(Collectors.toList())
-					.parallelStream()
-					.filter(dataCourse -> dataCourse.getSchoolYear() == year)
-					.collect(Collectors.toList())
-					.isEmpty())
-				.collect(Collectors.toList());
 	}
 
 	public int getYears() {
@@ -58,8 +34,7 @@ public class Grade {
 		}
 		if (object instanceof Grade) {
 			Grade grade = (Grade) object;
-			return ((this.code == grade.getCode()) && (this.name.equals(grade.getName())) && (this.years == grade.getYears())
-					&& (this.courseList.equals(grade.getAllCourses())));
+			return ((this.code == grade.getCode()) && (this.name.equals(grade.getName())) && (this.years == grade.getYears()));
 		} else {
 			return false;
 		}
@@ -67,7 +42,7 @@ public class Grade {
 	
 	@Override
 	public int hashCode() {
-		return (code + name.hashCode() * 23) / (years + courseList.hashCode());
+		return (code + name.hashCode() * 23) / (years);
 	}
 	
 	@Override
@@ -76,7 +51,6 @@ public class Grade {
 		gradeString.append("Grade: (");
 		gradeString.append("Code: " + code);
 		gradeString.append(" Name: " + name);
-		gradeString.append(" CourseList: " + courseList.toString());
 		gradeString.append(")");
 		return gradeString.toString();
 	}

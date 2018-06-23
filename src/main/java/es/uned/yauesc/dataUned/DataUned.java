@@ -3,6 +3,7 @@ package es.uned.yauesc.dataUned;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DataUned {
 	
@@ -11,6 +12,7 @@ public class DataUned {
 	private int courseNumber;
 	
 	private LinkedHashMap<Integer, Grade> codeGradeMap;
+	private LinkedHashMap<Integer, List<Integer>> codeGradeListCourseCodeMap;
 	
 	private LinkedHashMap<String, CentroAsociado> nameCentroAsociadoMap;
 	
@@ -26,6 +28,7 @@ public class DataUned {
 		courseNumber = 0;
 		
 		codeGradeMap = new LinkedHashMap<>();
+		codeGradeListCourseCodeMap = new LinkedHashMap<>();
 		
 		nameCentroAsociadoMap = new LinkedHashMap<>();
 		
@@ -36,16 +39,26 @@ public class DataUned {
 		centroAsociadoCourseNumberEnrolMap = new LinkedHashMap<>();
 	}
 
-	public void addCourse(Course firstCourse) {
-		int code = firstCourse.getCode();
-		idCodeCourseList.add(code);
-		codeCourseMap.put(code, firstCourse);
-		courseNumber++;
+	public void addCourse(int code, String name, int codeGrade, int  year, boolean obligatory) {
+		Course course;
+		if (idCodeCourseList.contains(code)) {
+			course = codeCourseMap.get(code);
+		} else {
+			course = UnedFactory.getCourse(code, name);
+			idCodeCourseList.add(code);
+			codeCourseMap.put(code, course);
+			courseNumber++;
+		}
+		DataCourse dataCourse = UnedFactory.getDataCourse(codeGrade, year, obligatory);
+		if (!course.getDataCourseList().contains(dataCourse)) {
+			course.addDataCourse(dataCourse);
+			codeGradeListCourseCodeMap.get(codeGrade).add(code);	
+		}
 	}
 
 	public Course getCourse(int id) {
 		Course result = null;
-		if (courseNumber >= id) {
+		if (courseNumber > id) {
 			result = codeCourseMap.get(idCodeCourseList.get(id));
 		}
 		return result;
@@ -55,15 +68,38 @@ public class DataUned {
 		return courseNumber;
 	}
 
-	public void addGrade(Grade firstGrade) {
-		codeGradeMap.put(firstGrade.getCode(), firstGrade);
+	public void addGrade(int code, String name, int years) {
+		Grade grade = UnedFactory.getGrade(code, name, years);
+		codeGradeMap.put(code, grade);
+		ArrayList<Integer> listCourses = new ArrayList<>();
+		codeGradeListCourseCodeMap.put(code, listCourses);
 	}
 
 	public Grade getGrade(int code) {
 		return codeGradeMap.get(code);
 	}
 
-	public void addCentroAsociado(CentroAsociado centroAsociado) {
+	public List<Course> getAllCourseGrade(int codeGrade) {
+		return codeGradeListCourseCodeMap.get(codeGrade)
+				.parallelStream()
+				.map(codeCourse -> codeCourseMap.get(codeCourse))
+				.collect(Collectors.toList());
+	}
+	
+	public List<Course> getCourseGradeYear(int codeGrade, int year) {
+		return codeGradeListCourseCodeMap.get(codeGrade)
+				.parallelStream()
+				.map(codeCourse -> codeCourseMap.get(codeCourse))
+				.filter(course -> !course.getDataCourseList()
+						.parallelStream()
+						.filter(dataCourse -> dataCourse.getGrade() == codeGrade)
+						.filter(dataCourseFiltered -> dataCourseFiltered.getSchoolYear() == year)
+						.collect(Collectors.toList()).isEmpty())
+				.collect(Collectors.toList());
+	}
+	
+	public void addCentroAsociado(String name, int capacity) {
+		CentroAsociado centroAsociado = UnedFactory.getCentroAsociado(name, capacity);
 		nameCentroAsociadoMap.put(centroAsociado.getName(), centroAsociado);
 	}
 
@@ -75,17 +111,19 @@ public class DataUned {
 		return nameCentroAsociadoMap.get(name);
 	}
 
-	public void addExamTime(ExamTime examTime) {
-		idExamTimeList.add(examTime);
-		int day = examTime.getDay();
-		if (dayListExamTimeMap.containsKey(day)) {
-			dayListExamTimeMap.get(day).add(examTime);
-		} else {
-			List<ExamTime> examTimeDayList = new ArrayList<>();
-			examTimeDayList.add(examTime);
-			dayListExamTimeMap.put(day, examTimeDayList);
+	public void addExamTime(int day, String dayText, int hour, String hourText) {
+		ExamTime examTime = UnedFactory.getExamTime(day, dayText, hour, hourText);
+		if (!idExamTimeList.contains(examTime)) {
+			idExamTimeList.add(examTime);
+			if (dayListExamTimeMap.containsKey(day)) {
+				dayListExamTimeMap.get(day).add(examTime);
+			} else {
+				List<ExamTime> examTimeDayList = new ArrayList<>();
+				examTimeDayList.add(examTime);
+				dayListExamTimeMap.put(day, examTimeDayList);
+			}
+			examTimeNumber++;
 		}
-		examTimeNumber++;
 	}
 	
 	public List<ExamTime> getExamTimeList() {
@@ -102,7 +140,7 @@ public class DataUned {
 
 	public ExamTime getExamTime(int id) {
 		ExamTime result = null;
-		if (examTimeNumber >= id) {
+		if (examTimeNumber > id) {
 			result = idExamTimeList.get(id);
 		}
 		return result;
