@@ -29,3 +29,9 @@ hs_err_pid*
 /build/
 gradlew
 gradlew.bat
+/gradle/
+
+
+#Data from thirds
+/data/
+

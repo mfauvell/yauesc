@@ -22,20 +22,24 @@ public final class UnedFactory {
 		return new CentroAsociado(name, capacity);
 	}
 	
-	public static Course getCourse(int code, String name) {
+	public static Course getCourse(String code, String name) {
 		return new Course(code, name);
 	}
 	
-	public static DataCourse getDataCourse(int gradeCode, int schoolYear, boolean obligatory) {
+	public static DataCourse getDataCourse(String gradeCode, int schoolYear, boolean obligatory) {
 		return new DataCourse(gradeCode, schoolYear, obligatory);
 	}
 	
-	public static Grade getGrade(int code, String name, int years) {
+	public static Grade getGrade(String code, String name, int years) {
 		return new Grade(code, name, years);
 	}
 	
 	public static ExamTime getExamTime(int day, String dayName, int hour, String hourName) {
 		return new ExamTime(day, dayName, hour, hourName);
+	}
+	
+	public static UnedParser getUnedParser() {
+		return new UnedParser();
 	}
 
 }

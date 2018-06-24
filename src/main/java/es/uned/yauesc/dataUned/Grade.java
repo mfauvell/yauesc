@@ -2,17 +2,17 @@ package es.uned.yauesc.dataUned;
 
 public class Grade {
 	
-	private int code;
+	private String code;
 	private String name;
 	private int years;
 
-	public Grade(int code, String name, int years) {
+	public Grade(String code, String name, int years) {
 		this.code = code;
 		this.name = name;
 		this.years = years;
 	}
 
-	public int getCode() {
+	public String getCode() {
 		return code;
 	}
 
@@ -34,7 +34,7 @@ public class Grade {
 		}
 		if (object instanceof Grade) {
 			Grade grade = (Grade) object;
-			return ((this.code == grade.getCode()) && (this.name.equals(grade.getName())) && (this.years == grade.getYears()));
+			return ((this.code.equals(grade.getCode())) && (this.name.equals(grade.getName())) && (this.years == grade.getYears()));
 		} else {
 			return false;
 		}
@@ -42,7 +42,7 @@ public class Grade {
 	
 	@Override
 	public int hashCode() {
-		return (code + name.hashCode() * 23) / (years);
+		return (code.hashCode() + name.hashCode() * 23) / (years);
 	}
 	
 	@Override

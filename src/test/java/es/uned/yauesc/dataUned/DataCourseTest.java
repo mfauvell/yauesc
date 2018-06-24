@@ -8,7 +8,7 @@ class DataCourseTest {
 
 	@Test
 	void testCreateDataCourseIsSetCorrectly() {
-		int grade = 73;
+		String grade = "73";
 		int schoolYear = 1;
 		boolean obligatory = true;
 		

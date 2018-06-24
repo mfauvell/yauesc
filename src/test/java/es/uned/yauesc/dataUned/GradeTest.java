@@ -13,7 +13,7 @@ class GradeTest {
 	@Test
 	public void testCreateGradeIsSetCorrectly() {
 		String name = "Grade";
-		int code = 73;
+		String code = "73";
 		int years = 4;
 		
 		Course courseOne = mock(Course.class);

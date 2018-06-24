@@ -5,17 +5,17 @@ import java.util.List;
 
 public class Course {
 	
-	private int code;
+	private String code;
 	private String name;
 	private List<DataCourse> dataCourseList;
 
-	public Course(int code, String name) {
+	public Course(String code, String name) {
 		this.code = code;
 		this.name = name;
 		dataCourseList = new ArrayList<>();
 	}
 
-	public int getCode() {
+	public String getCode() {
 		return code;
 	}
 
@@ -43,7 +43,7 @@ public class Course {
 		}
 		if (object instanceof Course) {
 			Course course = (Course) object;
-			return ((this.code == course.getCode()) && (this.name.equals(course.getName())) && this.dataCourseList.equals(course.getDataCourseList()));
+			return ((this.code.equals(course.getCode())) && (this.name.equals(course.getName())) && this.dataCourseList.equals(course.getDataCourseList()));
 		} else {
 			return false;
 		}
@@ -51,7 +51,7 @@ public class Course {
 	
 	@Override
 	public int hashCode() {
-		return (code + name.hashCode() -23) / dataCourseList.hashCode();
+		return (code.hashCode() + name.hashCode() -23) / dataCourseList.hashCode();
 	}
 	
 	@Override

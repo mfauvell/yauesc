@@ -12,7 +12,7 @@ class CourseTest {
 
 	@Test
 	public void testCreateCourseIsSetCorrectly() {
-		int code = 72;
+		String code = "72";
 		String name = "Course";
 		DataCourse firstDataCourse = mock(DataCourse.class);
 		DataCourse secondDataCourse = mock(DataCourse.class);

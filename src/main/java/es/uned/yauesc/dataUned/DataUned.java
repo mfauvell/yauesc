@@ -7,12 +7,12 @@ import java.util.stream.Collectors;
 
 public class DataUned {
 	
-	private ArrayList<Integer> idCodeCourseList;
-	private LinkedHashMap<Integer, Course> codeCourseMap;
+	private ArrayList<String> idCodeCourseList;
+	private LinkedHashMap<String, Course> codeCourseMap;
 	private int courseNumber;
 	
-	private LinkedHashMap<Integer, Grade> codeGradeMap;
-	private LinkedHashMap<Integer, List<Integer>> codeGradeListCourseCodeMap;
+	private LinkedHashMap<String, Grade> codeGradeMap;
+	private LinkedHashMap<String, List<String>> codeGradeListCourseCodeMap;
 	
 	private LinkedHashMap<String, CentroAsociado> nameCentroAsociadoMap;
 	
@@ -20,7 +20,7 @@ public class DataUned {
 	private LinkedHashMap<Integer, List<ExamTime>> dayListExamTimeMap;
 	private int examTimeNumber;
 	
-	private LinkedHashMap<String, LinkedHashMap<Integer, Integer>> centroAsociadoCourseNumberEnrolMap;
+	private LinkedHashMap<String, LinkedHashMap<String, Integer>> centroAsociadoCourseNumberEnrolMap;
 	
 	public DataUned() {
 		idCodeCourseList =  new ArrayList<>();
@@ -39,7 +39,7 @@ public class DataUned {
 		centroAsociadoCourseNumberEnrolMap = new LinkedHashMap<>();
 	}
 
-	public void addCourse(int code, String name, int codeGrade, int  year, boolean obligatory) {
+	public void addCourse(String code, String name, String codeGrade, int  year, boolean obligatory) {
 		Course course;
 		if (idCodeCourseList.contains(code)) {
 			course = codeCourseMap.get(code);
@@ -68,31 +68,31 @@ public class DataUned {
 		return courseNumber;
 	}
 
-	public void addGrade(int code, String name, int years) {
+	public void addGrade(String code, String name, int years) {
 		Grade grade = UnedFactory.getGrade(code, name, years);
 		codeGradeMap.put(code, grade);
-		ArrayList<Integer> listCourses = new ArrayList<>();
+		ArrayList<String> listCourses = new ArrayList<>();
 		codeGradeListCourseCodeMap.put(code, listCourses);
 	}
 
-	public Grade getGrade(int code) {
+	public Grade getGrade(String code) {
 		return codeGradeMap.get(code);
 	}
 
-	public List<Course> getAllCourseGrade(int codeGrade) {
+	public List<Course> getAllCourseGrade(String codeGrade) {
 		return codeGradeListCourseCodeMap.get(codeGrade)
 				.parallelStream()
 				.map(codeCourse -> codeCourseMap.get(codeCourse))
 				.collect(Collectors.toList());
 	}
 	
-	public List<Course> getCourseGradeYear(int codeGrade, int year) {
+	public List<Course> getCourseGradeYear(String codeGrade, int year) {
 		return codeGradeListCourseCodeMap.get(codeGrade)
 				.parallelStream()
 				.map(codeCourse -> codeCourseMap.get(codeCourse))
 				.filter(course -> !course.getDataCourseList()
 						.parallelStream()
-						.filter(dataCourse -> dataCourse.getGrade() == codeGrade)
+						.filter(dataCourse -> dataCourse.getGrade().equals(codeGrade))
 						.filter(dataCourseFiltered -> dataCourseFiltered.getSchoolYear() == year)
 						.collect(Collectors.toList()).isEmpty())
 				.collect(Collectors.toList());
@@ -146,7 +146,7 @@ public class DataUned {
 		return result;
 	}
 
-	public void addEnrolment(String nameCentroAsociado, int codeCourse, int numberEnroled) {
+	public void addEnrolment(String nameCentroAsociado, String codeCourse, int numberEnroled) {
 		if (!(codeCourseMap.containsKey(codeCourse))) {
 			throw new IllegalArgumentException("Course not exist");
 		}
@@ -156,13 +156,13 @@ public class DataUned {
 		if (centroAsociadoCourseNumberEnrolMap.containsKey(nameCentroAsociado)) {
 			centroAsociadoCourseNumberEnrolMap.get(nameCentroAsociado).put(codeCourse, numberEnroled);
 		} else {
-			LinkedHashMap<Integer, Integer> codeCourseNumberEnroled = new LinkedHashMap<>();
+			LinkedHashMap<String, Integer> codeCourseNumberEnroled = new LinkedHashMap<>();
 			codeCourseNumberEnroled.put(codeCourse, numberEnroled);
 			centroAsociadoCourseNumberEnrolMap.put(nameCentroAsociado, codeCourseNumberEnroled);
 		}
 	}
 
-	public int getNumberEnrolment(String nameCentroAsociado, int codeCourse) {
+	public int getNumberEnrolment(String nameCentroAsociado, String codeCourse) {
 		if (!(codeCourseMap.containsKey(codeCourse))) {
 			throw new IllegalArgumentException("Course not exist");
 		}
@@ -171,7 +171,7 @@ public class DataUned {
 		}
 		int result = 0;
 		if (centroAsociadoCourseNumberEnrolMap.containsKey(nameCentroAsociado)) {
-			LinkedHashMap<Integer, Integer> codeCourseNumberEnroled = centroAsociadoCourseNumberEnrolMap.get(nameCentroAsociado);
+			LinkedHashMap<String, Integer> codeCourseNumberEnroled = centroAsociadoCourseNumberEnrolMap.get(nameCentroAsociado);
 			if (codeCourseNumberEnroled.containsKey(codeCourse)) {
 				result = codeCourseNumberEnroled.get(codeCourse);
 			}

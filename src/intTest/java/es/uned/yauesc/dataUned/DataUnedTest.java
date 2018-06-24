@@ -9,10 +9,10 @@ class DataUnedTest {
 	
 	@Test
 	public void testAddGrade() {
-		int codeFirst = 73;
+		String codeFirst = "73";
 		String nameFirst = "First";
 		int yearsFirst = 4;
-		int codeSecond = 74;
+		String codeSecond = "74";
 		String nameSecond = "Second";
 		int yearsSecond = 4;
 		
@@ -21,7 +21,7 @@ class DataUnedTest {
 		dataUned.addGrade(codeFirst, nameFirst, yearsFirst);
 		dataUned.addGrade(codeSecond, nameSecond, yearsSecond);
 		
-		assertThat(dataUned.getGrade(-1)).isNull();
+		assertThat(dataUned.getGrade("Error")).isNull();
 		
 		Grade gradeFirst = dataUned.getGrade(codeFirst);
 		Grade gradeSecond = dataUned.getGrade(codeSecond);
@@ -37,11 +37,11 @@ class DataUnedTest {
 
 	@Test
 	public void testAddCourseAndDataCourseAndGetNumberCoursesAndSetCourseOnGradesThatExistsAndTestNotRepeat() {
-		int codeFirstGrade = 73;
-		int codeSecondGrade = 74;
+		String codeFirstGrade = "73";
+		String codeSecondGrade = "74";
 		
-		int codeFirstCourse = 7300;
-		int codeSecondCourse = 7400;
+		String codeFirstCourse = "7300";
+		String codeSecondCourse = "7400";
 		
 		DataUned dataUned = new DataUned();
 		
@@ -57,8 +57,8 @@ class DataUnedTest {
 		Course courseFirst = dataUned.getCourse(0);
 		Course courseSecond = dataUned.getCourse(1);
 		
-		assertThat(courseFirst.getCode()).isEqualTo(7300);
-		assertThat(courseSecond.getCode()).isEqualTo(7400);
+		assertThat(courseFirst.getCode()).isEqualTo("7300");
+		assertThat(courseSecond.getCode()).isEqualTo("7400");
 		assertThat(courseFirst.getDataCourseList()).hasSize(2);
 		assertThat(courseSecond.getDataCourseList()).hasSize(2);
 		assertThat(dataUned.getCourse(2)).isNull();
@@ -67,11 +67,11 @@ class DataUnedTest {
 	
 	@Test
 	public void testObtaingCoursesByGradeAndGradeAndYear() {
-		int codeFirstGrade = 73;
-		int codeSecondGrade = 74;
+		String codeFirstGrade = "73";
+		String codeSecondGrade = "74";
 		
-		int codeFirstCourse = 7300;
-		int codeSecondCourse = 7400;
+		String codeFirstCourse = "7300";
+		String codeSecondCourse = "7400";
 		
 		DataUned dataUned = new DataUned();
 		
@@ -134,10 +134,10 @@ class DataUnedTest {
 		String nameFirstCentroAsociado = "First";
 		String nameSecondCentroAsociado = "Second";
 
-		int codeGrade = 71;
+		String codeGrade = "71";
 	
-		int codeFisrtCourse = 7100;
-		int codeSecondCourse = 7200;
+		String codeFisrtCourse = "7100";
+		String codeSecondCourse = "7200";
 		
 		int numberEnroledFirstCaFirstCourse = 10;
 		int numberEnroledSecondCaSecondCourse = 13;
@@ -157,11 +157,11 @@ class DataUnedTest {
 		dataUned.addEnrolment(nameSecondCentroAsociado, codeSecondCourse, numberEnroledSecondCaSecondCourse);
 		
 		assertThrows(IllegalArgumentException.class, () -> dataUned.addEnrolment("Error", codeFisrtCourse, numberEnroledFirstCaFirstCourse), "Here must be thrown IllegalArgumentException");
-		assertThrows(IllegalArgumentException.class, () -> dataUned.addEnrolment(nameFirstCentroAsociado, -1, numberEnroledFirstCaFirstCourse), "Here must be thrown IllegalArgumentException");
+		assertThrows(IllegalArgumentException.class, () -> dataUned.addEnrolment(nameFirstCentroAsociado, "Error", numberEnroledFirstCaFirstCourse), "Here must be thrown IllegalArgumentException");
 		assertThat(dataUned.getNumberEnrolment(nameFirstCentroAsociado, codeFisrtCourse)).isEqualTo(numberEnroledFirstCaFirstCourse);
 		assertThat(dataUned.getNumberEnrolment(nameSecondCentroAsociado, codeSecondCourse)).isEqualTo(numberEnroledSecondCaSecondCourse);
 		assertThat(dataUned.getNumberEnrolment(nameFirstCentroAsociado, codeSecondCourse)).isEqualTo(0);
 		assertThrows(IllegalArgumentException.class, () -> dataUned.getNumberEnrolment("Error", codeFisrtCourse), "Here must be thrown IllegalArgumentException");
-		assertThrows(IllegalArgumentException.class, () -> dataUned.getNumberEnrolment(nameFirstCentroAsociado, -1), "Here must be thrown IllegalArgumentException");
+		assertThrows(IllegalArgumentException.class, () -> dataUned.getNumberEnrolment(nameFirstCentroAsociado, "Error"), "Here must be thrown IllegalArgumentException");
 	}
 }

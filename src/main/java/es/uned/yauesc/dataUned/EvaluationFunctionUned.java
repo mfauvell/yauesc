@@ -41,8 +41,8 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 		String obligatory = "Obligatory"; //Text to Obligatory courses.
 		String optional = "Optional"; //Text to Obligatory courses.
 		LinkedHashMap<ExamTime, List<Course>> examTimeCourseListMap = new LinkedHashMap<>();
-		LinkedHashMap<ExamTime, LinkedHashMap<Integer, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>>> examTimeGradeYearTypeNumber = new LinkedHashMap<>();
-		LinkedHashMap<Integer, LinkedHashMap<Integer, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>>> dayGradeYearTypeNumber = new LinkedHashMap<>();
+		LinkedHashMap<ExamTime, LinkedHashMap<String, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>>> examTimeGradeYearTypeNumber = new LinkedHashMap<>();
+		LinkedHashMap<Integer, LinkedHashMap<String, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>>> dayGradeYearTypeNumber = new LinkedHashMap<>();
 		//First collect data
 		for (int index = 0; index < dataUned.getNumberCourses(); index ++) {
 			ExamTime examTime = dataUned.getExamTime(genotype.get(index));
@@ -55,7 +55,7 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 				courseList.add(course);
 				examTimeCourseListMap.put(examTime, courseList);
 				//examTimeGradeYearTypeNumber
-				LinkedHashMap<Integer, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>> gradeYearTypeNumber = new LinkedHashMap<>();
+				LinkedHashMap<String, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>> gradeYearTypeNumber = new LinkedHashMap<>();
 				//Create structure and fill it
 				for (DataCourse dataCourse : course.getDataCourseList()) {
 					LinkedHashMap<Integer, LinkedHashMap<String, Integer>> yearTypeNumber = new LinkedHashMap<>();
@@ -76,9 +76,9 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 				//If examCourse is in maps already
 				//examTimeCouseListMap
 				examTimeCourseListMap.get(examTime).add(course);
-				LinkedHashMap<Integer, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>> gradeYearTypeNumber = examTimeGradeYearTypeNumber.get(examTime);
+				LinkedHashMap<String, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>> gradeYearTypeNumber = examTimeGradeYearTypeNumber.get(examTime);
 				for (DataCourse dataCourse : course.getDataCourseList()) {
-					int grade = dataCourse.getGrade();
+					String grade = dataCourse.getGrade();
 					int year = dataCourse.getSchoolYear();
 					//if grade exist in map already
 					if (gradeYearTypeNumber.containsKey(grade)) {
@@ -123,7 +123,7 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 			int day = examTime.getDay();
 			if (!dayGradeYearTypeNumber.containsKey(day)) {
 				//If day is not in maps yet
-				LinkedHashMap<Integer, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>> gradeYearTypeNumber = new LinkedHashMap<>();
+				LinkedHashMap<String, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>> gradeYearTypeNumber = new LinkedHashMap<>();
 				for (DataCourse dataCourse : course.getDataCourseList()) {
 					LinkedHashMap<Integer, LinkedHashMap<String, Integer>> yearTypeNumber = new LinkedHashMap<>();
 					LinkedHashMap<String, Integer> typeNumber = new LinkedHashMap<>();
@@ -141,9 +141,9 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 				dayGradeYearTypeNumber.put(day, gradeYearTypeNumber);
 			} else {
 				//if day is in maps already
-				LinkedHashMap<Integer, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>> gradeYearTypeNumber = dayGradeYearTypeNumber.get(day);
+				LinkedHashMap<String, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>> gradeYearTypeNumber = dayGradeYearTypeNumber.get(day);
 				for (DataCourse dataCourse : course.getDataCourseList()) {
-					int grade = dataCourse.getGrade();
+					String grade = dataCourse.getGrade();
 					int year = dataCourse.getSchoolYear();
 					if (gradeYearTypeNumber.containsKey(grade)) {
 						LinkedHashMap<Integer, LinkedHashMap<String, Integer>> yearTypeNumber = gradeYearTypeNumber.get(grade);
