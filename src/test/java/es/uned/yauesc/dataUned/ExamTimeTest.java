@@ -19,5 +19,26 @@ class ExamTimeTest {
 		assertThat(examTime.getHour()).isEqualTo(hour);
 		assertThat(examTime.getHourName()).isEqualTo(hourName);
 	}
+	
+	@Test
+	public void testCompareExamTime() {
+		int dayFirst = 1;
+		String dayFirstText = "Day First";
+		int hourFirst = 1;
+		String hourFirstText = "Hour First";
+		int daySecond = 2;
+		String daySecondText = "Day Second";
+		int hourSecond = 2;
+		String hourSecondText = "Hour Second";
+		
+		ExamTime examTimeFirst = new ExamTime(dayFirst, dayFirstText, hourFirst, hourFirstText);
+		ExamTime examTimeSecond = new ExamTime(dayFirst, dayFirstText, hourSecond, hourSecondText);
+		ExamTime examTimeThird = new ExamTime(daySecond, daySecondText, hourFirst, hourFirstText);
+		
+		assertThat(examTimeFirst.compareTo(examTimeSecond)).isLessThan(0);
+		assertThat(examTimeThird.compareTo(examTimeSecond)).isGreaterThan(0);
+		assertThat(examTimeSecond.compareTo(examTimeSecond)).isEqualTo(0);
+		assertThat(examTimeSecond.compareTo(null)).isGreaterThan(0);
+	}
 
 }

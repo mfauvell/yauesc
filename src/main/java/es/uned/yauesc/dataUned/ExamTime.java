@@ -1,6 +1,6 @@
 package es.uned.yauesc.dataUned;
 
-public class ExamTime {
+public class ExamTime implements Comparable<ExamTime> {
 	
 	private int day;
 	private int hour;
@@ -28,6 +28,23 @@ public class ExamTime {
 
 	public String getHourName() {
 		return hourName;
+	}
+	
+	@Override
+	public int compareTo(ExamTime examTime) {
+		if (examTime == null) {
+			return 1;
+		}
+		if (examTime.getDay() == day) {
+			if (examTime.getHour() == hour) {
+				return 0;
+			} else if (examTime.getHour() > hour) {
+				return -1;
+			}
+		} else if (examTime.getDay() > day) {
+			return -1;
+		}
+		return 1;
 	}
 
 	@Override

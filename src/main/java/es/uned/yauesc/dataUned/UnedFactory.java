@@ -1,5 +1,7 @@
 package es.uned.yauesc.dataUned;
 
+import java.util.List;
+
 public final class UnedFactory {
 	
 	private UnedFactory() {
@@ -40,6 +42,10 @@ public final class UnedFactory {
 	
 	public static UnedParser getUnedParser() {
 		return new UnedParser();
+	}
+	
+	public static UnedSchedule getUnedSchedule(List<Integer> solution, DataUned dataUned) {
+		return new UnedSchedule(solution, dataUned);
 	}
 
 }
