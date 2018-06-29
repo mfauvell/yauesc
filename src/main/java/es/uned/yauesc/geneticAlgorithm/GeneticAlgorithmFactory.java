@@ -25,7 +25,7 @@ public class GeneticAlgorithmFactory {
 		return new GeneticAlgorithmParallel(firstGeneticAlgorithmSingle, secondGeneticAlgorithmSingle, thirdGeneticAlgorithmSingle, generations, migrationGenerations, numberMigration);
 	}
 	
-	public GeneticAlgorithm getGeneticAlgorithmSingle(int generations, int[] populationOptions, Object[] parentSelectorOptions,
+	public GeneticAlgorithmSingle getGeneticAlgorithmSingle(int generations, int[] populationOptions, Object[] parentSelectorOptions,
 			Object[] recombinationOperatorOptions, Object[] mutationOperatorOptions, Object[] survivorSelectorOptions) throws IllegalParameterValueCheckedException {
 		Population population;
 		if (populationOptions.length == 1) {
