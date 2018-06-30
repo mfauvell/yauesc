@@ -75,7 +75,7 @@ public class GeneticAlgorithmFactory {
 				.parallel()
 				.mapToObj(i-> getIndividual())
 				.collect(Collectors.toList());
-		return new Population(collectionIndividual);
+		return new Population(evaluationFunction.evaluate(collectionIndividual));
 	}
 	
 	private Population getPopulation(int max, int min, int size) throws IllegalParameterValueCheckedException {
@@ -83,7 +83,7 @@ public class GeneticAlgorithmFactory {
 				.parallel()
 				.mapToObj(i-> getIndividual())
 				.collect(Collectors.toList());
-		return new Population(collectionIndividual, max, min);
+		return new Population(evaluationFunction.evaluate(collectionIndividual), max, min);
 	}
 	
 	private MutationOperator getMutationOperator(Object[] mutationOperatorOptions) {

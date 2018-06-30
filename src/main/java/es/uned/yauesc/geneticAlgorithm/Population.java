@@ -70,6 +70,7 @@ public class Population {
 			throw new IllegalArgumentException("New population can not be greater than max");
 		} else {
 			this.individuals = new ArrayList<Individual>(newIndividuals);
+			size = newSize;
 			sortIndividuals();
 		}
 	}

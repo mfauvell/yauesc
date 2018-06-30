@@ -19,12 +19,17 @@ public class RecombinationOperatorSimple implements RecombinationOperator{
 	@Override
 	public Collection<Individual> recombine(Collection<Individual> parents) {
 		ArrayList<Individual> parentsList = new ArrayList<Individual>(parents);
-		int iterations = parentsList.size() / 2;
-		return IntStream.range(0, iterations)
+		int parentsSize = parentsList.size();
+		int iterations = parentsSize / 2;
+		Collection<Individual> result = IntStream.range(0, iterations)
 				.parallel()
 				.mapToObj(index -> doRecombination(parentsList.get(index * 2), parentsList.get((index * 2) + 1)))
 				.flatMap(Collection::stream)
 				.collect(Collectors.toList());
+		if ((parentsSize - (iterations*2)) != 0) {
+			result.add(parentsList.get(parentsSize -1));
+		}
+		return result;
 	}
 	
 	private Collection<Individual> doRecombination(Individual firstParent, Individual secondParent) {

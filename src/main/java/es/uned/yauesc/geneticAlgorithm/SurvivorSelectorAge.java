@@ -16,7 +16,14 @@ public class SurvivorSelectorAge implements SurvivorSelector {
 	@Override
 	public Collection<Individual> getSurvivor(Population population, Collection<Individual> offspring) {
 		ArrayList<Individual> populationIndividuals = new ArrayList<Individual>(population.getAllIndividual());
-		populationIndividuals.parallelStream().forEach(individual -> individual.setAge(individual.getAge() - 1));
+		//Low all Individual one but if there are newcomers (not have age) set to five
+		populationIndividuals.parallelStream().forEach(individual -> {
+			if (individual.isAged()) {
+				individual.setAge(individual.getAge() - 1);
+			} else {
+				individual.setAge(5);
+			}
+		});
 		ArrayList<Individual> survivor = new ArrayList<Individual>(populationIndividuals
 				.parallelStream()
 				.filter(individual -> individual.getAge() > 0)

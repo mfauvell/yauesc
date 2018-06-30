@@ -20,12 +20,17 @@ public class RecombinationOperatorUniform implements RecombinationOperator {
 	public Collection<Individual> recombine(Collection<Individual> parents) {
 		ArrayList<Individual> parentsList = new ArrayList<Individual>(parents);
 		List<Integer> mask = geneticAlgorithmUtils.getBinaryMask();
-		int iterations = parentsList.size() / 2;
-		return IntStream.range(0, iterations)
+		int sizeParents = parentsList.size();
+		int iterations = sizeParents / 2;
+		Collection<Individual> result = IntStream.range(0, iterations)
 				.parallel()
 				.mapToObj(index -> doRecombination(parentsList.get(index * 2), parentsList.get((index * 2) + 1), mask))
 				.flatMap(Collection::stream)
 				.collect(Collectors.toList());
+		if ((sizeParents - (iterations*2)) != 0) {
+			result.add(parentsList.get(sizeParents -1));
+		}
+		return result;
 	}
 
 	private Collection<Individual> doRecombination(Individual firstParent, Individual secondParent, List<Integer> mask) {

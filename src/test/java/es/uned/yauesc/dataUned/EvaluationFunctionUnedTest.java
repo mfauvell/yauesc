@@ -52,25 +52,25 @@ class EvaluationFunctionUnedTest {
 		when(minFitness.getSecondLevel()).thenReturn(0);
 		when(minFitness.getThirdLevel()).thenReturn(100);
 		
-		when(firstFitness.getFirstLevel()).thenReturn(2);
-		when(firstFitness.getSecondLevel()).thenReturn(50);
+		when(firstFitness.getFirstLevel()).thenReturn(1);
+		when(firstFitness.getSecondLevel()).thenReturn(40);
 		when(firstFitness.getThirdLevel()).thenReturn(1);
 		
-		when(secondFitness.getFirstLevel()).thenReturn(3);
+		when(secondFitness.getFirstLevel()).thenReturn(2);
 		when(secondFitness.getSecondLevel()).thenReturn(0);
 		when(secondFitness.getThirdLevel()).thenReturn(70);
 		
-		when(thirdFitness.getFirstLevel()).thenReturn(7);
+		when(thirdFitness.getFirstLevel()).thenReturn(4);
 		when(thirdFitness.getSecondLevel()).thenReturn(0);
-		when(thirdFitness.getThirdLevel()).thenReturn(70);
+		when(thirdFitness.getThirdLevel()).thenReturn(61);
 		
-		when(fourthFitness.getFirstLevel()).thenReturn(8);
-		when(fourthFitness.getSecondLevel()).thenReturn(157);
-		when(fourthFitness.getThirdLevel()).thenReturn(203);
+		when(fourthFitness.getFirstLevel()).thenReturn(4);
+		when(fourthFitness.getSecondLevel()).thenReturn(0);
+		when(fourthFitness.getThirdLevel()).thenReturn(63);
 		
-		when(fifthFitness.getFirstLevel()).thenReturn(10);
+		when(fifthFitness.getFirstLevel()).thenReturn(8);
 		when(fifthFitness.getSecondLevel()).thenReturn(297);
-		when(fifthFitness.getThirdLevel()).thenReturn(0);
+		when(fifthFitness.getThirdLevel()).thenReturn(700);
 		
 		EvaluationFunctionUned evaluationFunctionUned = new EvaluationFunctionUned(dataUned);
 		

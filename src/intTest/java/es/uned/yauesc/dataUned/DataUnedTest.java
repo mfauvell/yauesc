@@ -156,8 +156,6 @@ class DataUnedTest {
 		dataUned.addEnrolment(nameFirstCentroAsociado, codeFisrtCourse, numberEnroledFirstCaFirstCourse);
 		dataUned.addEnrolment(nameSecondCentroAsociado, codeSecondCourse, numberEnroledSecondCaSecondCourse);
 		
-		assertThrows(IllegalArgumentException.class, () -> dataUned.addEnrolment("Error", codeFisrtCourse, numberEnroledFirstCaFirstCourse), "Here must be thrown IllegalArgumentException");
-		assertThrows(IllegalArgumentException.class, () -> dataUned.addEnrolment(nameFirstCentroAsociado, "Error", numberEnroledFirstCaFirstCourse), "Here must be thrown IllegalArgumentException");
 		assertThat(dataUned.getNumberEnrolment(nameFirstCentroAsociado, codeFisrtCourse)).isEqualTo(numberEnroledFirstCaFirstCourse);
 		assertThat(dataUned.getNumberEnrolment(nameSecondCentroAsociado, codeSecondCourse)).isEqualTo(numberEnroledSecondCaSecondCourse);
 		assertThat(dataUned.getNumberEnrolment(nameFirstCentroAsociado, codeSecondCourse)).isEqualTo(0);

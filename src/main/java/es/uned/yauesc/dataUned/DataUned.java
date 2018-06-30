@@ -147,18 +147,14 @@ public class DataUned {
 	}
 
 	public void addEnrolment(String nameCentroAsociado, String codeCourse, int numberEnroled) {
-		if (!(codeCourseMap.containsKey(codeCourse))) {
-			throw new IllegalArgumentException("Course not exist");
-		}
-		if (!(nameCentroAsociadoMap.containsKey(nameCentroAsociado))) {
-			throw new IllegalArgumentException("CentroAsociado not exist");
-		}
-		if (centroAsociadoCourseNumberEnrolMap.containsKey(nameCentroAsociado)) {
-			centroAsociadoCourseNumberEnrolMap.get(nameCentroAsociado).put(codeCourse, numberEnroled);
-		} else {
-			LinkedHashMap<String, Integer> codeCourseNumberEnroled = new LinkedHashMap<>();
-			codeCourseNumberEnroled.put(codeCourse, numberEnroled);
-			centroAsociadoCourseNumberEnrolMap.put(nameCentroAsociado, codeCourseNumberEnroled);
+		if (codeCourseMap.containsKey(codeCourse) && nameCentroAsociadoMap.containsKey(nameCentroAsociado)) {
+			if (centroAsociadoCourseNumberEnrolMap.containsKey(nameCentroAsociado)) {
+				centroAsociadoCourseNumberEnrolMap.get(nameCentroAsociado).put(codeCourse, numberEnroled);
+			} else {
+				LinkedHashMap<String, Integer> codeCourseNumberEnroled = new LinkedHashMap<>();
+				codeCourseNumberEnroled.put(codeCourse, numberEnroled);
+				centroAsociadoCourseNumberEnrolMap.put(nameCentroAsociado, codeCourseNumberEnroled);
+			}
 		}
 	}
 

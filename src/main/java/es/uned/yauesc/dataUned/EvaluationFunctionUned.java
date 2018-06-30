@@ -288,11 +288,11 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 	private void setDivisorAge(FitnessUned maxFitness, FitnessUned minFitness) {
 		long max = convertFitness(maxFitness);
 		long min = convertFitness(minFitness);
-		long difference = ((min - max) / 5);
+		long difference = ((min - max) / 20);
 		firstAgeDivisor = max + difference;
-		secondAgeDivisor = firstAgeDivisor + difference;
-		thirdAgeDivisor = secondAgeDivisor + difference;
-		fourthAgeDivisor = thirdAgeDivisor + difference;
+		secondAgeDivisor = firstAgeDivisor + (difference * 2);
+		thirdAgeDivisor = secondAgeDivisor + (difference * 3);
+		fourthAgeDivisor = thirdAgeDivisor + (difference * 6);
 	}
 	
 	private int getAge(FitnessUned fitness) {

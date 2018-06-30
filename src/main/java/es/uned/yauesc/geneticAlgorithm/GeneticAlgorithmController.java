@@ -70,6 +70,22 @@ public class GeneticAlgorithmController implements GeneticAlgorithmObserver {
 		mainGeneticAlgorithm.registerObserver(this);
 	}
 	
+	public void registerObserverMainGeneticAlgorithm(GeneticAlgorithmObserver observer) {
+		mainGeneticAlgorithm.registerObserver(observer);
+	}
+	
+	public void registerObserverFirstGeneticAlgorithm(GeneticAlgorithmObserver observer) {
+		firstGeneticAlgorithmSingle.registerObserver(observer);
+	}
+	
+	public void registerObserverSecondGeneticAlgorithm(GeneticAlgorithmObserver observer) {
+		secondGeneticAlgorithmSingle.registerObserver(observer);
+	}
+	
+	public void registerObserverThirdGeneticAlgorithm(GeneticAlgorithmObserver observer) {
+		thirdGeneticAlgorithmSingle.registerObserver(observer);
+	}
+	
 	public void registerObserver(GeneticAlgorithmControllerObserver geneticAlgorithmControllerObserver) {
 		if (!(observers.contains(geneticAlgorithmControllerObserver))) {
 			observers.add(geneticAlgorithmControllerObserver);
