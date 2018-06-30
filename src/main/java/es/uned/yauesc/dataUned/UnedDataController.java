@@ -13,6 +13,7 @@ public class UnedDataController {
 	private UnedParser unedParser;
 	private EvaluationFunctionUned evaluationFunctionUned;
 	private FitnessUned optimalFitness;
+	private double percentagePresented;
 	
 	private int sizeGenotype;
 	private int numberValuesGen;
@@ -69,6 +70,10 @@ public class UnedDataController {
 		numberValuesGen = dataUned.getNumberExamTime();
 	}
 	
+	public void setPercentagePresented(double percentagePresented) {
+		this.percentagePresented = percentagePresented;
+	}
+	
 	public void setUnedSchedule(List<Integer> solution) {
 		unedSchedule = UnedFactory.getUnedSchedule(solution, dataUned);
 	}
@@ -98,6 +103,6 @@ public class UnedDataController {
 	}
 	
 	private void setEvaluationFunction() {
-		evaluationFunctionUned = UnedFactory.getEvaluationFunctionUned(dataUned);
+		evaluationFunctionUned = UnedFactory.getEvaluationFunctionUned(dataUned, percentagePresented);
 	}
 }

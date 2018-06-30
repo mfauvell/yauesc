@@ -72,7 +72,7 @@ class EvaluationFunctionUnedTest {
 		when(fifthFitness.getSecondLevel()).thenReturn(297);
 		when(fifthFitness.getThirdLevel()).thenReturn(700);
 		
-		EvaluationFunctionUned evaluationFunctionUned = new EvaluationFunctionUned(dataUned);
+		EvaluationFunctionUned evaluationFunctionUned = new EvaluationFunctionUned(dataUned, 0.4);
 		
 		assertThat(evaluationFunctionUned.setAge(maxFitness, minFitness, offspring)).isEqualTo(offspring);
 		verify(firstIndividual).setAge(5);

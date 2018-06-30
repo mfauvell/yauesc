@@ -13,14 +13,16 @@ import es.uned.yauesc.geneticAlgorithm.Individual;
 public class EvaluationFunctionUned implements EvaluationFunction {
 
 	private DataUned dataUned;
+	private double percentagePresented;
 	
 	private long firstAgeDivisor;
 	private long secondAgeDivisor;
 	private long thirdAgeDivisor;
 	private long fourthAgeDivisor;
 	
-	public EvaluationFunctionUned(DataUned dataUned) {
+	public EvaluationFunctionUned(DataUned dataUned, double percentagePresented) {
 		this.dataUned = dataUned;
+		this.percentagePresented = percentagePresented;
 	}
 	
 	@Override
@@ -190,7 +192,7 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 						.mapToInt(centroAsociado -> {
 							int examStudentNumber = examTimeCourseListMap.get(examTime)
 									.parallelStream()
-									.mapToInt(course -> dataUned.getNumberEnrolment(centroAsociado.getName(), course.getCode()))
+									.mapToInt(course -> (int) Math.ceil(dataUned.getNumberEnrolment(centroAsociado.getName(), course.getCode()) * percentagePresented))
 									.sum();
 							if (examStudentNumber > centroAsociado.getCapacity()) {
 								return 1;

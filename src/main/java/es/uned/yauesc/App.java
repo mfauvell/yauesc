@@ -31,6 +31,7 @@ public class App implements GeneticAlgorithmControllerObserver, GeneticAlgorithm
     	unedDataController.setFileCoursePath("./data/AsignaturaGrados.csv");
     	unedDataController.setFileEnrolmentPath("./data/MatriculasCentroAsignatura.csv");
     	
+    	unedDataController.setPercentagePresented(0.4);
     	unedDataController.setOptimalFitness(0, 0, 0);
     	unedDataController.parseData();
     	
@@ -38,12 +39,12 @@ public class App implements GeneticAlgorithmControllerObserver, GeneticAlgorithm
     			unedDataController.getEvaluationFunction(), unedDataController.getOptimalFitness());
     	geneticAlgorithmController.setBasicOptions(500, true);
     	
-    	int[] populationOptions = {100};
+    	int[] populationOptions = {150};
     	int[] populationOptionsAge = {150, 50, 100};
     	Object[] parentSelectorOptionsOne = {"Ranking", 1.5};
     	Object[] recombinationOperatorOptionsOne = {"Uniform",0.8 };
     	Object[] mutationOperatorOptionsOne = {"Simple", 0.001};
-    	Object[] survivorSelectorOptionsOne = {"SteadyState", 1};
+    	Object[] survivorSelectorOptionsOne = {"SteadyState", 4};
     	
     	Object[] parentSelectorOptionsTwo = {"Tournament"};
     	Object[] recombinationOperatorOptionsTwo = {"Uniform",0.8 };
@@ -56,7 +57,7 @@ public class App implements GeneticAlgorithmControllerObserver, GeneticAlgorithm
     	Object[] survivorSelectorOptionsThree = {"RoundRobin", 5};
     	
     	
-    	geneticAlgorithmController.setFirstGeneticAlgorithmSingle(populationOptions, parentSelectorOptionsOne, recombinationOperatorOptionsOne, mutationOperatorOptionsOne, survivorSelectorOptionsOne);
+    	geneticAlgorithmController.setFirstGeneticAlgorithmSingle(populationOptionsAge, parentSelectorOptionsOne, recombinationOperatorOptionsOne, mutationOperatorOptionsOne, survivorSelectorOptionsOne);
     	geneticAlgorithmController.setSecondGeneticAlgorithmSingle(populationOptions, parentSelectorOptionsTwo, recombinationOperatorOptionsTwo, mutationOperatorOptionsTwo, survivorSelectorOptionsTwo);
     	geneticAlgorithmController.setThirdGeneticAlgorithmSingle(populationOptions, parentSelectorOptionsThree, recombinationOperatorOptionsThree, mutationOperatorOptionsThree, survivorSelectorOptionsThree);
     	geneticAlgorithmController.setMainGeneticAlgorithm(10, 10);

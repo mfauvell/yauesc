@@ -12,8 +12,8 @@ public final class UnedFactory {
 		return new FitnessUned(firstLevel, secondLevel, thirdLevel);
 	}
 	
-	public static EvaluationFunctionUned getEvaluationFunctionUned(DataUned dataUned) {
-		return new EvaluationFunctionUned(dataUned);
+	public static EvaluationFunctionUned getEvaluationFunctionUned(DataUned dataUned, double percentagePresented) {
+		return new EvaluationFunctionUned(dataUned, percentagePresented);
 	}
 	
 	public static DataUned getDataUned() {
