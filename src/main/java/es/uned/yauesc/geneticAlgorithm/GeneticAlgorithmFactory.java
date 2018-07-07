@@ -87,9 +87,9 @@ public class GeneticAlgorithmFactory {
 	}
 	
 	private MutationOperator getMutationOperator(Object[] mutationOperatorOptions) {
-		String type = (String) mutationOperatorOptions[0];
+		MutationOperatorType type = (MutationOperatorType) mutationOperatorOptions[0];
 		MutationOperator result;
-		if (type.equals("Permutation")) {
+		if (type.equals(MutationOperatorType.Permutation)) {
 			result = getMutationOperatorPermutation((double) mutationOperatorOptions[1]);
 		} else {
 			result = getMutationOperatorSimple((double) mutationOperatorOptions[1]);
@@ -106,9 +106,9 @@ public class GeneticAlgorithmFactory {
 	}
 	
 	private ParentSelector getParentSelector(Object[] parentSelectorOptions) {
-		String type = (String) parentSelectorOptions[0];
+		ParentSelectorType type = (ParentSelectorType) parentSelectorOptions[0];
 		ParentSelector result;
-		if (type.equals("Ranking")) {
+		if (type.equals(ParentSelectorType.Ranking)) {
 			result = getParentSelectorRanking((double) parentSelectorOptions[1]);
 		} else { //Default Tournament
 			result = getParentSelectorTournament();
@@ -125,9 +125,9 @@ public class GeneticAlgorithmFactory {
 	}
 	
 	private RecombinationOperator getRecombinationOperator(Object[] recombinationOperatorOptions) {
-		String type = (String) recombinationOperatorOptions[0];
+		RecombinationOperatorType type = (RecombinationOperatorType) recombinationOperatorOptions[0];
 		RecombinationOperator result;
-		if (type.equals("Uniform")) {
+		if (type.equals(RecombinationOperatorType.Uniform)) {
 			result = getRecombinationOperatorUniform((double) recombinationOperatorOptions[1]);
 		} else {
 			result = getRecombinationOperatorSimple((double) recombinationOperatorOptions[1]);
@@ -144,11 +144,11 @@ public class GeneticAlgorithmFactory {
 	}
 	
 	private SurvivorSelector getSurvivorSelector(Object[] survivorSelectorOptions) {
-		String type = (String) survivorSelectorOptions[0];
+		SurvivorSelectorType type = (SurvivorSelectorType) survivorSelectorOptions[0];
 		SurvivorSelector result;
-		if (type.equals("Age")) {
+		if (type.equals(SurvivorSelectorType.AgeBased)) {
 			result = getSurvivorSelectorAge();
-		} else if (type.equals("RoundRobin")) {
+		} else if (type.equals(SurvivorSelectorType.RoundRobin)) {
 			result = getSurvivorSelectorRoundRobin((int) survivorSelectorOptions[1]);
 		} else {
 			result = getSurvivorSelectorSteadyState((int) survivorSelectorOptions[1]);

@@ -9,6 +9,9 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
@@ -18,6 +21,12 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import java.awt.Dimension;
 import javax.swing.border.TitledBorder;
+
+import es.uned.yauesc.geneticAlgorithm.MutationOperatorType;
+import es.uned.yauesc.geneticAlgorithm.ParentSelectorType;
+import es.uned.yauesc.geneticAlgorithm.RecombinationOperatorType;
+import es.uned.yauesc.geneticAlgorithm.SurvivorSelectorType;
+
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
@@ -103,19 +112,20 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		
 		
 		JLabel lblGenerations = new JLabel("Generations");
-		
 		generations = new JTextField();
-		generations.setColumns(10);
+		generations.setColumns(5);		
 		
 		JLabel lblGenerationsToMigrate = new JLabel("Generations to Migrate");
-		
 		generationsToMigrate = new JTextField();
-		generationsToMigrate.setColumns(10);
-		
+		generationsToMigrate.setColumns(5);
+		lblGenerationsToMigrate.setVisible(false);
+		generationsToMigrate.setVisible(false);
+	
 		JLabel lblNumberMigrants = new JLabel("Number Migrants");
-		
 		numberMigrants = new JTextField();
-		numberMigrants.setColumns(10);
+		numberMigrants.setColumns(5);
+		lblNumberMigrants.setVisible(false);
+		numberMigrants.setVisible(false);
 		GroupLayout gl_panelBasicConfig = new GroupLayout(panelBasicConfig);
 		gl_panelBasicConfig.setHorizontalGroup(
 			gl_panelBasicConfig.createParallelGroup(Alignment.LEADING)
@@ -166,13 +176,53 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		
 		PanelAlgorithmSingle secondGeneticAlgorithmPanel = new PanelAlgorithmSingle("Second genetic algorithm config");
 		panelMain.add(secondGeneticAlgorithmPanel);
-		
-		secondGeneticAlgorithmPanel.setVisible(true);
+		secondGeneticAlgorithmPanel.setVisible(false);
 		
 		PanelAlgorithmSingle thirdGeneticAlgorithmPanel = new PanelAlgorithmSingle("Third genetic algorithm config");
 		panelMain.add(thirdGeneticAlgorithmPanel);
+		thirdGeneticAlgorithmPanel.setVisible(false);
 		
-		thirdGeneticAlgorithmPanel.setVisible(true);
+		rdbtnSingle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO
+				if (rdbtnSingle.isSelected()) {
+					lblGenerationsToMigrate.setVisible(false);
+					generationsToMigrate.setVisible(false);
+					lblNumberMigrants.setVisible(false);
+					numberMigrants.setVisible(false);
+					secondGeneticAlgorithmPanel.setVisible(false);
+					thirdGeneticAlgorithmPanel.setVisible(false);
+				} else {
+					lblGenerationsToMigrate.setVisible(true);
+					generationsToMigrate.setVisible(true);
+					lblNumberMigrants.setVisible(true);
+					numberMigrants.setVisible(true);
+					secondGeneticAlgorithmPanel.setVisible(true);
+					thirdGeneticAlgorithmPanel.setVisible(true);
+				}
+			}
+		});
+		rdbtnParallel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO
+				if (rdbtnParallel.isSelected()) {
+					lblGenerationsToMigrate.setVisible(true);
+					generationsToMigrate.setVisible(true);
+					lblNumberMigrants.setVisible(true);
+					numberMigrants.setVisible(true);
+					secondGeneticAlgorithmPanel.setVisible(true);
+					thirdGeneticAlgorithmPanel.setVisible(true);
+				} else {
+					lblGenerationsToMigrate.setVisible(false);
+					generationsToMigrate.setVisible(false);
+					lblNumberMigrants.setVisible(false);
+					numberMigrants.setVisible(false);
+					secondGeneticAlgorithmPanel.setVisible(false);
+					thirdGeneticAlgorithmPanel.setVisible(false);
+				}
+			}
+		});
+		
 		
 	}
 	
@@ -183,7 +233,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		 */
 		private static final long serialVersionUID = -5288395881259277815L;
 		
-		private JTextField textField;
+		private JTextField sParameter;
 		private JTextField probabilityRecombination;
 		private JTextField probabilityMutation;
 		private JTextField numberBattle;
@@ -191,7 +241,6 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		private JTextField populatonSize;
 		private JTextField populationMaxSize;
 		private JTextField populationMinSize;
-		private JLabel lblPopulationMaxSize;
 		
 		public PanelAlgorithmSingle(String title) {
 			setPreferredSize(new Dimension(1030, 160));
@@ -206,12 +255,13 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			
 			JLabel lblParentSelector = new JLabel("Parent Selector");
 			
-			JComboBox parentSelector = new JComboBox();
+			JComboBox<ParentSelectorType> parentSelector = new JComboBox<>(ParentSelectorType.values());
 			
 			JLabel lblSParameter = new JLabel("S Parameter");
-			
-			textField = new JTextField();
-			textField.setColumns(10);
+			sParameter = new JTextField();
+			sParameter.setColumns(5);
+			lblSParameter.setVisible(true);
+			sParameter.setVisible(true);
 			GroupLayout gl_panelParentSelector = new GroupLayout(panelParentSelector);
 			gl_panelParentSelector.setHorizontalGroup(
 				gl_panelParentSelector.createParallelGroup(Alignment.LEADING)
@@ -223,7 +273,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addComponent(lblSParameter)
 						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+						.addComponent(sParameter, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
 						.addContainerGap(92, Short.MAX_VALUE))
 			);
 			gl_panelParentSelector.setVerticalGroup(
@@ -234,7 +284,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 							.addComponent(lblParentSelector)
 							.addComponent(parentSelector, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addComponent(lblSParameter)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(sParameter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 			);
 			panelParentSelector.setLayout(gl_panelParentSelector);
@@ -245,7 +295,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			
 			JLabel lblRecombinationOperator = new JLabel("Recombination Operator");
 			
-			JComboBox recombinationOperator = new JComboBox();
+			JComboBox<RecombinationOperatorType> recombinationOperator = new JComboBox<>(RecombinationOperatorType.values());
 			
 			JLabel lblRecombinationProbability = new JLabel("Probability");
 			
@@ -284,7 +334,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			
 			JLabel lblMutationOperator = new JLabel("Mutation Operator");
 			
-			JComboBox mutationOperator = new JComboBox();
+			JComboBox<MutationOperatorType> mutationOperator = new JComboBox<>(MutationOperatorType.values());
 			
 			JLabel lblMutationProbability = new JLabel("Probability");
 			
@@ -327,7 +377,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			
 			JLabel lblSurvivorSelector = new JLabel("Survivor Selector");
 			
-			JComboBox survivorSelector = new JComboBox();
+			JComboBox<SurvivorSelectorType> survivorSelector = new JComboBox<>(SurvivorSelectorType.values());
 			GroupLayout gl_panelSurvivorSelectorCenter = new GroupLayout(panelSurvivorSelectorCenter);
 			gl_panelSurvivorSelectorCenter.setHorizontalGroup(
 				gl_panelSurvivorSelectorCenter.createParallelGroup(Alignment.LEADING)
@@ -354,6 +404,9 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			panelSurvivorSelectorEast.setMaximumSize(new Dimension(200, 32767));
 			panelSurvivorSelector.add(panelSurvivorSelectorEast, BorderLayout.EAST);
 			panelSurvivorSelectorEast.setLayout(new CardLayout(0, 0));
+			
+			JPanel panelAged = new JPanel();
+			panelSurvivorSelectorEast.add(panelAged);
 			
 			JPanel panelRounRobin = new JPanel();
 			panelSurvivorSelectorEast.add(panelRounRobin, "name_25156092643474");
@@ -409,6 +462,10 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			);
 			panelSteadyState.setLayout(gl_panelSteadyState);
 			
+			panelAged.setVisible(false);
+			panelRounRobin.setVisible(false);
+			panelSteadyState.setVisible(true);
+			
 			JPanel panelPopulation = new JPanel();
 			panelPopulation.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 			add(panelPopulation);
@@ -420,15 +477,17 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			populatonSize = new JTextField();
 			populatonSize.setColumns(10);
 			
-			lblPopulationMaxSize = new JLabel("Max");
-			
+			JLabel lblPopulationMaxSize = new JLabel("Max");
 			populationMaxSize = new JTextField();
 			populationMaxSize.setColumns(10);
+			lblPopulationMaxSize.setVisible(false);
+			populationMaxSize.setVisible(false);
 			
 			JLabel lblPopulationMinSize = new JLabel("Min");
-			
 			populationMinSize = new JTextField();
 			populationMinSize.setColumns(10);
+			lblPopulationMinSize.setVisible(false);
+			populationMinSize.setVisible(false);
 			GroupLayout gl_panelPopulation = new GroupLayout(panelPopulation);
 			gl_panelPopulation.setHorizontalGroup(
 				gl_panelPopulation.createParallelGroup(Alignment.LEADING)
@@ -464,6 +523,49 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 						.addContainerGap())
 			);
 			panelPopulation.setLayout(gl_panelPopulation);
+			
+			parentSelector.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if (parentSelector.getSelectedItem().equals(ParentSelectorType.Ranking)) {
+						lblSParameter.setVisible(true);
+						sParameter.setVisible(true);
+					} else {
+						lblSParameter.setVisible(false);
+						sParameter.setVisible(false);
+					}
+				}
+			});
+			survivorSelector.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					SurvivorSelectorType itemSelected = (SurvivorSelectorType) survivorSelector.getSelectedItem();
+					if (itemSelected.equals(SurvivorSelectorType.AgeBased)) {
+						panelAged.setVisible(true);
+						panelRounRobin.setVisible(false);
+						panelSteadyState.setVisible(false);
+						lblPopulationMaxSize.setVisible(true);
+						populationMaxSize.setVisible(true);
+						lblPopulationMinSize.setVisible(true);
+						populationMinSize.setVisible(true);
+					} else if (itemSelected.equals(SurvivorSelectorType.RoundRobin)) {
+						panelAged.setVisible(false);
+						panelRounRobin.setVisible(true);
+						panelSteadyState.setVisible(false);
+						lblPopulationMaxSize.setVisible(false);
+						populationMaxSize.setVisible(false);
+						lblPopulationMinSize.setVisible(false);
+						populationMinSize.setVisible(false);
+					} else {
+						panelAged.setVisible(false);
+						panelRounRobin.setVisible(false);
+						panelSteadyState.setVisible(true);
+						lblPopulationMaxSize.setVisible(false);
+						populationMaxSize.setVisible(false);
+						lblPopulationMinSize.setVisible(false);
+						populationMinSize.setVisible(false);
+					}
+				}
+			});
+			
 		}
 	}
 }
