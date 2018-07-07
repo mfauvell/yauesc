@@ -5,11 +5,11 @@ import java.io.IOException;
 
 import com.opencsv.*;
 
-public class UnedParser {
+public class DataUnedParser {
 	
 	CSVParser csvParser;
 	
-	public UnedParser() {
+	public DataUnedParser() {
 		csvParser = new CSVParserBuilder()
 				.withSeparator(';')
 				.withQuoteChar('"')

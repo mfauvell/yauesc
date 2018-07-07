@@ -82,7 +82,7 @@ class UnedScheduleTest {
 		when(examTimeFourth.compareTo(examTimeThird)).thenReturn(1);
 		
 		
-		UnedSchedule unedSchedule = new UnedSchedule(solution, dataUned);
+		DataUnedSchedule unedSchedule = new DataUnedSchedule(solution, dataUned);
 		
 		unedSchedule.createCsvAllSchedule(newFilePath);
 		

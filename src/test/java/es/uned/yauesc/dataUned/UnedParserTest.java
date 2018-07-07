@@ -21,7 +21,7 @@ class UnedParserTest {
 		
 		DataUned dataUned = mock(DataUned.class);
 		
-		UnedParser unedParser = new UnedParser();
+		DataUnedParser unedParser = new DataUnedParser();
 		
 		assertThat(unedParser.parseData(fileGradePath, fileCentroAsociadoPath, fileExamTimePath, fileCoursePath, fileEnrolmentPath, dataUned)).isEqualTo(dataUned);
 		

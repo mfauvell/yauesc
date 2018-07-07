@@ -19,12 +19,15 @@ import java.awt.Color;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import es.uned.yauesc.dataUned.UnedDataController;
+import es.uned.yauesc.dataUned.DataUnedController;
+import es.uned.yauesc.dataUned.DataUnedDefaultConfiguration;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.io.IOException;
+
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
 
@@ -35,7 +38,8 @@ public class DataUnedGui extends JPanel {
 	 */
 	private static final long serialVersionUID = -1293442390136906606L;
 	
-	private UnedDataController dataUnedController;
+	//private DataUnedController dataUnedController;
+	//private MainFrame mainFrame;
 	
 	private JTextField firstFitnessLevel;
 	private JTextField secondFitnessLevel;
@@ -50,9 +54,10 @@ public class DataUnedGui extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public DataUnedGui(UnedDataController dataUnedController) {
+	public DataUnedGui(DataUnedController dataUnedController, MainFrame mainFrame) {
 		
-		this.dataUnedController = dataUnedController;
+		//this.dataUnedController = dataUnedController;
+		//this.mainFrame = mainFrame;
 		
 		setSize(new Dimension(1030, 600));
 		setLayout(new BorderLayout(0, 0));
@@ -85,7 +90,15 @@ public class DataUnedGui extends JPanel {
 		JButton btnDefault = new JButton("Default Values");
 		btnDefault.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO
+				firstFitnessLevel.setText("" + DataUnedDefaultConfiguration.FIRST_LEVEL_OPTIMAL_FITNESS);
+				secondFitnessLevel.setText("" + DataUnedDefaultConfiguration.SECOND_LEVEL_OPTIMAL_FITNESS);
+				thirdFitnessLevel.setText("" + DataUnedDefaultConfiguration.THIRD_LEVEL_OPTIMAL_FITNESS);
+				presented.setText("" + DataUnedDefaultConfiguration.PRESENTED);
+				fileGrade.setText(DataUnedDefaultConfiguration.FILE_GRADE);
+				fileCentroAsociado.setText(DataUnedDefaultConfiguration.FILE_CENTROASOCIADO);
+				fileExamTime.setText(DataUnedDefaultConfiguration.FILE_EXAMTIME);
+				fileCourse.setText(DataUnedDefaultConfiguration.FILE_COURSE);
+				fileEnrolment.setText(DataUnedDefaultConfiguration.FILE_ENROLMENT);
 			}
 		});
 		panelNorthWest.add(btnDefault);
@@ -97,7 +110,25 @@ public class DataUnedGui extends JPanel {
 		JButton btnLoad = new JButton("Load Data");
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO
+				//TODO Checks lacks
+				mainFrame.disableGeneticAlgorithmConfigTab();
+				
+				dataUnedController.setOptimalFitness(Integer.parseInt(firstFitnessLevel.getText()), Integer.parseInt(secondFitnessLevel.getText()), Integer.parseInt(thirdFitnessLevel.getText()));
+				dataUnedController.setPercentagePresented(Double.parseDouble(presented.getText()));
+				dataUnedController.setFileGradePath(fileGrade.getText());
+				dataUnedController.setFileCentroAsociadoPath(fileCentroAsociado.getText());
+				dataUnedController.setFileExamTimePath(fileExamTime.getText());
+				dataUnedController.setFileCoursePath(fileCourse.getText());
+				dataUnedController.setFileEnrolmentPath(fileEnrolment.getText());
+				
+				try {
+					dataUnedController.parseData();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				mainFrame.setGeneticAlgorithmConfigTab();
 			}
 		});
 		panelNorthEast.add(btnLoad);

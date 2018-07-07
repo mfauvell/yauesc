@@ -2,7 +2,7 @@ package es.uned.yauesc;
 
 import java.io.IOException;
 
-import es.uned.yauesc.dataUned.UnedDataController;
+import es.uned.yauesc.dataUned.DataUnedController;
 import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithm;
 import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithmController;
 import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithmControllerObserver;
@@ -12,11 +12,11 @@ import es.uned.yauesc.geneticAlgorithm.IllegalParameterValueCheckedException;
 public class App implements GeneticAlgorithmControllerObserver, GeneticAlgorithmObserver {
     
 	private GeneticAlgorithmController geneticAlgorithmController;
-	private UnedDataController unedDataController;
+	private DataUnedController unedDataController;
 	
 	public App() throws IOException, IllegalParameterValueCheckedException {
 		geneticAlgorithmController = new GeneticAlgorithmController();
-		unedDataController = new UnedDataController();
+		unedDataController = new DataUnedController();
 		runProgram();
 	}
 

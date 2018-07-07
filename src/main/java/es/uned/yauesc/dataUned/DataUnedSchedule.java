@@ -10,14 +10,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class UnedSchedule {
+public class DataUnedSchedule {
 	
 	private DataUned dataUned;
 	
 	private LinkedHashMap<Course, ExamTime> codeCourseExamTime;
 	private LinkedHashMap<ExamTime,List<Course>> examTimeListCourse;
 	
-	public UnedSchedule(List<Integer> solution, DataUned dataUned) {
+	public DataUnedSchedule(List<Integer> solution, DataUned dataUned) {
 		this.dataUned = dataUned;
 		parseSolution(solution);
 	}

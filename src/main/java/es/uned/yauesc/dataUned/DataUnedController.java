@@ -6,11 +6,11 @@ import java.util.List;
 import es.uned.yauesc.geneticAlgorithm.EvaluationFunction;
 import es.uned.yauesc.geneticAlgorithm.Fitness;
 
-public class UnedDataController {
+public class DataUnedController {
 
 	private DataUned dataUned;
-	private UnedSchedule unedSchedule;
-	private UnedParser unedParser;
+	private DataUnedSchedule unedSchedule;
+	private DataUnedParser unedParser;
 	private EvaluationFunctionUned evaluationFunctionUned;
 	private FitnessUned optimalFitness;
 	private double percentagePresented;
@@ -24,9 +24,9 @@ public class UnedDataController {
 	private String fileCoursePath;
 	private String fileEnrolmentPath;
 	
-	public UnedDataController() {
-		dataUned = UnedFactory.getDataUned();
-		unedParser = UnedFactory.getUnedParser();
+	public DataUnedController() {
+		dataUned = DataUnedFactory.getDataUned();
+		unedParser = DataUnedFactory.getUnedParser();
 		sizeGenotype = -1;
 		numberValuesGen = -1;
 	}
@@ -75,11 +75,11 @@ public class UnedDataController {
 	}
 	
 	public void setUnedSchedule(List<Integer> solution) {
-		unedSchedule = UnedFactory.getUnedSchedule(solution, dataUned);
+		unedSchedule = DataUnedFactory.getUnedSchedule(solution, dataUned);
 	}
 	
 	public void setOptimalFitness(int first, int second, int third) {
-		optimalFitness = UnedFactory.getFitnessUned(first, second, third);
+		optimalFitness = DataUnedFactory.getFitnessUned(first, second, third);
 	}
 	
 	public void setFileGradePath(String fileGradePath) {
@@ -103,6 +103,6 @@ public class UnedDataController {
 	}
 	
 	private void setEvaluationFunction() {
-		evaluationFunctionUned = UnedFactory.getEvaluationFunctionUned(dataUned, percentagePresented);
+		evaluationFunctionUned = DataUnedFactory.getEvaluationFunctionUned(dataUned, percentagePresented);
 	}
 }

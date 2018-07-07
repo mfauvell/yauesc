@@ -2,9 +2,9 @@ package es.uned.yauesc.dataUned;
 
 import java.util.List;
 
-public final class UnedFactory {
+public final class DataUnedFactory {
 	
-	private UnedFactory() {
+	private DataUnedFactory() {
 		
 	}
 	
@@ -40,12 +40,12 @@ public final class UnedFactory {
 		return new ExamTime(day, dayName, hour, hourName);
 	}
 	
-	public static UnedParser getUnedParser() {
-		return new UnedParser();
+	public static DataUnedParser getUnedParser() {
+		return new DataUnedParser();
 	}
 	
-	public static UnedSchedule getUnedSchedule(List<Integer> solution, DataUned dataUned) {
-		return new UnedSchedule(solution, dataUned);
+	public static DataUnedSchedule getUnedSchedule(List<Integer> solution, DataUned dataUned) {
+		return new DataUnedSchedule(solution, dataUned);
 	}
 
 }

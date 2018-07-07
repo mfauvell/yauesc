@@ -269,7 +269,7 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 					}).
 					sum()).
 			sum();
-		return UnedFactory.getFitnessUned(firstLevel, secondLevel, thirdLevel);
+		return DataUnedFactory.getFitnessUned(firstLevel, secondLevel, thirdLevel);
 	}
 
 	@Override
