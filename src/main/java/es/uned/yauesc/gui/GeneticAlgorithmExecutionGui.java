@@ -12,11 +12,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.TitledBorder;
 
+import es.uned.yauesc.dataUned.FitnessUned;
 import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithm;
 import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithmController;
 import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithmControllerObserver;
@@ -32,11 +34,26 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 	 */
 	private static final long serialVersionUID = -1920379278298666697L;
 
+	private MainFrame mainFrame;
+	
+	private JButton btnStop;
+	private JButton btnStart;
+	private JPanel panelMainAlgorithm;
+	private ParallelExecutionGui panelMainAlgorithmParallel;
+	private SingleExecutionGui panelMainAlgorithmSingle;
+	private SingleExecutionGui panelFirstAlgorithmSingle;
+	private SingleExecutionGui panelSecondAlgorithmSingle;
+	private SingleExecutionGui panelThirdAlgorithmSingle;
+	private JPanelObserverGeneticAlgorithmController panelAdvise;
+	private JPanel panelInProgress;
+	private JPanel panelFinished;
 
 	/**
 	 * Create the panel.
 	 */
-	public GeneticAlgorithmExecutionGui() {
+	public GeneticAlgorithmExecutionGui(GeneticAlgorithmController geneticAlgorithmController, MainFrame mainFrame) {
+		this.mainFrame = mainFrame;
+		
 		setLayout(new BorderLayout(0, 0));
 		JPanel panelNorth = new JPanel();
 		panelNorth.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -47,15 +64,10 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		panelNorth.add(panelNorthWest, BorderLayout.WEST);
 		panelNorthWest.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 20));
 		
-		JButton btnStart = new JButton("Start");
-		btnStart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//TODO
-			}
-		});
+		btnStart = new JButton("Start");
 		panelNorthWest.add(btnStart);
 		
-		JButton btnStop = new JButton("Stop");
+		btnStop = new JButton("Stop");
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//TODO
@@ -69,14 +81,14 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		add(panelMain);
 		panelMain.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		
-		JPanel panelAdvise = new JPanelObserverGeneticAlgorithmController();
+		panelAdvise = new JPanelObserverGeneticAlgorithmController();
 		panelAdvise.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelAdvise.setPreferredSize(new Dimension(1030, 70));
 		panelMain.add(panelAdvise);
 		panelAdvise.setLayout(new CardLayout(0, 0));
 		panelAdvise.setVisible(false);
 		
-		JPanel panelInProgress = new JPanel();
+		panelInProgress = new JPanel();
 		panelAdvise.add(panelInProgress, "name_25225078782987");
 		panelInProgress.setVisible(false);
 		
@@ -85,7 +97,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		lblInProgress.setFont(new Font("Dialog", Font.BOLD, 48));
 		panelInProgress.add(lblInProgress);
 		
-		JPanel panelFinished = new JPanel();
+		panelFinished = new JPanel();
 		panelAdvise.add(panelFinished, "name_25230197734628");
 		panelFinished.setVisible(false);
 		
@@ -94,28 +106,109 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		lblFinished.setFont(new Font("Dialog", Font.BOLD, 48));
 		panelFinished.add(lblFinished);
 		
-		JPanel panelMainAlgorithm = new JPanel();
+		panelMainAlgorithm = new JPanel();
 		panelMainAlgorithm.setLayout(new CardLayout(0, 0));
 		panelMainAlgorithm.setMinimumSize(new Dimension(1030, 50));
 		panelMainAlgorithm.setMaximumSize(new Dimension(1030, 100));
 		panelMain.add(panelMainAlgorithm);
 		
-		JPanel panelMainAlgorithmParallel = new ParallelExecutionGui("Main genetic algorithm", 10, 10);
+		panelMainAlgorithmParallel = new ParallelExecutionGui("Main genetic algorithm");
 		panelMainAlgorithm.add(panelMainAlgorithmParallel);
 		
-		JPanel panelMainAlgorithmSingle = new SingleExecutionGui("Main genetic algorithm", 10);
+		panelMainAlgorithmSingle = new SingleExecutionGui("Main genetic algorithm");
 		panelMainAlgorithm.add(panelMainAlgorithmSingle);
-		panelMainAlgorithmSingle.setVisible(false);
 		
-		JPanel panelFirstAlgorithmSingle = new SingleExecutionGui("First genetic algorithm", 10);
+		panelFirstAlgorithmSingle = new SingleExecutionGui("First genetic algorithm");
 		panelMain.add(panelFirstAlgorithmSingle);
 		
-		JPanel panelSecondAlgorithmSingle = new SingleExecutionGui("Second genetic algorithm", 10);
+		panelSecondAlgorithmSingle = new SingleExecutionGui("Second genetic algorithm");
 		panelMain.add(panelSecondAlgorithmSingle);
 		
-		JPanel panelThirdAlgorithmSingle = new SingleExecutionGui("Third genetic algorithm", 10);
+		panelThirdAlgorithmSingle = new SingleExecutionGui("Third genetic algorithm");
 		panelMain.add(panelThirdAlgorithmSingle);
 
+		btnStop.setEnabled(false);
+		panelMainAlgorithm.setVisible(false);
+		panelMainAlgorithmParallel.setVisible(false);
+		panelMainAlgorithmSingle.setVisible(false);
+		panelFirstAlgorithmSingle.setVisible(false);
+		panelSecondAlgorithmSingle.setVisible(false);
+		panelThirdAlgorithmSingle.setVisible(false);
+		
+		btnStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO
+				btnStop.setEnabled(true);
+				btnStart.setEnabled(false);
+				int generations = geneticAlgorithmController.getGenerations();
+				if (geneticAlgorithmController.isParallel()) {
+					geneticAlgorithmController.registerObserverMainGeneticAlgorithm(panelMainAlgorithmParallel);
+					geneticAlgorithmController.registerObserverFirstGeneticAlgorithm(panelFirstAlgorithmSingle);
+					geneticAlgorithmController.registerObserverSecondGeneticAlgorithm(panelSecondAlgorithmSingle);
+					geneticAlgorithmController.registerObserverThirdGeneticAlgorithm(panelThirdAlgorithmSingle);
+					panelMainAlgorithmParallel.preparePanel(generations, geneticAlgorithmController.getGenerarionsToMigrate());
+					panelFirstAlgorithmSingle.preparePanel(generations);
+					panelSecondAlgorithmSingle.preparePanel(generations);
+					panelThirdAlgorithmSingle.preparePanel(generations);
+					panelMainAlgorithm.setVisible(true);
+					panelMainAlgorithmParallel.setVisible(true);
+					panelMainAlgorithmSingle.setVisible(true);
+					panelFirstAlgorithmSingle.setVisible(true);
+					panelSecondAlgorithmSingle.setVisible(true);
+					panelThirdAlgorithmSingle.setVisible(true);
+				} else {
+					panelMainAlgorithmSingle.preparePanel(generations);
+					geneticAlgorithmController.registerObserverMainGeneticAlgorithm(panelMainAlgorithmSingle);
+					panelMainAlgorithm.setVisible(true);
+					panelMainAlgorithmSingle.setVisible(true);
+					panelMainAlgorithmParallel.setVisible(false);
+					panelFirstAlgorithmSingle.setVisible(false);
+					panelSecondAlgorithmSingle.setVisible(false);
+					panelThirdAlgorithmSingle.setVisible(false);
+				}
+				geneticAlgorithmController.registerObserver(panelAdvise);
+				panelAdvise.setVisible(true);
+				panelInProgress.setVisible(true);
+				panelFinished.setVisible(false);
+				
+				@SuppressWarnings("rawtypes")
+				SwingWorker worker = new SwingWorker() {
+					@Override
+					protected Object doInBackground() throws Exception {
+						geneticAlgorithmController.startExecution();
+						return null;
+					}
+				};
+				worker.execute();
+			}
+		});
+		
+		btnStop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				geneticAlgorithmController.stopExecution();
+				btnStop.setEnabled(false);
+			}
+		});
+	}
+	
+	public void initialize() {
+		reset();
+	}
+	
+	private void reset() {
+		btnStop.setEnabled(false);
+		panelAdvise.setVisible(false);
+		panelMainAlgorithm.setVisible(false);
+		panelMainAlgorithmParallel.setVisible(false);
+		panelMainAlgorithmParallel.reset();
+		panelMainAlgorithmSingle.setVisible(false);
+		panelMainAlgorithmSingle.reset();
+		panelFirstAlgorithmSingle.setVisible(false);
+		panelFirstAlgorithmSingle.reset();
+		panelSecondAlgorithmSingle.setVisible(false);
+		panelSecondAlgorithmSingle.reset();
+		panelThirdAlgorithmSingle.setVisible(false);
+		panelThirdAlgorithmSingle.reset();
 	}
 	
 	private class JPanelObserverGeneticAlgorithmController extends JPanel implements GeneticAlgorithmControllerObserver {
@@ -124,8 +217,10 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 
 		@Override
 		public void updateGeneticAlgorithmControllerObserver(GeneticAlgorithmController geneticAlgorithmController) {
-			// TODO Auto-generated method stub
-			
+			panelFinished.setVisible(true);
+			panelInProgress.setVisible(false);
+			btnStart.setEnabled(true);
+			mainFrame.setObtainResultsTab();
 		}
 		
 	}
@@ -139,9 +234,10 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		private JTextField thirdFitness;
 		private JTextField total;
 		private JTextField done;
+		private JProgressBar migrationsProgressBar;
 
 	
-		public ParallelExecutionGui(String title, int numberMigrates, int generations) {
+		public ParallelExecutionGui(String title) {
 			setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), title, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			setPreferredSize(new Dimension(1030, 100));
 			setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
@@ -196,19 +292,39 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 			panelProgressBar.setPreferredSize(new Dimension(1010, 35));
 			add(panelProgressBar);
 			
-			JProgressBar migrationsProgressBar = new JProgressBar();
-			migrationsProgressBar.setMaximum(generations / numberMigrates);
+			migrationsProgressBar = new JProgressBar();
+			migrationsProgressBar.setMaximum(100);
 			migrationsProgressBar.setPreferredSize(new Dimension(1010, 25));
 			migrationsProgressBar.setString("Migrations");
 			migrationsProgressBar.setStringPainted(true);
 			panelProgressBar.add(migrationsProgressBar);
-
+			
+		}
+		
+		public void reset()	{
+			firstFitness.setText("");
+			secondFitness.setText("");
+			thirdFitness.setText("");
+			total.setText("");
+			done.setText("");
+			migrationsProgressBar.setValue(0);
+		}
+		
+		public void preparePanel(int generations, int generationsToMigrate) {
+			total.setText("" + generations/generationsToMigrate);
+			done.setText("0");
+			migrationsProgressBar.setMaximum(generations/generationsToMigrate);
 		}
 
 		@Override
 		public void updateGeneticAlgorithmObserver(GeneticAlgorithm geneticAlgorithm) {
-			// TODO Auto-generated method stub
-			
+			FitnessUned solutionFitness = (FitnessUned) geneticAlgorithm.getSolution().getFitness();
+			firstFitness.setText("" + solutionFitness.getFirstLevel());
+			secondFitness.setText("" + solutionFitness.getSecondLevel());
+			thirdFitness.setText("" + solutionFitness.getThirdLevel());
+			migrationsProgressBar.setValue(migrationsProgressBar.getValue() + 1);
+			done.setText("" + (Integer.parseInt(done.getText()) + 1));
+			paintImmediately(0, 0, 1030, 200);
 		}
 
 	}
@@ -222,9 +338,10 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		private JTextField thirdFitness;
 		private JTextField total;
 		private JTextField done;
+		JProgressBar generationsProgressBar;
 		
 	
-		public SingleExecutionGui(String title, int generations) {
+		public SingleExecutionGui(String title) {
 			setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), title, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			setPreferredSize(new Dimension(1030, 100));
 			setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
@@ -279,19 +396,39 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 			panelProgressBar.setPreferredSize(new Dimension(1010, 35));
 			add(panelProgressBar);
 			
-			JProgressBar generationsProgressBar = new JProgressBar();
-			generationsProgressBar.setMaximum(generations);
+			generationsProgressBar = new JProgressBar();
+			generationsProgressBar.setMaximum(100);
 			generationsProgressBar.setPreferredSize(new Dimension(1010, 25));
 			generationsProgressBar.setString("Generations");
 			generationsProgressBar.setStringPainted(true);
 			panelProgressBar.add(generationsProgressBar);
 			
 		}
+		
+		public void reset() {
+			firstFitness.setText("");
+			secondFitness.setText("");
+			thirdFitness.setText("");
+			total.setText("");
+			done.setText("");
+			generationsProgressBar.setValue(0);
+		}
+		
+		public void preparePanel(int generations) {
+			total.setText("" + generations);
+			done.setText("0");
+			generationsProgressBar.setMaximum(generations);
+		}
 
 		@Override
 		public void updateGeneticAlgorithmObserver(GeneticAlgorithm geneticAlgorithm) {
-			// TODO Auto-generated method stub
-			
+			FitnessUned solutionFitness = (FitnessUned) geneticAlgorithm.getSolution().getFitness();
+			firstFitness.setText("" + solutionFitness.getFirstLevel());
+			secondFitness.setText("" + solutionFitness.getSecondLevel());
+			thirdFitness.setText("" + solutionFitness.getThirdLevel());
+			generationsProgressBar.setValue(generationsProgressBar.getValue() + 1);
+			done.setText("" + (Integer.parseInt(done.getText()) + 1));
+			paintImmediately(0, 0, 1030, 200);
 		}
 
 	}

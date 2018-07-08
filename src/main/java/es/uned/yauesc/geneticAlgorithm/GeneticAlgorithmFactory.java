@@ -49,11 +49,11 @@ public class GeneticAlgorithmFactory {
 	}
 	
 	private int getSizeOffspring(Population population, Object[] survivorSelectorOptions) {
-		String type = (String) survivorSelectorOptions[0];
+		SurvivorSelectorType type = (SurvivorSelectorType) survivorSelectorOptions[0];
 		int result;
-		if (type.equals("Age")) {
+		if (type.equals(SurvivorSelectorType.AgeBased)) {
 			result = population.getMinSize();
-		} else if (type.equals("SteadyState")) {
+		} else if (type.equals(SurvivorSelectorType.SteadyState)) {
 			result = population.getSize() - (int) survivorSelectorOptions[1];
 		} else {
 			result = population.getSize();

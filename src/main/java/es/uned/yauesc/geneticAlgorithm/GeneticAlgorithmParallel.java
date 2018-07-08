@@ -99,6 +99,11 @@ public class GeneticAlgorithmParallel implements GeneticAlgorithm {
 		}
 
 	}
+	
+	@Override
+	public void stop() {
+		finished=true;
+	}
 
 	@Override
 	public boolean isFinished() {

@@ -108,6 +108,11 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 	public boolean isFinished() {
 		return finished;
 	}
+	
+	@Override
+	public void stop() {
+		finished = true;
+	}
 
 	public boolean foundOptimal() {
 		return foundOptimal;

@@ -17,6 +17,7 @@ public class GeneticAlgorithmController implements GeneticAlgorithmObserver {
 	
 	private boolean parallel;
 	private int generations;
+	private int generationsToMigrate;
 	
 	private boolean finished;
 	private Individual solution;
@@ -30,6 +31,18 @@ public class GeneticAlgorithmController implements GeneticAlgorithmObserver {
 	
 	public Individual getSolution() {
 		return solution;
+	}
+	
+	public int getGenerations() {
+		return generations;
+	}
+	
+	public int getGenerarionsToMigrate() {
+		int result = 0;
+		if (parallel) {
+			result = generationsToMigrate;
+		}
+		return result;
 	}
 	
 	public boolean isParallel() {
@@ -61,6 +74,7 @@ public class GeneticAlgorithmController implements GeneticAlgorithmObserver {
 	}
 	
 	public void setMainGeneticAlgorithm(int migrationGenerations, int numberMigration) {
+		generationsToMigrate = migrationGenerations;
 		mainGeneticAlgorithm = geneticAlgorithmFactory.getGeneticAlgorithmParallel(generations, migrationGenerations, numberMigration, firstGeneticAlgorithmSingle, secondGeneticAlgorithmSingle, thirdGeneticAlgorithmSingle);
 		mainGeneticAlgorithm.registerObserver(this);
 	}
@@ -121,6 +135,10 @@ public class GeneticAlgorithmController implements GeneticAlgorithmObserver {
 			Thread.currentThread().interrupt();
 			System.out.println("Failed execution of algorithm");
 		}
+	}
+
+	public void stopExecution() {
+		mainGeneticAlgorithm.stop();
 	}
 	
 	

@@ -15,6 +15,9 @@ public class MainFrame {
 	private DataUnedController dataUnedController;
 	private GeneticAlgorithmController geneticAlgorithmController;
 	
+	private GeneticAlgorithmConfigGui geneticAlgorithmConfigGui;
+	private GeneticAlgorithmExecutionGui geneticAlgorithmExecutionGui;
+	
 	private JFrame frame;
 	private JTabbedPane tabbedPane;
 
@@ -61,18 +64,18 @@ public class MainFrame {
 		DataUnedGui dataUnedGui = new DataUnedGui(dataUnedController, this);
 		tabbedPane.addTab("Data UNED", null, dataUnedGui, null);
 		
-		GeneticAlgorithmConfigGui geneticAlgorithmConfigGui = new GeneticAlgorithmConfigGui();
+		geneticAlgorithmConfigGui = new GeneticAlgorithmConfigGui(geneticAlgorithmController, this);
 		tabbedPane.addTab("Genetic algorithm configuration", null, geneticAlgorithmConfigGui, null);
 		
-		GeneticAlgorithmExecutionGui geneticAlgorithmExecutionGui = new GeneticAlgorithmExecutionGui();
+		geneticAlgorithmExecutionGui = new GeneticAlgorithmExecutionGui(geneticAlgorithmController, this);
 		tabbedPane.addTab("Genetic algorithm progress", null, geneticAlgorithmExecutionGui, null);
 		
 		ObtainResultGui obtainResultGui = new ObtainResultGui();
 		tabbedPane.addTab("Export results", null, obtainResultGui, null);
 		
 		disableGeneticAlgorithmConfigTab();
-		tabbedPane.setEnabledAt(2, false);
-		tabbedPane.setEnabledAt(3, false);
+		disableGeneticAlgorithmExecutionTab();
+		disableObtainResultTab();
 	}
 
 	public void setGeneticAlgorithmConfigTab() {
@@ -84,8 +87,41 @@ public class MainFrame {
 		tabbedPane.setSelectedIndex(1);
 	}
 	
-	public void disableGeneticAlgorithmConfigTab() {
+	public void setGeneticAlgorithmExecutionTab() {
+		//TODO
+		tabbedPane.setEnabledAt(2, true);
+		tabbedPane.setSelectedIndex(2);
+	}
+	
+	public void setObtainResultsTab() {
+		// TODO Auto-generated method stub
+		tabbedPane.setEnabledAt(3, true);
+		tabbedPane.setSelectedIndex(3);
+	}
+	
+	public void resetFromGeneticAlgorithmConfig() {
+		//TODO
+		disableGeneticAlgorithmExecutionTab();
+		disableObtainResultTab();
+		geneticAlgorithmExecutionGui.initialize();
+	}
+	
+	public void resetFromLoadData() {
+		//TODO
+		disableGeneticAlgorithmConfigTab();
+		geneticAlgorithmConfigGui.initialize();
+		resetFromGeneticAlgorithmConfig();
+	}
+	
+	private void disableGeneticAlgorithmConfigTab() {
 		tabbedPane.setEnabledAt(1, false);
 	}
-
+	
+	private void disableGeneticAlgorithmExecutionTab() {
+		tabbedPane.setEnabledAt(2, false);
+	}
+	
+	private void disableObtainResultTab() {
+		tabbedPane.setEnabledAt(3, false);
+	}
 }

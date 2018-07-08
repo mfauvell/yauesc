@@ -22,7 +22,9 @@ import javax.swing.JTextField;
 import java.awt.Dimension;
 import javax.swing.border.TitledBorder;
 
+import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithmController;
 import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithmDefaultConfig;
+import es.uned.yauesc.geneticAlgorithm.IllegalParameterValueCheckedException;
 import es.uned.yauesc.geneticAlgorithm.MutationOperatorType;
 import es.uned.yauesc.geneticAlgorithm.ParentSelectorType;
 import es.uned.yauesc.geneticAlgorithm.RecombinationOperatorType;
@@ -43,11 +45,16 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 	private JTextField generations;
 	private JTextField generationsToMigrate;
 	private JTextField numberMigrants;
+	
+	private JRadioButton rdbtnSingle;
+	private PanelAlgorithmSingle firstGeneticAlgorithmPanel;
+	private PanelAlgorithmSingle secondGeneticAlgorithmPanel;
+	private PanelAlgorithmSingle thirdGeneticAlgorithmPanel;
 
 	/**
 	 * Create the panel.
 	 */
-	public GeneticAlgorithmConfigGui() {
+	public GeneticAlgorithmConfigGui(GeneticAlgorithmController geneticAlgorithmController, MainFrame mainFrame) {
 		setSize(new Dimension(1000, 600));
 		setLayout(new BorderLayout(0, 0));
 		
@@ -89,7 +96,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		
 		ButtonGroup btnGrpType = new ButtonGroup();
 		
-		JRadioButton rdbtnSingle = new JRadioButton("Single");
+		rdbtnSingle = new JRadioButton("Single");
 		rdbtnSingle.setSelected(true);
 		btnGrpType.add(rdbtnSingle);
 		
@@ -157,14 +164,14 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		);
 		panelBasicConfig.setLayout(gl_panelBasicConfig);
 		
-		PanelAlgorithmSingle firstGeneticAlgorithmPanel = new PanelAlgorithmSingle("First genetic algorithm config");
+		firstGeneticAlgorithmPanel = new PanelAlgorithmSingle("First genetic algorithm config");
 		panelMain.add(firstGeneticAlgorithmPanel);
 		
-		PanelAlgorithmSingle secondGeneticAlgorithmPanel = new PanelAlgorithmSingle("Second genetic algorithm config");
+		secondGeneticAlgorithmPanel = new PanelAlgorithmSingle("Second genetic algorithm config");
 		panelMain.add(secondGeneticAlgorithmPanel);
 		secondGeneticAlgorithmPanel.setVisible(false);
 		
-		PanelAlgorithmSingle thirdGeneticAlgorithmPanel = new PanelAlgorithmSingle("Third genetic algorithm config");
+		thirdGeneticAlgorithmPanel = new PanelAlgorithmSingle("Third genetic algorithm config");
 		panelMain.add(thirdGeneticAlgorithmPanel);
 		thirdGeneticAlgorithmPanel.setVisible(false);
 		
@@ -209,13 +216,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				rdbtnSingle.setSelected(true);
-				generations.setText("");
-				generationsToMigrate.setText("");
-				numberMigrants.setText("");
-				firstGeneticAlgorithmPanel.resetValues();
-				secondGeneticAlgorithmPanel.resetValues();
-				thirdGeneticAlgorithmPanel.resetValues();
+				reset();
 			}
 		});
 		btnDefault.addActionListener(new ActionListener() {
@@ -254,10 +255,45 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		btnSetConfig.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO
+				mainFrame.resetFromGeneticAlgorithmConfig();
+				boolean parallel = rdbtnParallel.isSelected();
+				geneticAlgorithmController.setBasicOptions(Integer.parseInt(generations.getText()), parallel);
+				try {
+					geneticAlgorithmController.setFirstGeneticAlgorithmSingle(firstGeneticAlgorithmPanel.getPopulationConfig(), firstGeneticAlgorithmPanel.getParentSelectorConfig(),
+							firstGeneticAlgorithmPanel.getRecombinationOperatorConfig(), firstGeneticAlgorithmPanel.getMutationOperatorConfig(), firstGeneticAlgorithmPanel.getSurvivorSelectorConfig());
+					if (parallel) {
+						geneticAlgorithmController.setSecondGeneticAlgorithmSingle(secondGeneticAlgorithmPanel.getPopulationConfig(), secondGeneticAlgorithmPanel.getParentSelectorConfig(),
+								secondGeneticAlgorithmPanel.getRecombinationOperatorConfig(), secondGeneticAlgorithmPanel.getMutationOperatorConfig(), secondGeneticAlgorithmPanel.getSurvivorSelectorConfig());
+						geneticAlgorithmController.setThirdGeneticAlgorithmSingle(thirdGeneticAlgorithmPanel.getPopulationConfig(), thirdGeneticAlgorithmPanel.getParentSelectorConfig(),
+								thirdGeneticAlgorithmPanel.getRecombinationOperatorConfig(), thirdGeneticAlgorithmPanel.getMutationOperatorConfig(), thirdGeneticAlgorithmPanel.getSurvivorSelectorConfig());
+					}
+				} catch (IllegalParameterValueCheckedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				if (parallel) {
+					geneticAlgorithmController.setMainGeneticAlgorithm(Integer.parseInt(generationsToMigrate.getText()), Integer.parseInt(numberMigrants.getText()));
+				} else {
+					geneticAlgorithmController.setMainGeneticAlgorithm();
+				}
 				
+				mainFrame.setGeneticAlgorithmExecutionTab();
 			}
 		});
-		
+	}
+	
+	public void initialize() {
+		reset();
+	}
+	
+	private void reset() {
+		rdbtnSingle.setSelected(true);
+		generations.setText("");
+		generationsToMigrate.setText("");
+		numberMigrants.setText("");
+		firstGeneticAlgorithmPanel.resetValues();
+		secondGeneticAlgorithmPanel.resetValues();
+		thirdGeneticAlgorithmPanel.resetValues();
 	}
 	
 	private class PanelAlgorithmSingle extends JPanel {
@@ -637,6 +673,50 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			this.recombinationOperator.setSelectedIndex(recombinationOperator.ordinal());;
 			this.mutationOperator.setSelectedIndex(mutationOperator.ordinal());
 			this.survivorSelector.setSelectedIndex(survivorSelector.ordinal());
+		}
+		
+		public int[] getPopulationConfig() {
+			if (survivorSelector.getSelectedItem().equals(SurvivorSelectorType.AgeBased)) {
+				int[] result = {Integer.parseInt(populatonSize.getText()),Integer.parseInt(populationMaxSize.getText()),Integer.parseInt(populationMinSize.getText())};
+				return result;
+			} else {
+				int[] result = {Integer.parseInt(populatonSize.getText())};
+				return result;
+			}
+		}
+		
+		public Object[] getParentSelectorConfig() {
+			Object[] result = new Object[2];
+			result[0] = parentSelector.getSelectedItem();
+			if (parentSelector.getSelectedItem().equals(ParentSelectorType.Ranking)) {
+				result[1] = Double.parseDouble(sParameter.getText());
+			}
+			return result;
+		}
+		
+		public Object[] getRecombinationOperatorConfig() {
+			Object[] result = new Object[2];
+			result[0] = recombinationOperator.getSelectedItem();
+			result[1] = Double.parseDouble(probabilityRecombination.getText());
+			return result;
+		}
+		
+		public Object[] getMutationOperatorConfig() {
+			Object[] result = new Object[2];
+			result[0] = mutationOperator.getSelectedItem();
+			result[1] = Double.parseDouble(probabilityMutation.getText());
+			return result;
+		}
+		
+		public Object[] getSurvivorSelectorConfig() {
+			Object[] result = new Object[2];
+			result[0] = survivorSelector.getSelectedItem();
+			if (survivorSelector.getSelectedItem().equals(SurvivorSelectorType.SteadyState)) {
+				result[1] = Integer.parseInt(survivors.getText());
+			} else if (survivorSelector.getSelectedItem().equals(SurvivorSelectorType.RoundRobin)) {
+				result[1] = Integer.parseInt(numberBattle.getText());
+			}
+			return result;
 		}
 	}
 }

@@ -111,8 +111,7 @@ public class DataUnedGui extends JPanel {
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO Checks lacks
-				mainFrame.disableGeneticAlgorithmConfigTab();
-				
+				mainFrame.resetFromLoadData();
 				dataUnedController.setOptimalFitness(Integer.parseInt(firstFitnessLevel.getText()), Integer.parseInt(secondFitnessLevel.getText()), Integer.parseInt(thirdFitnessLevel.getText()));
 				dataUnedController.setPercentagePresented(Double.parseDouble(presented.getText()));
 				dataUnedController.setFileGradePath(fileGrade.getText());
