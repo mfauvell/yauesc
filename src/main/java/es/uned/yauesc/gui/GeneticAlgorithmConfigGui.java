@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import java.awt.Dimension;
 import javax.swing.border.TitledBorder;
 
+import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithmDefaultConfig;
 import es.uned.yauesc.geneticAlgorithm.MutationOperatorType;
 import es.uned.yauesc.geneticAlgorithm.ParentSelectorType;
 import es.uned.yauesc.geneticAlgorithm.RecombinationOperatorType;
@@ -60,19 +61,9 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		panelNorthWest.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 20));
 		
 		JButton btnReset = new JButton("Reset Values");
-		btnReset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//TODO
-			}
-		});
 		panelNorthWest.add(btnReset);
 		
 		JButton btnDefault = new JButton("Default Values");
-		btnDefault.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//TODO
-			}
-		});
 		panelNorthWest.add(btnDefault);
 		
 		JPanel panelNorthEast = new JPanel();
@@ -80,11 +71,6 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		panelNorthEast.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 20));
 		
 		JButton btnSetConfig = new JButton("Set Config");
-		btnSetConfig.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//TODO
-			}
-		});
 		panelNorthEast.add(btnSetConfig);
 		
 		JPanel panelMain = new JPanel();
@@ -182,9 +168,8 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		panelMain.add(thirdGeneticAlgorithmPanel);
 		thirdGeneticAlgorithmPanel.setVisible(false);
 		
-		rdbtnSingle.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//TODO
+		rdbtnSingle.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
 				if (rdbtnSingle.isSelected()) {
 					lblGenerationsToMigrate.setVisible(false);
 					generationsToMigrate.setVisible(false);
@@ -202,9 +187,8 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 				}
 			}
 		});
-		rdbtnParallel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//TODO
+		rdbtnParallel.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
 				if (rdbtnParallel.isSelected()) {
 					lblGenerationsToMigrate.setVisible(true);
 					generationsToMigrate.setVisible(true);
@@ -223,6 +207,56 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			}
 		});
 		
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rdbtnSingle.setSelected(true);
+				generations.setText("");
+				generationsToMigrate.setText("");
+				numberMigrants.setText("");
+				firstGeneticAlgorithmPanel.resetValues();
+				secondGeneticAlgorithmPanel.resetValues();
+				thirdGeneticAlgorithmPanel.resetValues();
+			}
+		});
+		btnDefault.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (GeneticAlgorithmDefaultConfig.isParallel) {
+					rdbtnParallel.setSelected(true);
+				} else {
+					rdbtnSingle.setSelected(false);
+				}
+				generations.setText("" + GeneticAlgorithmDefaultConfig.generations);
+				generationsToMigrate.setText("" + GeneticAlgorithmDefaultConfig.generationsToMigrate);
+				numberMigrants.setText("" + GeneticAlgorithmDefaultConfig.numberMigrants);
+				firstGeneticAlgorithmPanel.setDefaultValues(GeneticAlgorithmDefaultConfig.parentSelectorFirst,
+						GeneticAlgorithmDefaultConfig.sParameterFirst, GeneticAlgorithmDefaultConfig.recombinationOperatorFirst,
+						GeneticAlgorithmDefaultConfig.probabilityRecombinationFirst, GeneticAlgorithmDefaultConfig.mutationOperatorFirst,
+						GeneticAlgorithmDefaultConfig.probabilityMutationFirst, GeneticAlgorithmDefaultConfig.survivorSelectorFirst,
+						GeneticAlgorithmDefaultConfig.survivorsFirst, GeneticAlgorithmDefaultConfig.numberBattleFirst, 
+						GeneticAlgorithmDefaultConfig.populationSizeFirst, GeneticAlgorithmDefaultConfig.maxPopulationFirst, 
+						GeneticAlgorithmDefaultConfig.minPopulationFirst);
+				secondGeneticAlgorithmPanel.setDefaultValues(GeneticAlgorithmDefaultConfig.parentSelectorSecond,
+						GeneticAlgorithmDefaultConfig.sParameterSecond, GeneticAlgorithmDefaultConfig.recombinationOperatorSecond,
+						GeneticAlgorithmDefaultConfig.probabilityRecombinationSecond, GeneticAlgorithmDefaultConfig.mutationOperatorSecond,
+						GeneticAlgorithmDefaultConfig.probabilityMutationSecond, GeneticAlgorithmDefaultConfig.survivorSelectorSecond,
+						GeneticAlgorithmDefaultConfig.survivorsSecond, GeneticAlgorithmDefaultConfig.numberBattleSecond, 
+						GeneticAlgorithmDefaultConfig.populationSizeSecond, GeneticAlgorithmDefaultConfig.maxPopulationSecond, 
+						GeneticAlgorithmDefaultConfig.minPopulationSecond);
+				thirdGeneticAlgorithmPanel.setDefaultValues(GeneticAlgorithmDefaultConfig.parentSelectorThird,
+						GeneticAlgorithmDefaultConfig.sParameterThird, GeneticAlgorithmDefaultConfig.recombinationOperatorThird,
+						GeneticAlgorithmDefaultConfig.probabilityRecombinationThird, GeneticAlgorithmDefaultConfig.mutationOperatorThird,
+						GeneticAlgorithmDefaultConfig.probabilityMutationThird, GeneticAlgorithmDefaultConfig.survivorSelectorThird,
+						GeneticAlgorithmDefaultConfig.survivorsThird, GeneticAlgorithmDefaultConfig.numberBattleThird, 
+						GeneticAlgorithmDefaultConfig.populationSizeThird, GeneticAlgorithmDefaultConfig.maxPopulationThird, 
+						GeneticAlgorithmDefaultConfig.minPopulationThird);
+			}
+		});
+		btnSetConfig.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO
+				
+			}
+		});
 		
 	}
 	
@@ -241,6 +275,11 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		private JTextField populatonSize;
 		private JTextField populationMaxSize;
 		private JTextField populationMinSize;
+		private JComboBox<ParentSelectorType> parentSelector;
+		private JComboBox<RecombinationOperatorType> recombinationOperator;
+		private JComboBox<MutationOperatorType> mutationOperator;
+		private JComboBox<SurvivorSelectorType> survivorSelector;
+		
 		
 		public PanelAlgorithmSingle(String title) {
 			setPreferredSize(new Dimension(1030, 160));
@@ -255,7 +294,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			
 			JLabel lblParentSelector = new JLabel("Parent Selector");
 			
-			JComboBox<ParentSelectorType> parentSelector = new JComboBox<>(ParentSelectorType.values());
+			parentSelector = new JComboBox<>(ParentSelectorType.values());
 			
 			JLabel lblSParameter = new JLabel("S Parameter");
 			sParameter = new JTextField();
@@ -295,7 +334,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			
 			JLabel lblRecombinationOperator = new JLabel("Recombination Operator");
 			
-			JComboBox<RecombinationOperatorType> recombinationOperator = new JComboBox<>(RecombinationOperatorType.values());
+			recombinationOperator = new JComboBox<>(RecombinationOperatorType.values());
 			
 			JLabel lblRecombinationProbability = new JLabel("Probability");
 			
@@ -334,7 +373,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			
 			JLabel lblMutationOperator = new JLabel("Mutation Operator");
 			
-			JComboBox<MutationOperatorType> mutationOperator = new JComboBox<>(MutationOperatorType.values());
+			mutationOperator = new JComboBox<>(MutationOperatorType.values());
 			
 			JLabel lblMutationProbability = new JLabel("Probability");
 			
@@ -377,7 +416,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			
 			JLabel lblSurvivorSelector = new JLabel("Survivor Selector");
 			
-			JComboBox<SurvivorSelectorType> survivorSelector = new JComboBox<>(SurvivorSelectorType.values());
+			survivorSelector = new JComboBox<>(SurvivorSelectorType.values());
 			GroupLayout gl_panelSurvivorSelectorCenter = new GroupLayout(panelSurvivorSelectorCenter);
 			gl_panelSurvivorSelectorCenter.setHorizontalGroup(
 				gl_panelSurvivorSelectorCenter.createParallelGroup(Alignment.LEADING)
@@ -565,7 +604,39 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 					}
 				}
 			});
-			
+		}
+		
+		public void resetValues() {
+			sParameter.setText("");
+			probabilityRecombination.setText("");
+			probabilityMutation.setText("");
+			numberBattle.setText("");
+			survivors.setText("");
+			populatonSize.setText("");
+			populationMaxSize.setText("");
+			populationMinSize.setText("");
+			parentSelector.setSelectedIndex(0);
+			recombinationOperator.setSelectedIndex(0);;
+			mutationOperator.setSelectedIndex(0);
+			survivorSelector.setSelectedIndex(0);
+		}
+		
+		public void setDefaultValues(ParentSelectorType parentSelector, double sParameter, RecombinationOperatorType recombinationOperator,
+				double probabilityRecombination, MutationOperatorType mutationOperator, double probabilityMutation,
+				SurvivorSelectorType survivorSelector, int survivors, int numberBattle, int populationSize, 
+				int maxPopulation, int minPopulation) {
+			this.sParameter.setText("" + sParameter);
+			this.probabilityRecombination.setText("" + probabilityRecombination);
+			this.probabilityMutation.setText("" + probabilityMutation);
+			this.numberBattle.setText("" + numberBattle);
+			this.survivors.setText("" + survivors);
+			populatonSize.setText("" + populationSize);
+			populationMaxSize.setText("" + maxPopulation);
+			populationMinSize.setText("" + minPopulation);
+			this.parentSelector.setSelectedIndex(parentSelector.ordinal());
+			this.recombinationOperator.setSelectedIndex(recombinationOperator.ordinal());;
+			this.mutationOperator.setSelectedIndex(mutationOperator.ordinal());
+			this.survivorSelector.setSelectedIndex(survivorSelector.ordinal());
 		}
 	}
 }
