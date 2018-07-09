@@ -1,6 +1,8 @@
 package es.uned.yauesc.dataUned;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,6 +69,23 @@ public class DataUned {
 	public int getNumberCourses() {
 		return courseNumber;
 	}
+	
+	public List<String> getCodeNameCourseList(){
+		List<String> result = codeCourseMap.keySet().parallelStream().map(code -> code + " - " + codeCourseMap.get(code).getName()).collect(Collectors.toList());
+		Comparator<String> comparator = new Comparator<String>() {
+
+			@Override
+			public int compare(String first, String second) {
+				// TODO Auto-generated method stub
+				String firstTrim = first.substring(11, first.length());
+				String secondTrim = second.substring(11, second.length());
+				return firstTrim.compareTo(secondTrim);
+			}
+			
+		};
+		Collections.sort(result, comparator);
+		return result;
+	}
 
 	public void addGrade(String code, String name, int years) {
 		Grade grade = DataUnedFactory.getGrade(code, name, years);
@@ -77,6 +96,23 @@ public class DataUned {
 
 	public Grade getGrade(String code) {
 		return codeGradeMap.get(code);
+	}
+	
+	public List<String> getCodeNameGradeList() {
+		List<String> result = codeGradeMap.keySet().parallelStream().map(code -> code + " - " + codeGradeMap.get(code).getName()).collect(Collectors.toList());
+		Comparator<String> comparator = new Comparator<String>() {
+
+			@Override
+			public int compare(String first, String second) {
+				// TODO Auto-generated method stub
+				String firstTrim = first.substring(7, first.length());
+				String secondTrim = second.substring(7, second.length());
+				return firstTrim.compareTo(secondTrim);
+			}
+			
+		};
+		Collections.sort(result, comparator);
+		return result;
 	}
 
 	public List<Course> getAllCourseGrade(String codeGrade) {

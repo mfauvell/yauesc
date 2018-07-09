@@ -17,6 +17,8 @@ public class MainFrame {
 	
 	private GeneticAlgorithmConfigGui geneticAlgorithmConfigGui;
 	private GeneticAlgorithmExecutionGui geneticAlgorithmExecutionGui;
+	private DataUnedGui dataUnedGui;
+	private ObtainResultGui obtainResultGui;
 	
 	private JFrame frame;
 	private JTabbedPane tabbedPane;
@@ -61,7 +63,7 @@ public class MainFrame {
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		frame.getContentPane().add(tabbedPane);
 		
-		DataUnedGui dataUnedGui = new DataUnedGui(dataUnedController, this);
+		dataUnedGui = new DataUnedGui(dataUnedController, this);
 		tabbedPane.addTab("Data UNED", null, dataUnedGui, null);
 		
 		geneticAlgorithmConfigGui = new GeneticAlgorithmConfigGui(geneticAlgorithmController, this);
@@ -70,7 +72,7 @@ public class MainFrame {
 		geneticAlgorithmExecutionGui = new GeneticAlgorithmExecutionGui(geneticAlgorithmController, this);
 		tabbedPane.addTab("Genetic algorithm progress", null, geneticAlgorithmExecutionGui, null);
 		
-		ObtainResultGui obtainResultGui = new ObtainResultGui();
+		obtainResultGui = new ObtainResultGui();
 		tabbedPane.addTab("Export results", null, obtainResultGui, null);
 		
 		disableGeneticAlgorithmConfigTab();
@@ -95,6 +97,7 @@ public class MainFrame {
 	
 	public void setObtainResultsTab() {
 		// TODO Auto-generated method stub
+		obtainResultGui.preparePanel(dataUnedController.getCodeGrades(), dataUnedController.getCodeCourses());
 		tabbedPane.setEnabledAt(3, true);
 		tabbedPane.setSelectedIndex(3);
 	}
@@ -111,6 +114,16 @@ public class MainFrame {
 		disableGeneticAlgorithmConfigTab();
 		geneticAlgorithmConfigGui.initialize();
 		resetFromGeneticAlgorithmConfig();
+	}
+	
+	public void disableExecutionButtons() {
+		geneticAlgorithmConfigGui.disableSetConfig();
+		dataUnedGui.disableLoadData();
+	}
+	
+	public void enableExecutionButtons() {
+		geneticAlgorithmConfigGui.enableSetConfig();
+		dataUnedGui.enableLoadData();
 	}
 	
 	private void disableGeneticAlgorithmConfigTab() {

@@ -47,6 +47,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 	private JTextField numberMigrants;
 	
 	private JRadioButton rdbtnSingle;
+	private JButton btnSetConfig;
 	private PanelAlgorithmSingle firstGeneticAlgorithmPanel;
 	private PanelAlgorithmSingle secondGeneticAlgorithmPanel;
 	private PanelAlgorithmSingle thirdGeneticAlgorithmPanel;
@@ -77,7 +78,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		panelNorth.add(panelNorthEast, BorderLayout.EAST);
 		panelNorthEast.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 20));
 		
-		JButton btnSetConfig = new JButton("Set Config");
+		btnSetConfig = new JButton("Set Config");
 		panelNorthEast.add(btnSetConfig);
 		
 		JPanel panelMain = new JPanel();
@@ -294,6 +295,14 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		firstGeneticAlgorithmPanel.resetValues();
 		secondGeneticAlgorithmPanel.resetValues();
 		thirdGeneticAlgorithmPanel.resetValues();
+	}
+	
+	public void disableSetConfig() {
+		btnSetConfig.setEnabled(false);
+	}
+	
+	public void enableSetConfig() {
+		btnSetConfig.setEnabled(true);
 	}
 	
 	private class PanelAlgorithmSingle extends JPanel {

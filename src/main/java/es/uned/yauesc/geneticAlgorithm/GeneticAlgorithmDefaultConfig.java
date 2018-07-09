@@ -1,7 +1,5 @@
 package es.uned.yauesc.geneticAlgorithm;
 
-import javax.swing.JTextField;
-
 public class GeneticAlgorithmDefaultConfig {
 
 	public static final boolean isParallel = true;

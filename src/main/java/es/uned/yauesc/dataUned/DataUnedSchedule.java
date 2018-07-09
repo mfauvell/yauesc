@@ -23,14 +23,66 @@ public class DataUnedSchedule {
 	}
 
 	public void createCsvAllSchedule(String filePath) {
+		String content = createCsvString(examTimeListCourse);
+		createFile(filePath, content);
+	}
+	
+	public void createCsvByGradeSchedule(String filePath, String grade) {
+		Map<ExamTime, List<Course>> examTimeCourseList = examTimeListCourse.keySet()
+				.parallelStream()
+				.collect(Collectors.toMap(it -> it, it -> new ArrayList<>(examTimeListCourse.get(it)
+						.parallelStream()
+						.filter(course -> {
+							int result = course.getDataCourseList().parallelStream().mapToInt(dataCourse ->  { 
+								if (dataCourse.getGrade().equals(grade)) {
+									return 1;
+								} else {
+									return 0;
+								}
+							}).sum();
+							if (result > 0) {
+								return true;
+							} else {
+								return false;
+							}
+						})
+						.collect(Collectors.toList())
+						))
+				)
+				.entrySet()
+				.parallelStream()
+				.sorted(Map.Entry.comparingByKey())
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue,newValue) -> oldValue, LinkedHashMap::new));
+		String content = createCsvString(examTimeCourseList);
+		createFile(filePath, content);
+	}	
+	
+	public void createCsvByListCourseSchedule(String filePath, List<String> courseList) {
+		Map<ExamTime, List<Course>> examTimeCourseList = examTimeListCourse.keySet()
+				.parallelStream()
+				.collect(Collectors.toMap(it -> it, it -> new ArrayList<>(examTimeListCourse.get(it)
+						.parallelStream()
+						.filter(course -> courseList.contains(course.getCode()))
+						.collect(Collectors.toList())
+						))
+				)
+				.entrySet()
+				.parallelStream()
+				.sorted(Map.Entry.comparingByKey())
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue,newValue) -> oldValue, LinkedHashMap::new));
+		String content = createCsvString(examTimeCourseList);
+		createFile(filePath, content);
+	}
+	
+	private String createCsvString(Map<ExamTime,List<Course>> examTimeCourseList) {
 		StringBuilder content = new StringBuilder();
 		content.append("\"Code\";\"Name\";\"Day\";\"Hour\"\n");
-		for (ExamTime examTime : examTimeListCourse.keySet()) {
-			for (Course course : examTimeListCourse.get(examTime)) {
+		for (ExamTime examTime : examTimeCourseList.keySet()) {
+			for (Course course : examTimeCourseList.get(examTime)) {
 				content.append("\"" + course.getCode() + "\";\"" + course.getName() + "\";\"" + examTime.getDayName() + "\";\"" + examTime.getHourName() + "\"\n");
 			}
 		}
-		createFile(filePath, content.toString());
+		return content.toString();
 	}
 	
 	private void createFile(String filePath, String content) {
@@ -75,5 +127,9 @@ public class DataUnedSchedule {
 				.parallelStream()
 				.sorted(Map.Entry.comparingByKey())
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue,newValue) -> oldValue, LinkedHashMap::new));
-	}	
+	}
+
+	
+
+	
 }

@@ -38,8 +38,7 @@ public class DataUnedGui extends JPanel {
 	 */
 	private static final long serialVersionUID = -1293442390136906606L;
 	
-	//private DataUnedController dataUnedController;
-	//private MainFrame mainFrame;
+	private JButton btnLoad;
 	
 	private JTextField firstFitnessLevel;
 	private JTextField secondFitnessLevel;
@@ -107,7 +106,7 @@ public class DataUnedGui extends JPanel {
 		panelNorth.add(panelNorthEast, BorderLayout.EAST);
 		panelNorthEast.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 20));
 		
-		JButton btnLoad = new JButton("Load Data");
+		btnLoad = new JButton("Load Data");
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO Checks lacks
@@ -390,6 +389,14 @@ public class DataUnedGui extends JPanel {
 		gbc_btnFileEnrolment.gridy = 4;
 		panelDataFiles.add(btnFileEnrolment, gbc_btnFileEnrolment);
 		
+	}
+	
+	public void disableLoadData() {
+		btnLoad.setEnabled(false);
+	}
+	
+	public void enableLoadData() {
+		btnLoad.setEnabled(true);
 	}
 
 }

@@ -68,11 +68,6 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		panelNorthWest.add(btnStart);
 		
 		btnStop = new JButton("Stop");
-		btnStop.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//TODO
-			}
-		});
 		panelNorthWest.add(btnStop);
 		
 		JPanel panelMain = new JPanel();
@@ -140,6 +135,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 				//TODO
 				btnStop.setEnabled(true);
 				btnStart.setEnabled(false);
+				mainFrame.disableExecutionButtons();
 				int generations = geneticAlgorithmController.getGenerations();
 				if (geneticAlgorithmController.isParallel()) {
 					geneticAlgorithmController.registerObserverMainGeneticAlgorithm(panelMainAlgorithmParallel);
@@ -184,7 +180,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		});
 		
 		btnStop.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				geneticAlgorithmController.stopExecution();
 				btnStop.setEnabled(false);
 			}
@@ -220,6 +216,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 			panelFinished.setVisible(true);
 			panelInProgress.setVisible(false);
 			btnStart.setEnabled(true);
+			mainFrame.enableExecutionButtons();
 			mainFrame.setObtainResultsTab();
 		}
 		

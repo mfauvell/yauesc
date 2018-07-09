@@ -56,6 +56,14 @@ public class DataUnedController {
 		return numberValuesGen;
 	}
 	
+	public List<String> getCodeGrades() {
+		return dataUned.getCodeNameGradeList();
+	}
+	
+	public List<String> getCodeCourses() {
+		return dataUned.getCodeNameCourseList();
+	}
+	
 	public void createCSVAllSchedule(String filePath) {
 		if (unedSchedule == null) {
 			throw new UnsupportedOperationException("UnedSchedule must be created first");
