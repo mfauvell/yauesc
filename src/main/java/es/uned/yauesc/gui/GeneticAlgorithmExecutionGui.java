@@ -133,6 +133,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO
+				reset();
 				btnStop.setEnabled(true);
 				btnStart.setEnabled(false);
 				mainFrame.disableExecutionButtons();
@@ -149,7 +150,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 					panelThirdAlgorithmSingle.preparePanel(generations);
 					panelMainAlgorithm.setVisible(true);
 					panelMainAlgorithmParallel.setVisible(true);
-					panelMainAlgorithmSingle.setVisible(true);
+					panelMainAlgorithmSingle.setVisible(false);
 					panelFirstAlgorithmSingle.setVisible(true);
 					panelSecondAlgorithmSingle.setVisible(true);
 					panelThirdAlgorithmSingle.setVisible(true);
@@ -322,7 +323,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 			thirdFitness.setText("" + solutionFitness.getThirdLevel());
 			migrationsProgressBar.setValue(migrationsProgressBar.getValue() + 1);
 			done.setText("" + (Integer.parseInt(done.getText()) + 1));
-			paintImmediately(0, 0, 1030, 200);
+			repaint();
 		}
 
 	}
@@ -426,7 +427,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 			thirdFitness.setText("" + solutionFitness.getThirdLevel());
 			generationsProgressBar.setValue(generationsProgressBar.getValue() + 1);
 			done.setText("" + (Integer.parseInt(done.getText()) + 1));
-			paintImmediately(0, 0, 1030, 200);
+			paintImmediately(this.getX(), this.getY(), this.getWidth(), this.getHeight());
 		}
 
 	}

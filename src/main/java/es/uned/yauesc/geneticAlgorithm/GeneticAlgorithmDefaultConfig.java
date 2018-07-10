@@ -3,7 +3,7 @@ package es.uned.yauesc.geneticAlgorithm;
 public class GeneticAlgorithmDefaultConfig {
 
 	public static final boolean isParallel = true;
-	public static final int generations = 500;
+	public static final int generations = 50;
 	public static final int generationsToMigrate = 10;
 	public static final int numberMigrants = 10;
 	
