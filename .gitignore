@@ -33,5 +33,5 @@ gradlew.bat
 
 
 #Data from thirds
-/data/
-
+#/data/
+/export/*
