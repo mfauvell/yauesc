@@ -64,11 +64,31 @@ public class DataUnedController {
 		return dataUned.getCodeNameCourseList();
 	}
 	
-	public void createCSVAllSchedule(String filePath) {
+	public void createAllSchedule(String filePath, FormatFileExtension format) {
 		if (unedSchedule == null) {
 			throw new UnsupportedOperationException("UnedSchedule must be created first");
 		}
-		unedSchedule.createCsvAllSchedule(filePath);
+		if (format.equals(FormatFileExtension.CSV)) {
+			unedSchedule.createCsvAllSchedule(filePath);
+		}
+	}
+	
+	public void createByGradeSchedule(String filePath, String grade, FormatFileExtension format) {
+		if (unedSchedule == null) {
+			throw new UnsupportedOperationException("UnedSchedule must be created first");
+		}
+		if (format.equals(FormatFileExtension.CSV)) {
+			unedSchedule.createCsvByGradeSchedule(filePath, grade);
+		}
+	}
+	
+	public void createByCourseSchedule(String filePath, List<String> courseList, FormatFileExtension format) {
+		if (unedSchedule == null) {
+			throw new UnsupportedOperationException("UnedSchedule must be created first");
+		}
+		if (format.equals(FormatFileExtension.CSV)) {
+			unedSchedule.createCsvByListCourseSchedule(filePath, courseList);
+		}
 	}
 	
 	public void parseData() throws IOException {

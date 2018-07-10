@@ -118,7 +118,7 @@ public class DataUnedGui extends JPanel {
 				dataUnedController.setFileExamTimePath(fileExamTime.getText());
 				dataUnedController.setFileCoursePath(fileCourse.getText());
 				dataUnedController.setFileEnrolmentPath(fileEnrolment.getText());
-				
+			
 				try {
 					dataUnedController.parseData();
 				} catch (IOException e1) {

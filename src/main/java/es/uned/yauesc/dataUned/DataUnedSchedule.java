@@ -28,13 +28,15 @@ public class DataUnedSchedule {
 	}
 	
 	public void createCsvByGradeSchedule(String filePath, String grade) {
+		String gradeClean = grade.substring(0, 4);
+		
 		Map<ExamTime, List<Course>> examTimeCourseList = examTimeListCourse.keySet()
 				.parallelStream()
 				.collect(Collectors.toMap(it -> it, it -> new ArrayList<>(examTimeListCourse.get(it)
 						.parallelStream()
 						.filter(course -> {
 							int result = course.getDataCourseList().parallelStream().mapToInt(dataCourse ->  { 
-								if (dataCourse.getGrade().equals(grade)) {
+								if (dataCourse.getGrade().equals(gradeClean)) {
 									return 1;
 								} else {
 									return 0;
@@ -58,11 +60,12 @@ public class DataUnedSchedule {
 	}	
 	
 	public void createCsvByListCourseSchedule(String filePath, List<String> courseList) {
+		List<String> courseListClean = courseList.parallelStream().map(course -> course.substring(0, 8)).collect(Collectors.toList());
 		Map<ExamTime, List<Course>> examTimeCourseList = examTimeListCourse.keySet()
 				.parallelStream()
 				.collect(Collectors.toMap(it -> it, it -> new ArrayList<>(examTimeListCourse.get(it)
 						.parallelStream()
-						.filter(course -> courseList.contains(course.getCode()))
+						.filter(course -> courseListClean.contains(course.getCode()))
 						.collect(Collectors.toList())
 						))
 				)

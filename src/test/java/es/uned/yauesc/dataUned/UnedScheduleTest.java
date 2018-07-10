@@ -104,6 +104,8 @@ ClassLoader classLoader = getClass().getClassLoader();
 		String grade2 = "7103";
 		String grade3 = "6126";
 		
+		String gradeWithName = "7103 - weirStuff";
+		
 		List<Integer> solution = new ArrayList<Integer>(Arrays.asList(0,2,3,1)); 
 		DataUned dataUned = mock(DataUned.class);
 		
@@ -186,7 +188,7 @@ ClassLoader classLoader = getClass().getClassLoader();
 				
 		DataUnedSchedule unedSchedule = new DataUnedSchedule(solution, dataUned);
 		
-		unedSchedule.createCsvByGradeSchedule(newFilePath, grade2);
+		unedSchedule.createCsvByGradeSchedule(newFilePath, gradeWithName);
 		
 		File newFile = new File(classLoader.getResource(newFileName).getPath());
 		File expectedFile = new File(classLoader.getResource(expectedFileName).getPath());
@@ -206,6 +208,9 @@ ClassLoader classLoader = getClass().getClassLoader();
 		String secondCourseCode = "10011112";
 		String thirdCourseCode = "10011113";
 		String fourthCourseCode = "10011114";
+		
+		String secondCourseCodeWithName = secondCourseCode + " - weirdStuff";
+		String thirdCourseCodeWithName = thirdCourseCode + " - weirdStuff";
 		
 		List<Integer> solution = new ArrayList<Integer>(Arrays.asList(0,2,3,1)); 
 		DataUned dataUned = mock(DataUned.class);
@@ -227,8 +232,8 @@ ClassLoader classLoader = getClass().getClassLoader();
 		examTimeList.add(examTimeFourth);
 		
 		List<String> courseCodeList = new ArrayList<>();
-		courseCodeList.add(secondCourseCode);
-		courseCodeList.add(thirdCourseCode);
+		courseCodeList.add(secondCourseCodeWithName);
+		courseCodeList.add(thirdCourseCodeWithName);
 		
 		when(dataUned.getExamTimeList()).thenReturn(examTimeList);
 		when(dataUned.getCourse(0)).thenReturn(courseFirst);

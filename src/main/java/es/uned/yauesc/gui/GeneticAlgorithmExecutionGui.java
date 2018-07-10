@@ -136,6 +136,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 				btnStop.setEnabled(true);
 				btnStart.setEnabled(false);
 				mainFrame.disableExecutionButtons();
+				mainFrame.resetFromGeneticAlgorithmExecution();
 				int generations = geneticAlgorithmController.getGenerations();
 				if (geneticAlgorithmController.isParallel()) {
 					geneticAlgorithmController.registerObserverMainGeneticAlgorithm(panelMainAlgorithmParallel);

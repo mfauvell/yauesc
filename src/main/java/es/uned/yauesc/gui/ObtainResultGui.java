@@ -23,6 +23,10 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 
+import es.uned.yauesc.dataUned.DataUnedController;
+import es.uned.yauesc.dataUned.DataUnedDefaultConfiguration;
+import es.uned.yauesc.dataUned.FormatFileExtension;
+
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JCheckBox;
@@ -30,6 +34,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ItemEvent;
 import javax.swing.ScrollPaneConstants;
@@ -45,13 +50,17 @@ public class ObtainResultGui extends JPanel {
 	private JList<String> listCourse;
 	private JScrollPane panelList;
 	
+	private JRadioButton rdbtnCSV;
+	private JCheckBox chckbxGradeEnable;
+	private JCheckBox chckbxCourseEnable;
+	
 	private JTextField path;
 	private JTextField name;
 
 	/**
 	 * Create the panel.
 	 */
-	public ObtainResultGui() {
+	public ObtainResultGui(DataUnedController dataUnedController) {
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel panelNorth = new JPanel();
@@ -64,19 +73,9 @@ public class ObtainResultGui extends JPanel {
 		panelNorthWest.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 20));
 		
 		JButton btnReset = new JButton("Reset Values");
-		btnReset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//TODO
-			}
-		});
 		panelNorthWest.add(btnReset);
 		
 		JButton btnDefault = new JButton("Default Values");
-		btnDefault.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//TODO
-			}
-		});
 		panelNorthWest.add(btnDefault);
 		
 		JPanel panelNorthEast = new JPanel();
@@ -84,11 +83,6 @@ public class ObtainResultGui extends JPanel {
 		panelNorthEast.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 20));
 		
 		JButton btnLoad = new JButton("Export Data");
-		btnLoad.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//TODO
-			}
-		});
 		panelNorthEast.add(btnLoad);
 		
 		JPanel panelMain = new JPanel();
@@ -130,7 +124,7 @@ public class ObtainResultGui extends JPanel {
 		
 		ButtonGroup extensionGroup = new ButtonGroup();
 		
-		JRadioButton rdbtnCSV = new JRadioButton("CSV");
+		rdbtnCSV = new JRadioButton("CSV");
 		rdbtnCSV.setSelected(true);
 		extensionGroup.add(rdbtnCSV);
 		
@@ -197,7 +191,7 @@ public class ObtainResultGui extends JPanel {
 		panelFilterGrade.setPreferredSize(new Dimension(509, 110));
 		panelMain.add(panelFilterGrade);
 		
-		JCheckBox chckbxGradeEnable = new JCheckBox("Enable");
+		chckbxGradeEnable = new JCheckBox("Enable");
 		
 		JLabel lblGrade = new JLabel("Grade");
 		lblGrade.setEnabled(false);
@@ -235,7 +229,7 @@ public class ObtainResultGui extends JPanel {
 		panelFilterCourse.setPreferredSize(new Dimension(509, 300));
 		panelMain.add(panelFilterCourse);
 		
-		JCheckBox chckbxCourseEnable = new JCheckBox("Enable");
+		chckbxCourseEnable = new JCheckBox("Enable");
 		
 		panelList = new JScrollPane();
 		panelList.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -304,10 +298,69 @@ public class ObtainResultGui extends JPanel {
 			}
 		});
 		
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				reset();
+			}
+		});
+		
+		btnDefault.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				path.setText("" + DataUnedDefaultConfiguration.EXPORT_PATH);
+				name.setText("" + DataUnedDefaultConfiguration.EXPORT_NAME);
+				rdbtnCSV.setSelected(true);
+				chckbxGradeEnable.setSelected(false);
+				chckbxCourseEnable.setSelected(false);
+				comboBoxGrade.setSelectedIndex(-1);
+				listCourse.clearSelection();
+			}
+		});
+		
+		btnLoad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO
+				String extension = "";
+				
+				FormatFileExtension formatFile = null;
+				if (rdbtnCSV.isSelected()) {
+					extension = "csv";
+					formatFile = FormatFileExtension.CSV;
+				}
+				
+				String filePath = path.getText() + name.getText()+ "." + extension;
+				
+				if (chckbxGradeEnable.isSelected()) {
+					String grade = (String) comboBoxGrade.getSelectedItem();
+					dataUnedController.createByGradeSchedule(filePath, grade, formatFile);
+				} else if (chckbxCourseEnable.isSelected()) {
+					List<String> courses = new ArrayList<>(listCourse.getSelectedValuesList());
+					dataUnedController.createByCourseSchedule(filePath, courses, formatFile);
+				} else {
+					dataUnedController.createAllSchedule(filePath, formatFile);
+				}
+			}
+		});
+		
 		//TO ERASE WHEN FUNCTIONALITY ARE MADE.
 		rdbtnXML.setEnabled(false);
 		rdbtnPDF.setEnabled(false);
 
+	}
+	
+	private void reset() {
+		path.setText("");
+		name.setText("");
+		rdbtnCSV.setSelected(true);
+		chckbxGradeEnable.setSelected(false);
+		chckbxCourseEnable.setSelected(false);
+		comboBoxGrade.setSelectedIndex(-1);
+		listCourse.clearSelection();
+	}
+	
+	public void initialize() {
+		reset();
+		comboBoxGrade.removeAllItems();
+		listCourse.removeAll();
 	}
 	
 	public void preparePanel(List<String> gradeCodeList, List<String> courseCodeList) {

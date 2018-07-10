@@ -11,6 +11,8 @@ public final class DataUnedDefaultConfiguration {
 	public static final String FILE_EXAMTIME = "./data/ExamTime.csv";
 	public static final String FILE_COURSE = "./data/Course.csv";
 	public static final String FILE_ENROLMENT = "./data/Enrolment.csv";
+	public static final String EXPORT_PATH = "./export/";
+	public static final String EXPORT_NAME = "fileExportName";
 	
 	private DataUnedDefaultConfiguration() {
 		
