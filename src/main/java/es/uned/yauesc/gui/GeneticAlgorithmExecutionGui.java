@@ -25,8 +25,6 @@ import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithmController;
 import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithmControllerObserver;
 import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithmObserver;
 import java.awt.CardLayout;
-import java.awt.Font;
-import javax.swing.border.EtchedBorder;
 
 public class GeneticAlgorithmExecutionGui extends JPanel {
 
@@ -46,9 +44,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 	private SingleExecutionGui panelFirstAlgorithmSingle;
 	private SingleExecutionGui panelSecondAlgorithmSingle;
 	private SingleExecutionGui panelThirdAlgorithmSingle;
-	private JPanelObserverGeneticAlgorithmController panelAdvise;
-	private JPanel panelInProgress;
-	private JPanel panelFinished;
+	private JPanelObserverGeneticAlgorithmController panelWorkingIcon;
 
 	/**
 	 * Create the panel.
@@ -77,7 +73,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		panelNorth.add(panelNorthEast, BorderLayout.EAST);
 		panelNorthEast.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 20));
 
-		JPanel panelWorkingIcon = new JPanel();
+		panelWorkingIcon = new JPanelObserverGeneticAlgorithmController();
 		FlowLayout flowLayout_1 = (FlowLayout) panelWorkingIcon.getLayout();
 		flowLayout_1.setVgap(0);
 		flowLayout_1.setHgap(0);
@@ -93,31 +89,6 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		panelMain.setMaximumSize(new Dimension(1030, 32767));
 		add(panelMain);
 		panelMain.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
-		
-		panelAdvise = new JPanelObserverGeneticAlgorithmController();
-		panelAdvise.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panelAdvise.setPreferredSize(new Dimension(1030, 70));
-		panelMain.add(panelAdvise);
-		panelAdvise.setLayout(new CardLayout(0, 0));
-		panelAdvise.setVisible(false);
-		
-		panelInProgress = new JPanel();
-		panelAdvise.add(panelInProgress, "name_25225078782987");
-		panelInProgress.setVisible(false);
-		
-		JLabel lblInProgress = new JLabel("IN PROGRESS");
-		lblInProgress.setForeground(Color.RED);
-		lblInProgress.setFont(new Font("Dialog", Font.BOLD, 48));
-		panelInProgress.add(lblInProgress);
-		
-		panelFinished = new JPanel();
-		panelAdvise.add(panelFinished, "name_25230197734628");
-		panelFinished.setVisible(false);
-		
-		JLabel lblFinished = new JLabel("FINISHED");
-		lblFinished.setForeground(Color.GREEN);
-		lblFinished.setFont(new Font("Dialog", Font.BOLD, 48));
-		panelFinished.add(lblFinished);
 		
 		panelMainAlgorithm = new JPanel();
 		panelMainAlgorithm.setLayout(new CardLayout(0, 0));
@@ -182,10 +153,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 					panelSecondAlgorithmSingle.setVisible(false);
 					panelThirdAlgorithmSingle.setVisible(false);
 				}
-				geneticAlgorithmController.registerObserver(panelAdvise);
-				panelAdvise.setVisible(false);
-				panelInProgress.setVisible(false);
-				panelFinished.setVisible(false);
+				geneticAlgorithmController.registerObserver(panelWorkingIcon);
 				working.setVisible(true);
 				
 				@SuppressWarnings("rawtypes")
@@ -214,7 +182,6 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 	
 	private void reset() {
 		btnStop.setEnabled(false);
-		panelAdvise.setVisible(false);
 		panelMainAlgorithm.setVisible(false);
 		panelMainAlgorithmParallel.setVisible(false);
 		panelMainAlgorithmParallel.reset();
@@ -234,8 +201,6 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 
 		@Override
 		public void updateGeneticAlgorithmControllerObserver(GeneticAlgorithmController geneticAlgorithmController) {
-			panelFinished.setVisible(false);
-			panelInProgress.setVisible(false);
 			working.setVisible(false);
 			btnStart.setEnabled(true);
 			mainFrame.enableExecutionButtons();
