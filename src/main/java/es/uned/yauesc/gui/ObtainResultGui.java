@@ -15,6 +15,7 @@ import java.awt.Dimension;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -84,6 +85,17 @@ public class ObtainResultGui extends JPanel {
 		
 		JButton btnLoad = new JButton("Export Data");
 		panelNorthEast.add(btnLoad);
+		
+		JPanel panelWorkingIcon = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) panelWorkingIcon.getLayout();
+		flowLayout_1.setVgap(0);
+		flowLayout_1.setHgap(0);
+		panelWorkingIcon.setPreferredSize(new Dimension(30, 30));
+		JLabel working = new JLabel(new ImageIcon("./images/working.gif"));
+		working.setEnabled(false);
+		working.setVisible(false);
+		panelWorkingIcon.add(working);
+		panelNorthEast.add(panelWorkingIcon);
 		
 		JPanel panelMain = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panelMain.getLayout();
@@ -319,6 +331,8 @@ public class ObtainResultGui extends JPanel {
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO
+				working.setVisible(true);
+				
 				String extension = "";
 				
 				FormatFileExtension formatFile = null;
@@ -338,6 +352,8 @@ public class ObtainResultGui extends JPanel {
 				} else {
 					dataUnedController.createAllSchedule(filePath, formatFile);
 				}
+				
+				working.setVisible(false);
 			}
 		});
 		

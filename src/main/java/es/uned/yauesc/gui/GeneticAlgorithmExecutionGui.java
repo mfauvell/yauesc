@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,6 +39,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 	
 	private JButton btnStop;
 	private JButton btnStart;
+	private JLabel working;
 	private JPanel panelMainAlgorithm;
 	private ParallelExecutionGui panelMainAlgorithmParallel;
 	private SingleExecutionGui panelMainAlgorithmSingle;
@@ -69,6 +71,22 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		
 		btnStop = new JButton("Stop");
 		panelNorthWest.add(btnStop);
+		
+
+		JPanel panelNorthEast = new JPanel();
+		panelNorth.add(panelNorthEast, BorderLayout.EAST);
+		panelNorthEast.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 20));
+
+		JPanel panelWorkingIcon = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) panelWorkingIcon.getLayout();
+		flowLayout_1.setVgap(0);
+		flowLayout_1.setHgap(0);
+		panelWorkingIcon.setPreferredSize(new Dimension(30, 30));
+		working = new JLabel(new ImageIcon("./images/working.gif"));
+		working.setEnabled(false);
+		working.setVisible(false);
+		panelWorkingIcon.add(working);
+		panelNorthEast.add(panelWorkingIcon);
 		
 		JPanel panelMain = new JPanel();
 		panelMain.setMinimumSize(new Dimension(1030, 10));
@@ -165,9 +183,10 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 					panelThirdAlgorithmSingle.setVisible(false);
 				}
 				geneticAlgorithmController.registerObserver(panelAdvise);
-				panelAdvise.setVisible(true);
-				panelInProgress.setVisible(true);
+				panelAdvise.setVisible(false);
+				panelInProgress.setVisible(false);
 				panelFinished.setVisible(false);
+				working.setVisible(true);
 				
 				@SuppressWarnings("rawtypes")
 				SwingWorker worker = new SwingWorker() {
@@ -215,8 +234,9 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 
 		@Override
 		public void updateGeneticAlgorithmControllerObserver(GeneticAlgorithmController geneticAlgorithmController) {
-			panelFinished.setVisible(true);
+			panelFinished.setVisible(false);
 			panelInProgress.setVisible(false);
+			working.setVisible(false);
 			btnStart.setEnabled(true);
 			mainFrame.enableExecutionButtons();
 			mainFrame.setObtainResultsTab();

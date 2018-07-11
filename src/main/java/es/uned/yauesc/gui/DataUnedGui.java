@@ -2,6 +2,9 @@ package es.uned.yauesc.gui;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
@@ -26,6 +29,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.border.SoftBevelBorder;
@@ -107,29 +112,18 @@ public class DataUnedGui extends JPanel {
 		panelNorthEast.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 20));
 		
 		btnLoad = new JButton("Load Data");
-		btnLoad.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//TODO Checks lacks
-				mainFrame.resetFromLoadData();
-				dataUnedController.setOptimalFitness(Integer.parseInt(firstFitnessLevel.getText()), Integer.parseInt(secondFitnessLevel.getText()), Integer.parseInt(thirdFitnessLevel.getText()));
-				dataUnedController.setPercentagePresented(Double.parseDouble(presented.getText()));
-				dataUnedController.setFileGradePath(fileGrade.getText());
-				dataUnedController.setFileCentroAsociadoPath(fileCentroAsociado.getText());
-				dataUnedController.setFileExamTimePath(fileExamTime.getText());
-				dataUnedController.setFileCoursePath(fileCourse.getText());
-				dataUnedController.setFileEnrolmentPath(fileEnrolment.getText());
-			
-				try {
-					dataUnedController.parseData();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				mainFrame.setGeneticAlgorithmConfigTab();
-			}
-		});
 		panelNorthEast.add(btnLoad);
+		
+		JPanel panelWorkingIcon = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) panelWorkingIcon.getLayout();
+		flowLayout_1.setVgap(0);
+		flowLayout_1.setHgap(0);
+		panelWorkingIcon.setPreferredSize(new Dimension(30, 30));
+		JLabel working = new JLabel(new ImageIcon("./images/working.gif"));
+		working.setEnabled(false);
+		working.setVisible(false);
+		panelWorkingIcon.add(working);
+		panelNorthEast.add(panelWorkingIcon);
 		
 		JPanel panelMain = new JPanel();
 		add(panelMain, BorderLayout.CENTER);
@@ -388,6 +382,30 @@ public class DataUnedGui extends JPanel {
 		gbc_btnFileEnrolment.gridx = 2;
 		gbc_btnFileEnrolment.gridy = 4;
 		panelDataFiles.add(btnFileEnrolment, gbc_btnFileEnrolment);
+		
+		btnLoad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO Checks lacks
+				working.setVisible(true);
+				mainFrame.resetFromLoadData();
+				dataUnedController.setOptimalFitness(Integer.parseInt(firstFitnessLevel.getText()), Integer.parseInt(secondFitnessLevel.getText()), Integer.parseInt(thirdFitnessLevel.getText()));
+				dataUnedController.setPercentagePresented(Double.parseDouble(presented.getText()));
+				dataUnedController.setFileGradePath(fileGrade.getText());
+				dataUnedController.setFileCentroAsociadoPath(fileCentroAsociado.getText());
+				dataUnedController.setFileExamTimePath(fileExamTime.getText());
+				dataUnedController.setFileCoursePath(fileCourse.getText());
+				dataUnedController.setFileEnrolmentPath(fileEnrolment.getText());
+				working.setVisible(false);
+				try {
+					dataUnedController.parseData();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				mainFrame.setGeneticAlgorithmConfigTab();
+			}
+		});
 		
 	}
 	

@@ -16,9 +16,12 @@ import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
+
 import java.awt.Dimension;
 import javax.swing.border.TitledBorder;
 
@@ -80,6 +83,17 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		
 		btnSetConfig = new JButton("Set Config");
 		panelNorthEast.add(btnSetConfig);
+
+		JPanel panelWorkingIcon = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) panelWorkingIcon.getLayout();
+		flowLayout_1.setVgap(0);
+		flowLayout_1.setHgap(0);
+		panelWorkingIcon.setPreferredSize(new Dimension(30, 30));
+		JLabel working = new JLabel(new ImageIcon("./images/working.gif"));
+		working.setEnabled(false);
+		working.setVisible(false);
+		panelWorkingIcon.add(working);
+		panelNorthEast.add(panelWorkingIcon);
 		
 		JPanel panelMain = new JPanel();
 		panelMain.setMinimumSize(new Dimension(1030, 10));
@@ -256,29 +270,39 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		btnSetConfig.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO
-				mainFrame.resetFromGeneticAlgorithmConfig();
-				boolean parallel = rdbtnParallel.isSelected();
-				geneticAlgorithmController.setBasicOptions(Integer.parseInt(generations.getText()), parallel);
-				try {
-					geneticAlgorithmController.setFirstGeneticAlgorithmSingle(firstGeneticAlgorithmPanel.getPopulationConfig(), firstGeneticAlgorithmPanel.getParentSelectorConfig(),
+				working.setVisible(true);
+				working.repaint();
+				@SuppressWarnings("rawtypes")
+				SwingWorker worker = new SwingWorker() {
+					@Override
+					protected Object doInBackground() throws Exception {
+						mainFrame.resetFromGeneticAlgorithmConfig();
+						boolean parallel = rdbtnParallel.isSelected();
+						geneticAlgorithmController.setBasicOptions(Integer.parseInt(generations.getText()), parallel);
+						try {
+							geneticAlgorithmController.setFirstGeneticAlgorithmSingle(firstGeneticAlgorithmPanel.getPopulationConfig(), firstGeneticAlgorithmPanel.getParentSelectorConfig(),
 							firstGeneticAlgorithmPanel.getRecombinationOperatorConfig(), firstGeneticAlgorithmPanel.getMutationOperatorConfig(), firstGeneticAlgorithmPanel.getSurvivorSelectorConfig());
-					if (parallel) {
-						geneticAlgorithmController.setSecondGeneticAlgorithmSingle(secondGeneticAlgorithmPanel.getPopulationConfig(), secondGeneticAlgorithmPanel.getParentSelectorConfig(),
-								secondGeneticAlgorithmPanel.getRecombinationOperatorConfig(), secondGeneticAlgorithmPanel.getMutationOperatorConfig(), secondGeneticAlgorithmPanel.getSurvivorSelectorConfig());
-						geneticAlgorithmController.setThirdGeneticAlgorithmSingle(thirdGeneticAlgorithmPanel.getPopulationConfig(), thirdGeneticAlgorithmPanel.getParentSelectorConfig(),
-								thirdGeneticAlgorithmPanel.getRecombinationOperatorConfig(), thirdGeneticAlgorithmPanel.getMutationOperatorConfig(), thirdGeneticAlgorithmPanel.getSurvivorSelectorConfig());
+							if (parallel) {
+								geneticAlgorithmController.setSecondGeneticAlgorithmSingle(secondGeneticAlgorithmPanel.getPopulationConfig(), secondGeneticAlgorithmPanel.getParentSelectorConfig(),
+										secondGeneticAlgorithmPanel.getRecombinationOperatorConfig(), secondGeneticAlgorithmPanel.getMutationOperatorConfig(), secondGeneticAlgorithmPanel.getSurvivorSelectorConfig());
+								geneticAlgorithmController.setThirdGeneticAlgorithmSingle(thirdGeneticAlgorithmPanel.getPopulationConfig(), thirdGeneticAlgorithmPanel.getParentSelectorConfig(),
+										thirdGeneticAlgorithmPanel.getRecombinationOperatorConfig(), thirdGeneticAlgorithmPanel.getMutationOperatorConfig(), thirdGeneticAlgorithmPanel.getSurvivorSelectorConfig());
+							}
+						} catch (IllegalParameterValueCheckedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						if (parallel) {
+							geneticAlgorithmController.setMainGeneticAlgorithm(Integer.parseInt(generationsToMigrate.getText()), Integer.parseInt(numberMigrants.getText()));
+						} else {
+							geneticAlgorithmController.setMainGeneticAlgorithm();
+						}
+						working.setVisible(false);
+						mainFrame.setGeneticAlgorithmExecutionTab();
+						return null;
 					}
-				} catch (IllegalParameterValueCheckedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				if (parallel) {
-					geneticAlgorithmController.setMainGeneticAlgorithm(Integer.parseInt(generationsToMigrate.getText()), Integer.parseInt(numberMigrants.getText()));
-				} else {
-					geneticAlgorithmController.setMainGeneticAlgorithm();
-				}
-				
-				mainFrame.setGeneticAlgorithmExecutionTab();
+				};
+				worker.execute();
 			}
 		});
 	}
