@@ -14,6 +14,9 @@ public class GeneticAlgorithmController implements GeneticAlgorithmObserver {
 	private GeneticAlgorithmSingle firstGeneticAlgorithmSingle;
 	private GeneticAlgorithmSingle secondGeneticAlgorithmSingle;
 	private GeneticAlgorithmSingle thirdGeneticAlgorithmSingle;
+	private int[] firstGeneticAlgorithmSinglePopulationOptions;
+	private int[] secondGeneticAlgorithmSinglePopulationOptions;
+	private int[] thirdGeneticAlgorithmSinglePopulationOptions;
 	
 	private boolean parallel;
 	private int generations;
@@ -60,16 +63,19 @@ public class GeneticAlgorithmController implements GeneticAlgorithmObserver {
 	
 	public void setFirstGeneticAlgorithmSingle(int[] populationOptions, Object[] parentSelectorOptions,
 			Object[] recombinationOperatorOptions, Object[] mutationOperatorOptions, Object[] survivorSelectorOptions) throws IllegalParameterValueCheckedException {
+		firstGeneticAlgorithmSinglePopulationOptions = populationOptions;
 		firstGeneticAlgorithmSingle = geneticAlgorithmFactory.getGeneticAlgorithmSingle(generations, populationOptions, parentSelectorOptions, recombinationOperatorOptions, mutationOperatorOptions, survivorSelectorOptions);
 	}
 	
 	public void setSecondGeneticAlgorithmSingle(int[] populationOptions, Object[] parentSelectorOptions,
 			Object[] recombinationOperatorOptions, Object[] mutationOperatorOptions, Object[] survivorSelectorOptions) throws IllegalParameterValueCheckedException {
+		secondGeneticAlgorithmSinglePopulationOptions = populationOptions;
 		secondGeneticAlgorithmSingle = geneticAlgorithmFactory.getGeneticAlgorithmSingle(generations, populationOptions, parentSelectorOptions, recombinationOperatorOptions, mutationOperatorOptions, survivorSelectorOptions);
 	}
 	
 	public void setThirdGeneticAlgorithmSingle(int[] populationOptions, Object[] parentSelectorOptions,
 			Object[] recombinationOperatorOptions, Object[] mutationOperatorOptions, Object[] survivorSelectorOptions) throws IllegalParameterValueCheckedException {
+		thirdGeneticAlgorithmSinglePopulationOptions = populationOptions;
 		thirdGeneticAlgorithmSingle = geneticAlgorithmFactory.getGeneticAlgorithmSingle(generations, populationOptions, parentSelectorOptions, recombinationOperatorOptions, mutationOperatorOptions, survivorSelectorOptions);
 	}
 	
@@ -82,6 +88,18 @@ public class GeneticAlgorithmController implements GeneticAlgorithmObserver {
 	public void setMainGeneticAlgorithm() {
 		mainGeneticAlgorithm = firstGeneticAlgorithmSingle;
 		mainGeneticAlgorithm.registerObserver(this);
+	}
+	
+	public void resetGeneticAlgorithm() throws IllegalParameterValueCheckedException {
+		if (parallel) {
+			secondGeneticAlgorithmSingle.removeSolution();
+			secondGeneticAlgorithmSingle.setPopulation(geneticAlgorithmFactory.getPopulation(secondGeneticAlgorithmSinglePopulationOptions));
+			thirdGeneticAlgorithmSingle.removeSolution();
+			thirdGeneticAlgorithmSingle.setPopulation(geneticAlgorithmFactory.getPopulation(thirdGeneticAlgorithmSinglePopulationOptions));
+			mainGeneticAlgorithm.removeSolution();
+		}
+		firstGeneticAlgorithmSingle.removeSolution();
+		firstGeneticAlgorithmSingle.setPopulation(geneticAlgorithmFactory.getPopulation(firstGeneticAlgorithmSinglePopulationOptions));
 	}
 	
 	public void registerObserverMainGeneticAlgorithm(GeneticAlgorithmObserver observer) {

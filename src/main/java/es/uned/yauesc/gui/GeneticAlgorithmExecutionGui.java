@@ -24,6 +24,8 @@ import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithm;
 import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithmController;
 import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithmControllerObserver;
 import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithmObserver;
+import es.uned.yauesc.geneticAlgorithm.IllegalParameterValueCheckedException;
+
 import java.awt.CardLayout;
 
 public class GeneticAlgorithmExecutionGui extends JPanel {
@@ -121,10 +123,15 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO
 				reset();
 				btnStop.setEnabled(true);
 				btnStart.setEnabled(false);
+				try {
+					geneticAlgorithmController.resetGeneticAlgorithm();
+				} catch (IllegalParameterValueCheckedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				mainFrame.disableExecutionButtons();
 				mainFrame.resetFromGeneticAlgorithmExecution();
 				int generations = geneticAlgorithmController.getGenerations();

@@ -341,7 +341,7 @@ public class ObtainResultGui extends JPanel {
 					formatFile = FormatFileExtension.CSV;
 				}
 				
-				String filePath = path.getText() + name.getText()+ "." + extension;
+				String filePath = path.getText() + "/" + name.getText()+ "." + extension;
 				
 				if (chckbxGradeEnable.isSelected()) {
 					String grade = (String) comboBoxGrade.getSelectedItem();

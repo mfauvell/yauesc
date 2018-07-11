@@ -73,6 +73,9 @@ public class Individual implements Comparable<Individual>{
 
 	@Override
 	public int compareTo(Individual individual){
+			if (individual == null) {
+				return fitness.compareTo(null);
+			}
 			return fitness.compareTo(individual.getFitness());
 	}
 	

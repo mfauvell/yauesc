@@ -24,7 +24,6 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 	public GeneticAlgorithmSingle(Population population, EvaluationFunction evaluationFunction,
 			ParentSelector parentSelector, RecombinationOperator recombinationOperator,
 			MutationOperator mutationOperator, SurvivorSelector survivorSelector, int generations, Fitness optimalFitness, int sizeOffspring) {
-		this.population = population;
 		this.evaluationFunction = evaluationFunction;
 		this.parentSelector = parentSelector;
 		this.recombinationOperator = recombinationOperator;
@@ -36,16 +35,7 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 		
 		observers = new ArrayList<GeneticAlgorithmObserver>();
 		
-		population.substituteAllIndividual(evaluationFunction.evaluate(population.getAllIndividual()));
-		
-		if (population.isAged()) {
-			List<Individual> individualList = new ArrayList<>(population.getAllIndividual());
-			Fitness max = individualList.get(0).getFitness();
-			Fitness min = individualList.get(individualList.size() -1).getFitness();
-			population.substituteAllIndividual(evaluationFunction.setAge(max, min, individualList));
-		}
-		
-		solution = population.getBestIndividual();
+		setPopulation(population);
 		
 		finished = false;
 		foundOptimal = false;
@@ -62,6 +52,21 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 	
 	public void setGenerations(int number) {
 		generations = number;	
+	}
+	
+	public void setPopulation(Population newPopulation) {
+		population = newPopulation;
+		
+		population.substituteAllIndividual(evaluationFunction.evaluate(population.getAllIndividual()));
+		
+		if (population.isAged()) {
+			List<Individual> individualList = new ArrayList<>(population.getAllIndividual());
+			Fitness max = individualList.get(0).getFitness();
+			Fitness min = individualList.get(individualList.size() -1).getFitness();
+			population.substituteAllIndividual(evaluationFunction.setAge(max, min, individualList));
+		}
+		
+		solution = population.getBestIndividual();
 	}
 	
 	@Override
@@ -118,6 +123,11 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 		return foundOptimal;
 	}
 	
+	@Override
+	public void removeSolution() {
+		solution = null;
+	}
+	
 	public void substituteWorstIndividual(Collection<Individual> newIndividual) {
 		population.substituteWorstIndividual(newIndividual);
 	}
@@ -138,5 +148,4 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 	public void notifyObservers() {
 		observers.parallelStream().forEach(geneticAlgorithmObserver -> geneticAlgorithmObserver.updateGeneticAlgorithmObserver(this));
 	}
-
 }

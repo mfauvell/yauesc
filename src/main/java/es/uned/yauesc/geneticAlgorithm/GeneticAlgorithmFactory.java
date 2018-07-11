@@ -27,12 +27,7 @@ public class GeneticAlgorithmFactory {
 	
 	public GeneticAlgorithmSingle getGeneticAlgorithmSingle(int generations, int[] populationOptions, Object[] parentSelectorOptions,
 			Object[] recombinationOperatorOptions, Object[] mutationOperatorOptions, Object[] survivorSelectorOptions) throws IllegalParameterValueCheckedException {
-		Population population;
-		if (populationOptions.length == 1) {
-			population = getPopulation(populationOptions[0]);
-		} else {
-			population = getPopulation(populationOptions[0], populationOptions[1], populationOptions[2]);
-		}
+		Population population = getPopulation(populationOptions);
 		
 		ParentSelector parentSelector = getParentSelector(parentSelectorOptions);
 		
@@ -46,6 +41,16 @@ public class GeneticAlgorithmFactory {
 		
 		return new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, 
 				recombinationOperator, mutationOperator, survivorSelector, generations, optimalFitness, sizeOffspring);
+	}
+	
+	public Population getPopulation(int[] populationOptions) throws IllegalParameterValueCheckedException {
+		Population population;
+		if (populationOptions.length == 1) {
+			population = getPopulationNormal(populationOptions[0]);
+		} else {
+			population = getPopulationAged(populationOptions[0], populationOptions[1], populationOptions[2]);
+		}
+		return population;
 	}
 	
 	private int getSizeOffspring(Population population, Object[] survivorSelectorOptions) {
@@ -70,7 +75,7 @@ public class GeneticAlgorithmFactory {
 		return new Individual(genotype);
 	}
 	
-	private Population getPopulation(int size) throws IllegalParameterValueCheckedException {
+	private Population getPopulationNormal(int size) throws IllegalParameterValueCheckedException {
 		Collection<Individual> collectionIndividual = IntStream.range(0, size)
 				.parallel()
 				.mapToObj(i-> getIndividual())
@@ -78,7 +83,7 @@ public class GeneticAlgorithmFactory {
 		return new Population(evaluationFunction.evaluate(collectionIndividual));
 	}
 	
-	private Population getPopulation(int max, int min, int size) throws IllegalParameterValueCheckedException {
+	private Population getPopulationAged(int max, int min, int size) throws IllegalParameterValueCheckedException {
 		Collection<Individual> collectionIndividual = IntStream.range(0, size)
 				.parallel()
 				.mapToObj(i-> getIndividual())

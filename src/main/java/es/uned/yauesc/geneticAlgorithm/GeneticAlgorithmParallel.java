@@ -114,6 +114,11 @@ public class GeneticAlgorithmParallel implements GeneticAlgorithm {
 	public Individual getSolution() {
 		return solution;
 	}
+	
+	@Override
+	public void removeSolution() {
+		solution = null;
+	}
 
 	@Override
 	public void registerObserver(GeneticAlgorithmObserver geneticAlgorithmObserver) {
@@ -146,4 +151,5 @@ public class GeneticAlgorithmParallel implements GeneticAlgorithm {
 			solution = candidateSolution;
 		}
 	}
+
 }
