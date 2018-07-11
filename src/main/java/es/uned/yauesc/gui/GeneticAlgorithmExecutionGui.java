@@ -70,7 +70,6 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		btnStop = new JButton("Stop");
 		panelNorthWest.add(btnStop);
 		
-
 		JPanel panelNorthEast = new JPanel();
 		panelNorth.add(panelNorthEast, BorderLayout.EAST);
 		panelNorthEast.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 20));

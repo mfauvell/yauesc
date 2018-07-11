@@ -39,8 +39,9 @@ public class MainFrame {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Yet Another UNED Exam Schedule Creator");
-		frame.setBounds(100, 100, 1050 , 700);
+		frame.setBounds(100, 100, 1050 , 705);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 		frame.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 		frame.setVisible(true);
 		

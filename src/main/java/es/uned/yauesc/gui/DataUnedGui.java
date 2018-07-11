@@ -142,6 +142,18 @@ public class DataUnedGui extends JPanel {
 		panelBasicConfigurations.add(lblFirst);
 		
 		firstFitnessLevel = new JTextField();
+		firstFitnessLevel.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) { 
+				//TODO
+
+			}
+			@Override
+			public void focusGained(FocusEvent e) {
+				//TODO
+				
+			}
+		});
 		panelBasicConfigurations.add(firstFitnessLevel);
 		firstFitnessLevel.setColumns(5);
 		
@@ -149,6 +161,18 @@ public class DataUnedGui extends JPanel {
 		panelBasicConfigurations.add(lblSecond);
 		
 		secondFitnessLevel = new JTextField();
+		secondFitnessLevel.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) { 
+				//TODO
+
+			}
+			@Override
+			public void focusGained(FocusEvent e) {
+				//TODO
+				
+			}
+		});
 		panelBasicConfigurations.add(secondFitnessLevel);
 		secondFitnessLevel.setColumns(5);
 		
@@ -156,6 +180,18 @@ public class DataUnedGui extends JPanel {
 		panelBasicConfigurations.add(lblThird);
 		
 		thirdFitnessLevel = new JTextField();
+		thirdFitnessLevel.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) { 
+				//TODO
+
+			}
+			@Override
+			public void focusGained(FocusEvent e) {
+				//TODO
+				
+			}
+		});
 		panelBasicConfigurations.add(thirdFitnessLevel);
 		thirdFitnessLevel.setColumns(5);
 		
@@ -183,7 +219,7 @@ public class DataUnedGui extends JPanel {
 				presented.setBackground(Color.WHITE);
 			}
 		});
-		presented.setColumns(10);
+		presented.setColumns(5);
 		
 		JPanel panelDataFiles = new JPanel();
 		panelDataFiles.setPreferredSize(new Dimension(1030, 200));
