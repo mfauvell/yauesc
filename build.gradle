@@ -6,12 +6,24 @@
  * user guide available at https://docs.gradle.org/4.6/userguide/tutorial_java_projects.html
  */
 
+buildscript {
+ 	repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+    }
+}
+
 plugins {
     // Apply the java plugin to add support for Java
     id 'java'
 
     // Apply the application plugin to add support for building an application
     id 'application'
+    
+    //Shadow
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
 }
 
 // Define the main class for the application
@@ -90,6 +102,6 @@ check.dependsOn integrationTest
 repositories {
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
-    //jcenter()
+    jcenter()
     mavenCentral()
 }

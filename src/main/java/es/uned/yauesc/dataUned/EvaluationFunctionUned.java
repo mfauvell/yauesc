@@ -46,16 +46,26 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 		LinkedHashMap<ExamTime, LinkedHashMap<String, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>>> examTimeGradeYearTypeNumber = new LinkedHashMap<>();
 		LinkedHashMap<Integer, LinkedHashMap<String, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>>> dayGradeYearTypeNumber = new LinkedHashMap<>();
 		//First collect data
+		for (int index = 0; index< dataUned.getNumberCourses(); index ++) {
+			ExamTime examTime = dataUned.getExamTime(genotype.get(index));
+			Course course = dataUned.getCourse(index);
+			if (!examTimeCourseListMap.containsKey(examTime)) {
+				List<Course> courseList = new ArrayList<>();
+				courseList.add(course);
+				examTimeCourseListMap.put(examTime, courseList);
+			} else {
+				examTimeCourseListMap.get(examTime).add(course);
+			}
+		}
+		
 		for (int index = 0; index < dataUned.getNumberCourses(); index ++) {
 			ExamTime examTime = dataUned.getExamTime(genotype.get(index));
 			Course course = dataUned.getCourse(index);
 			//Collect Data to examTimeCourseListMap and examTimeGradeYearTypeNumber
 			//If examTime is not in maps yet
-			if (!examTimeCourseListMap.containsKey(examTime)) {
+			if (!examTimeGradeYearTypeNumber.containsKey(examTime)) {
 				//ExamTimeCourseListMap
-				List<Course> courseList = new ArrayList<>();
-				courseList.add(course);
-				examTimeCourseListMap.put(examTime, courseList);
+				
 				//examTimeGradeYearTypeNumber
 				LinkedHashMap<String, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>> gradeYearTypeNumber = new LinkedHashMap<>();
 				//Create structure and fill it
@@ -77,7 +87,7 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 			} else {
 				//If examCourse is in maps already
 				//examTimeCouseListMap
-				examTimeCourseListMap.get(examTime).add(course);
+				
 				LinkedHashMap<String, LinkedHashMap<Integer, LinkedHashMap<String, Integer>>> gradeYearTypeNumber = examTimeGradeYearTypeNumber.get(examTime);
 				for (DataCourse dataCourse : course.getDataCourseList()) {
 					String grade = dataCourse.getGrade();
@@ -190,12 +200,14 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 				.mapToInt(examTime -> dataUned.getCentroAsociadoList()
 						.parallelStream()
 						.mapToInt(centroAsociado -> {
-							int examStudentNumber = examTimeCourseListMap.get(examTime)
-									.parallelStream()
-									.mapToInt(course -> (int) Math.ceil(dataUned.getNumberEnrolment(centroAsociado.getName(), course.getCode()) * percentagePresented))
-									.sum();
-							if (examStudentNumber > centroAsociado.getCapacity()) {
-								return 1;
+							if (examTimeCourseListMap.keySet().contains(examTime)) {
+								int examStudentNumber = examTimeCourseListMap.get(examTime)
+										.parallelStream()
+										.mapToInt(course -> (int) Math.ceil(dataUned.getNumberEnrolment(centroAsociado.getName(), course.getCode()) * percentagePresented))
+										.sum();
+								if (examStudentNumber > centroAsociado.getCapacity()) {
+									return 1;
+								}
 							}
 							return 0;
 						})

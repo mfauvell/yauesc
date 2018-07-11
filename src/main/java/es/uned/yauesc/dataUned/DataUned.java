@@ -76,7 +76,6 @@ public class DataUned {
 
 			@Override
 			public int compare(String first, String second) {
-				// TODO Auto-generated method stub
 				String firstTrim = first.substring(11, first.length());
 				String secondTrim = second.substring(11, second.length());
 				return firstTrim.compareTo(secondTrim);
@@ -104,7 +103,6 @@ public class DataUned {
 
 			@Override
 			public int compare(String first, String second) {
-				// TODO Auto-generated method stub
 				String firstTrim = first.substring(7, first.length());
 				String secondTrim = second.substring(7, second.length());
 				return firstTrim.compareTo(secondTrim);

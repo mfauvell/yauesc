@@ -686,7 +686,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		
 		public int[] getPopulationConfig() {
 			if (survivorSelector.getSelectedItem().equals(SurvivorSelectorType.AgeBased)) {
-				int[] result = {Integer.parseInt(populatonSize.getText()),Integer.parseInt(populationMaxSize.getText()),Integer.parseInt(populationMinSize.getText())};
+				int[] result = {Integer.parseInt(populationMaxSize.getText()),Integer.parseInt(populationMinSize.getText()),Integer.parseInt(populatonSize.getText())};
 				return result;
 			} else {
 				int[] result = {Integer.parseInt(populatonSize.getText())};

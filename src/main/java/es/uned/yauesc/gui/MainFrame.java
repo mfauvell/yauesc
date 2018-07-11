@@ -65,7 +65,6 @@ public class MainFrame {
 	}
 
 	public void setGeneticAlgorithmConfigTab() {
-		// TODO Auto-generated method stub
 		geneticAlgorithmController.setGeneticAlgorithmFactory(dataUnedController.getGenotypeSize(), dataUnedController.getNumberValuesGen(), 
 				dataUnedController.getEvaluationFunction(),dataUnedController.getOptimalFitness());
 		
@@ -74,13 +73,11 @@ public class MainFrame {
 	}
 	
 	public void setGeneticAlgorithmExecutionTab() {
-		//TODO
 		tabbedPane.setEnabledAt(2, true);
 		tabbedPane.setSelectedIndex(2);
 	}
 	
 	public void setObtainResultsTab() {
-		// TODO Auto-generated method stub
 		dataUnedController.setUnedSchedule(geneticAlgorithmController.getSolution().getGenotype());
 		obtainResultGui.preparePanel(dataUnedController.getCodeGrades(), dataUnedController.getCodeCourses());
 		tabbedPane.setEnabledAt(3, true);
@@ -88,7 +85,6 @@ public class MainFrame {
 	}
 	
 	public void resetFromGeneticAlgorithmConfig() {
-		//TODO
 		disableGeneticAlgorithmExecutionTab();
 		disableObtainResultTab();
 		geneticAlgorithmExecutionGui.initialize();
@@ -96,14 +92,12 @@ public class MainFrame {
 	}
 	
 	public void resetFromLoadData() {
-		//TODO
 		disableGeneticAlgorithmConfigTab();
 		geneticAlgorithmConfigGui.initialize();
 		resetFromGeneticAlgorithmConfig();
 	}
 	
 	public void resetFromGeneticAlgorithmExecution() {
-		//TODO
 		disableObtainResultTab();
 		obtainResultGui.initialize();
 	}
