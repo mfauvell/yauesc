@@ -3,6 +3,7 @@ package es.uned.yauesc.gui;
 import javax.swing.JFrame;
 
 import es.uned.yauesc.dataUned.DataUnedController;
+import es.uned.yauesc.dataUned.FitnessUned;
 import es.uned.yauesc.geneticAlgorithm.GeneticAlgorithmController;
 
 import javax.swing.JTabbedPane;
@@ -79,7 +80,7 @@ public class MainFrame {
 	}
 	
 	public void setObtainResultsTab() {
-		dataUnedController.setUnedSchedule(geneticAlgorithmController.getSolution().getGenotype());
+		dataUnedController.setUnedSchedule(geneticAlgorithmController.getSolution().getGenotype(), (FitnessUned) geneticAlgorithmController.getSolution().getFitness());
 		obtainResultGui.preparePanel(dataUnedController.getCodeGrades(), dataUnedController.getCodeCourses());
 		tabbedPane.setEnabledAt(3, true);
 		tabbedPane.setSelectedIndex(3);

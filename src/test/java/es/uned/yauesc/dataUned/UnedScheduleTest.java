@@ -23,6 +23,7 @@ class UnedScheduleTest {
 		
 		List<Integer> solution = new ArrayList<Integer>(Arrays.asList(0,2,3,1)); 
 		DataUned dataUned = mock(DataUned.class);
+		FitnessUned solutionFitness = mock(FitnessUned.class);
 		
 		Course courseFirst = mock(Course.class);
 		Course courseSecond = mock(Course.class);
@@ -82,7 +83,7 @@ class UnedScheduleTest {
 		when(examTimeFourth.compareTo(examTimeThird)).thenReturn(1);
 		
 		
-		DataUnedSchedule unedSchedule = new DataUnedSchedule(solution, dataUned);
+		DataUnedSchedule unedSchedule = new DataUnedSchedule(solution, solutionFitness, dataUned);
 		
 		unedSchedule.createCsvAllSchedule(newFilePath);
 		
@@ -108,6 +109,7 @@ ClassLoader classLoader = getClass().getClassLoader();
 		
 		List<Integer> solution = new ArrayList<Integer>(Arrays.asList(0,2,3,1)); 
 		DataUned dataUned = mock(DataUned.class);
+		FitnessUned solutionFitness = mock(FitnessUned.class);
 		
 		Course courseFirst = mock(Course.class);
 		Course courseSecond = mock(Course.class);
@@ -186,7 +188,7 @@ ClassLoader classLoader = getClass().getClassLoader();
 		when(dataCourseSecond.getGrade()).thenReturn(grade2);
 		when(dataCourseThird.getGrade()).thenReturn(grade3);
 				
-		DataUnedSchedule unedSchedule = new DataUnedSchedule(solution, dataUned);
+		DataUnedSchedule unedSchedule = new DataUnedSchedule(solution, solutionFitness, dataUned);
 		
 		unedSchedule.createCsvByGradeSchedule(newFilePath, gradeWithName);
 		
@@ -214,6 +216,7 @@ ClassLoader classLoader = getClass().getClassLoader();
 		
 		List<Integer> solution = new ArrayList<Integer>(Arrays.asList(0,2,3,1)); 
 		DataUned dataUned = mock(DataUned.class);
+		FitnessUned solutionFitness = mock(FitnessUned.class);
 		
 		Course courseFirst = mock(Course.class);
 		Course courseSecond = mock(Course.class);
@@ -276,7 +279,7 @@ ClassLoader classLoader = getClass().getClassLoader();
 		when(examTimeFourth.compareTo(examTimeSecond)).thenReturn(1);
 		when(examTimeFourth.compareTo(examTimeThird)).thenReturn(1);
 		
-		DataUnedSchedule unedSchedule = new DataUnedSchedule(solution, dataUned);
+		DataUnedSchedule unedSchedule = new DataUnedSchedule(solution, solutionFitness, dataUned);
 		
 		unedSchedule.createCsvByListCourseSchedule(newFilePath, courseCodeList);
 		

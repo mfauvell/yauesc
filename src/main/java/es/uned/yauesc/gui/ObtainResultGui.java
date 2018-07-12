@@ -12,7 +12,6 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import java.awt.Dimension;
 
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
@@ -20,12 +19,13 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
 
 import es.uned.yauesc.dataUned.DataUnedController;
 import es.uned.yauesc.dataUned.DataUnedDefaultConfiguration;
+import es.uned.yauesc.dataUned.FitnessUned;
 import es.uned.yauesc.dataUned.FormatFileExtension;
 
 import javax.swing.border.LineBorder;
@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ItemEvent;
 import javax.swing.ScrollPaneConstants;
+import java.awt.Font;
 
 public class ObtainResultGui extends JPanel {
 	
@@ -47,21 +48,24 @@ public class ObtainResultGui extends JPanel {
 	 */
 	private static final long serialVersionUID = -4350197841151246760L;
 	
+	private DataUnedController dataUnedController;
+	
 	private JComboBox<String> comboBoxGrade; 
 	private JList<String> listCourse;
 	private JScrollPane panelList;
-	
-	private JRadioButton rdbtnCSV;
 	private JCheckBox chckbxGradeEnable;
 	private JCheckBox chckbxCourseEnable;
-	
-	private JTextField path;
-	private JTextField name;
+	private JTextField first;
+	private JTextField second;
+	private JTextField third;
+	private JTextArea textAreaResult;
 
 	/**
 	 * Create the panel.
 	 */
 	public ObtainResultGui(DataUnedController dataUnedController) {
+		this.dataUnedController = dataUnedController;
+		
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel panelNorth = new JPanel();
@@ -83,8 +87,8 @@ public class ObtainResultGui extends JPanel {
 		panelNorth.add(panelNorthEast, BorderLayout.EAST);
 		panelNorthEast.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 20));
 		
-		JButton btnLoad = new JButton("Export Data");
-		panelNorthEast.add(btnLoad);
+		JButton btnExportCSV = new JButton("Export CSV");
+		panelNorthEast.add(btnExportCSV);
 		
 		JPanel panelWorkingIcon = new JPanel();
 		FlowLayout flowLayout_1 = (FlowLayout) panelWorkingIcon.getLayout();
@@ -98,110 +102,97 @@ public class ObtainResultGui extends JPanel {
 		panelNorthEast.add(panelWorkingIcon);
 		
 		JPanel panelMain = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panelMain.getLayout();
-		flowLayout.setAlignment(FlowLayout.LEFT);
 		add(panelMain);
+		panelMain.setLayout(new BorderLayout(0, 0));
 		
-		JPanel panelFileConfiguration = new JPanel();
-		panelFileConfiguration.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "File output configuration", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelFileConfiguration.setPreferredSize(new Dimension(509, 110));
-		panelMain.add(panelFileConfiguration);
+		JPanel panelInformation = new JPanel();
+		FlowLayout fl_panelInformation = (FlowLayout) panelInformation.getLayout();
+		fl_panelInformation.setAlignment(FlowLayout.RIGHT);
+		panelInformation.setPreferredSize(new Dimension(520, 500));
+		panelInformation.setBorder(null);
+		panelMain.add(panelInformation, BorderLayout.WEST);
 		
-		JLabel lblPath = new JLabel("Path");
+		JPanel panelSolution = new JPanel();
+		panelSolution.setPreferredSize(new Dimension(509, 565));
+		panelSolution.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Solution", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelInformation.add(panelSolution);
 		
-		path = new JTextField();
-		path.setColumns(10);
+		JLabel lblFitness = new JLabel("Fitness:");
 		
-		JButton button = new JButton("Browse");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser filePathChooser = new JFileChooser();
-				filePathChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				int returnValor = filePathChooser.showOpenDialog(new Frame());
-				if (returnValor == JFileChooser.APPROVE_OPTION) {
-					path.setText(filePathChooser.getSelectedFile().getAbsolutePath());
-				}
-			}
-		});
-		button.setPreferredSize(new Dimension(87, 20));
-		button.setMinimumSize(new Dimension(87, 20));
-		button.setMaximumSize(new Dimension(87, 20));
+		JLabel lblFirst = new JLabel("First");
 		
-		JLabel lblName = new JLabel("Name");
+		first = new JTextField();
+		first.setEditable(false);
+		first.setColumns(10);
 		
-		name = new JTextField();
-		name.setColumns(10);
+		JLabel lblSecond = new JLabel("Second");
 		
-		JLabel lblType = new JLabel("Type");
+		second = new JTextField();
+		second.setEditable(false);
+		second.setColumns(10);
 		
-		ButtonGroup extensionGroup = new ButtonGroup();
+		JLabel lblThird = new JLabel("Third");
 		
-		rdbtnCSV = new JRadioButton("CSV");
-		rdbtnCSV.setSelected(true);
-		extensionGroup.add(rdbtnCSV);
+		third = new JTextField();
+		third.setEditable(false);
+		third.setColumns(10);
 		
-		JRadioButton rdbtnXML = new JRadioButton("XML");
-		extensionGroup.add(rdbtnXML);
-		
-		JRadioButton rdbtnPDF = new JRadioButton("PDF");
-		extensionGroup.add(rdbtnPDF);
-		GroupLayout gl_panelFileConfiguration = new GroupLayout(panelFileConfiguration);
-		gl_panelFileConfiguration.setHorizontalGroup(
-			gl_panelFileConfiguration.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panelFileConfiguration.createSequentialGroup()
-					.addContainerGap(22, Short.MAX_VALUE)
-					.addGroup(gl_panelFileConfiguration.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_panelFileConfiguration.createSequentialGroup()
-							.addGroup(gl_panelFileConfiguration.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblPath)
-								.addComponent(lblName))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_panelFileConfiguration.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(name)
-								.addComponent(path, GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
+		JScrollPane paneResult = new JScrollPane();
+		textAreaResult = new JTextArea();
+		textAreaResult.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		textAreaResult.setEditable(false);
+		paneResult.setViewportView(textAreaResult);
+		GroupLayout gl_panelSolution = new GroupLayout(panelSolution);
+		gl_panelSolution.setHorizontalGroup(
+			gl_panelSolution.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelSolution.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panelSolution.createParallelGroup(Alignment.LEADING)
+						.addComponent(paneResult, GroupLayout.PREFERRED_SIZE, 475, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_panelSolution.createSequentialGroup()
+							.addComponent(lblFitness)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(button, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
-							.addGap(77))
-						.addGroup(gl_panelFileConfiguration.createSequentialGroup()
-							.addComponent(lblType)
-							.addPreferredGap(ComponentPlacement.RELATED)))
-					.addGroup(gl_panelFileConfiguration.createParallelGroup(Alignment.LEADING)
-						.addComponent(rdbtnXML)
-						.addComponent(rdbtnPDF)
-						.addComponent(rdbtnCSV))
-					.addGap(574))
+							.addComponent(lblFirst)
+							.addGap(2)
+							.addComponent(first, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblSecond)
+							.addGap(3)
+							.addComponent(second, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblThird)
+							.addGap(2)
+							.addComponent(third, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
-		gl_panelFileConfiguration.setVerticalGroup(
-			gl_panelFileConfiguration.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panelFileConfiguration.createSequentialGroup()
-					.addGroup(gl_panelFileConfiguration.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panelFileConfiguration.createSequentialGroup()
-							.addGap(15)
-							.addComponent(rdbtnCSV)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panelFileConfiguration.createParallelGroup(Alignment.BASELINE)
-								.addComponent(rdbtnXML)
-								.addComponent(lblType))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(rdbtnPDF))
-						.addGroup(gl_panelFileConfiguration.createSequentialGroup()
-							.addGap(20)
-							.addGroup(gl_panelFileConfiguration.createParallelGroup(Alignment.BASELINE)
-								.addComponent(path, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(button, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblPath))
-							.addGap(18)
-							.addGroup(gl_panelFileConfiguration.createParallelGroup(Alignment.BASELINE)
-								.addComponent(name, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblName))))
-					.addContainerGap(116, Short.MAX_VALUE))
+		gl_panelSolution.setVerticalGroup(
+			gl_panelSolution.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelSolution.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panelSolution.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblFitness)
+						.addComponent(lblFirst)
+						.addComponent(first, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblSecond)
+						.addComponent(second, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblThird)
+						.addComponent(third, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(paneResult, GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+					.addContainerGap())
 		);
-		panelFileConfiguration.setLayout(gl_panelFileConfiguration);
+		panelSolution.setLayout(gl_panelSolution);
+		
+		JPanel panelFilter = new JPanel();
+		panelFilter.setPreferredSize(new Dimension(520, 500));
+		FlowLayout fl_panelFilter = (FlowLayout) panelFilter.getLayout();
+		fl_panelFilter.setAlignment(FlowLayout.LEFT);
+		panelMain.add(panelFilter, BorderLayout.CENTER);
 		
 		JPanel panelFilterGrade = new JPanel();
+		panelFilter.add(panelFilterGrade);
 		panelFilterGrade.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Filter by Grade", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(51, 51, 51)));
 		panelFilterGrade.setPreferredSize(new Dimension(509, 110));
-		panelMain.add(panelFilterGrade);
 		
 		chckbxGradeEnable = new JCheckBox("Enable");
 		
@@ -210,6 +201,9 @@ public class ObtainResultGui extends JPanel {
 		
 		comboBoxGrade = new JComboBox<>();
 		comboBoxGrade.setEnabled(false);
+		
+		JButton btnSetFilterGrade = new JButton("Set");
+		btnSetFilterGrade.setEnabled(false);
 		GroupLayout gl_panelFilterGrade = new GroupLayout(panelFilterGrade);
 		gl_panelFilterGrade.setHorizontalGroup(
 			gl_panelFilterGrade.createParallelGroup(Alignment.LEADING)
@@ -220,14 +214,19 @@ public class ObtainResultGui extends JPanel {
 							.addComponent(lblGrade)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(comboBoxGrade, 0, 411, Short.MAX_VALUE))
-						.addComponent(chckbxGradeEnable))
+						.addGroup(gl_panelFilterGrade.createSequentialGroup()
+							.addComponent(chckbxGradeEnable)
+							.addPreferredGap(ComponentPlacement.RELATED, 276, Short.MAX_VALUE)
+							.addComponent(btnSetFilterGrade)))
 					.addContainerGap())
 		);
 		gl_panelFilterGrade.setVerticalGroup(
 			gl_panelFilterGrade.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelFilterGrade.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(chckbxGradeEnable)
+					.addGroup(gl_panelFilterGrade.createParallelGroup(Alignment.BASELINE)
+						.addComponent(chckbxGradeEnable)
+						.addComponent(btnSetFilterGrade))
 					.addGap(18)
 					.addGroup(gl_panelFilterGrade.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblGrade)
@@ -237,9 +236,9 @@ public class ObtainResultGui extends JPanel {
 		panelFilterGrade.setLayout(gl_panelFilterGrade);
 		
 		JPanel panelFilterCourse = new JPanel();
+		panelFilter.add(panelFilterCourse);
 		panelFilterCourse.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Filter by Course", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelFilterCourse.setPreferredSize(new Dimension(509, 300));
-		panelMain.add(panelFilterCourse);
+		panelFilterCourse.setPreferredSize(new Dimension(509, 450));
 		
 		chckbxCourseEnable = new JCheckBox("Enable");
 		
@@ -254,42 +253,37 @@ public class ObtainResultGui extends JPanel {
 		
 		JLabel lblCourse = new JLabel("Course:");
 		lblCourse.setEnabled(false);
+		
+		JButton btnSetFilterCourse = new JButton("Set");
+		btnSetFilterCourse.setEnabled(false);
 		GroupLayout gl_panelFilterCourse = new GroupLayout(panelFilterCourse);
 		gl_panelFilterCourse.setHorizontalGroup(
 			gl_panelFilterCourse.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelFilterCourse.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panelFilterCourse.createParallelGroup(Alignment.LEADING)
-						.addComponent(chckbxCourseEnable)
-						.addComponent(lblCourse)
-						.addComponent(panelList, GroupLayout.PREFERRED_SIZE, 453, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(34, Short.MAX_VALUE))
+						.addComponent(panelList, GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
+						.addGroup(gl_panelFilterCourse.createSequentialGroup()
+							.addComponent(chckbxCourseEnable)
+							.addPreferredGap(ComponentPlacement.RELATED, 285, Short.MAX_VALUE)
+							.addComponent(btnSetFilterCourse))
+						.addComponent(lblCourse))
+					.addContainerGap())
 		);
 		gl_panelFilterCourse.setVerticalGroup(
 			gl_panelFilterCourse.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelFilterCourse.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(chckbxCourseEnable)
-					.addPreferredGap(ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+					.addGroup(gl_panelFilterCourse.createParallelGroup(Alignment.BASELINE)
+						.addComponent(chckbxCourseEnable)
+						.addComponent(btnSetFilterCourse))
+					.addGap(18)
 					.addComponent(lblCourse)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(panelList, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panelList, GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		panelFilterCourse.setLayout(gl_panelFilterCourse);
-		
-		chckbxGradeEnable.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				if (chckbxGradeEnable.isSelected()) {
-					chckbxCourseEnable.setSelected(false);
-					lblGrade.setEnabled(true);
-					comboBoxGrade.setEnabled(true);
-				} else {
-					lblGrade.setEnabled(false);
-					comboBoxGrade.setEnabled(false);
-				}
-			}
-		});
 		
 		chckbxCourseEnable.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -300,27 +294,58 @@ public class ObtainResultGui extends JPanel {
 					panelList.getVerticalScrollBar().setEnabled(true);
 					panelList.getViewport().getView().setEnabled(true);
 					panelList.setWheelScrollingEnabled(true);
+					btnSetFilterCourse.setEnabled(true);
 				} else {
+					clearFilter();
 					lblCourse.setEnabled(false);
 					listCourse.setEnabled(false);
 					panelList.getVerticalScrollBar().setEnabled(false);
 					panelList.getViewport().getView().setEnabled(false);
 					panelList.setWheelScrollingEnabled(false);
+					btnSetFilterCourse.setEnabled(false);
 				}
+			}
+		});
+		
+		btnSetFilterCourse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<String> courses = new ArrayList<>(listCourse.getSelectedValuesList());
+				textAreaResult.setText(dataUnedController.getByCourseScheduleString(courses));
+			}
+		});
+		
+		chckbxGradeEnable.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (chckbxGradeEnable.isSelected()) {
+					chckbxCourseEnable.setSelected(false);
+					lblGrade.setEnabled(true);
+					comboBoxGrade.setEnabled(true);
+					btnSetFilterGrade.setEnabled(true);
+				} else {
+					clearFilter();
+					lblGrade.setEnabled(false);
+					comboBoxGrade.setEnabled(false);
+					btnSetFilterGrade.setEnabled(false);
+				}
+			}
+		});
+		
+		btnSetFilterGrade.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String grade = (String) comboBoxGrade.getSelectedItem();
+				textAreaResult.setText(dataUnedController.getByGradeScheduleString(grade));
 			}
 		});
 		
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				reset();
+				clearFilter();
 			}
 		});
 		
 		btnDefault.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				path.setText("" + DataUnedDefaultConfiguration.EXPORT_PATH);
-				name.setText("" + DataUnedDefaultConfiguration.EXPORT_NAME);
-				rdbtnCSV.setSelected(true);
 				chckbxGradeEnable.setSelected(false);
 				chckbxCourseEnable.setSelected(false);
 				comboBoxGrade.setSelectedIndex(-1);
@@ -328,58 +353,64 @@ public class ObtainResultGui extends JPanel {
 			}
 		});
 		
-		btnLoad.addActionListener(new ActionListener() {
+		btnExportCSV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO
 				working.setVisible(true);
 				
-				String extension = "";
+				FormatFileExtension formatFile = FormatFileExtension.CSV;
 				
-				FormatFileExtension formatFile = null;
-				if (rdbtnCSV.isSelected()) {
-					extension = "csv";
-					formatFile = FormatFileExtension.CSV;
-				}
+				String filePath = null;
 				
-				String filePath = path.getText() + "/" + name.getText()+ "." + extension;
-				
-				if (chckbxGradeEnable.isSelected()) {
-					String grade = (String) comboBoxGrade.getSelectedItem();
-					dataUnedController.createByGradeSchedule(filePath, grade, formatFile);
-				} else if (chckbxCourseEnable.isSelected()) {
-					List<String> courses = new ArrayList<>(listCourse.getSelectedValuesList());
-					dataUnedController.createByCourseSchedule(filePath, courses, formatFile);
-				} else {
-					dataUnedController.createAllSchedule(filePath, formatFile);
+				JFileChooser filePathChooser = new JFileChooser(DataUnedDefaultConfiguration.EXPORT_PATH);
+				int returnValor = filePathChooser.showSaveDialog(new Frame());
+				if (returnValor == JFileChooser.APPROVE_OPTION) {
+					filePath = filePathChooser.getSelectedFile().getAbsolutePath();
+					
+					if (chckbxGradeEnable.isSelected()) {
+						String grade = (String) comboBoxGrade.getSelectedItem();
+						dataUnedController.createByGradeSchedule(filePath, grade, formatFile);
+					} else if (chckbxCourseEnable.isSelected()) {
+						List<String> courses = new ArrayList<>(listCourse.getSelectedValuesList());
+						dataUnedController.createByCourseSchedule(filePath, courses, formatFile);
+					} else {
+						dataUnedController.createAllSchedule(filePath, formatFile);
+					}
 				}
 				
 				working.setVisible(false);
 			}
 		});
-		
-		//TO ERASE WHEN FUNCTIONALITY ARE MADE.
-		rdbtnXML.setEnabled(false);
-		rdbtnPDF.setEnabled(false);
 
 	}
 	
 	private void reset() {
-		path.setText("");
-		name.setText("");
-		rdbtnCSV.setSelected(true);
 		chckbxGradeEnable.setSelected(false);
 		chckbxCourseEnable.setSelected(false);
 		comboBoxGrade.setSelectedIndex(-1);
 		listCourse.clearSelection();
 	}
 	
+	private void clearFilter() {
+		textAreaResult.setText(dataUnedController.getAllScheduleString());
+	}
+	
 	public void initialize() {
 		reset();
 		comboBoxGrade.removeAllItems();
 		listCourse.removeAll();
+		textAreaResult.setText("");
+		first.setText("");
+		second.setText("");
+		third.setText("");
 	}
 	
 	public void preparePanel(List<String> gradeCodeList, List<String> courseCodeList) {
+		textAreaResult.setText(dataUnedController.getAllScheduleString());
+		FitnessUned fitnessSolution = dataUnedController.getSolutionFitness();
+		first.setText("" +fitnessSolution.getFirstLevel());
+		second.setText("" + fitnessSolution.getSecondLevel());
+		third.setText("" + fitnessSolution.getThirdLevel());
 		gradeCodeList.stream().forEachOrdered(gradeCode -> comboBoxGrade.addItem(gradeCode));
 		DefaultListModel<String> listModel = new DefaultListModel<>();
 		courseCodeList.stream().forEachOrdered(courseCode -> listModel.addElement(courseCode));

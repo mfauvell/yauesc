@@ -13,11 +13,13 @@ import java.util.stream.IntStream;
 public class DataUnedSchedule {
 	
 	private DataUned dataUned;
+	private FitnessUned fitnessSolution;
 	
 	private LinkedHashMap<Course, ExamTime> codeCourseExamTime;
 	private LinkedHashMap<ExamTime,List<Course>> examTimeListCourse;
 	
-	public DataUnedSchedule(List<Integer> solution, DataUned dataUned) {
+	public DataUnedSchedule(List<Integer> solution, FitnessUned fitnessSolution, DataUned dataUned) {
+		this.fitnessSolution = fitnessSolution;
 		this.dataUned = dataUned;
 		parseSolution(solution);
 	}
@@ -27,10 +29,76 @@ public class DataUnedSchedule {
 		createFile(filePath, content);
 	}
 	
+	public String getStringAllSchedule() {
+		return createString(examTimeListCourse);
+	}
+	
+	public String getStringByGradeSchedule(String grade) {
+		return createString(filterByGrade(grade));
+	}
+	
+	public String getStringByCourseSchedule(List<String> courseList) {
+		return createString(filterByCourse(courseList));
+	}
+	
+	public FitnessUned getFitnessSolution() {
+		return fitnessSolution;
+	}
+	
 	public void createCsvByGradeSchedule(String filePath, String grade) {
+		Map<ExamTime, List<Course>> examTimeCourseList = filterByGrade(grade);
+		String content = createCsvString(examTimeCourseList);
+		createFile(filePath, content);
+	}	
+	
+	public void createCsvByListCourseSchedule(String filePath, List<String> courseList) {
+		Map<ExamTime, List<Course>> examTimeCourseList = filterByCourse(courseList);
+		String content = createCsvString(examTimeCourseList);
+		createFile(filePath, content);
+	}
+	
+	private String createCsvString(Map<ExamTime,List<Course>> examTimeCourseList) {
+		StringBuilder content = new StringBuilder();
+		content.append("\"Code\";\"Name\";\"Day\";\"Hour\"\n");
+		for (ExamTime examTime : examTimeCourseList.keySet()) {
+			for (Course course : examTimeCourseList.get(examTime)) {
+				content.append("\"" + course.getCode() + "\";\"" + course.getName() + "\";\"" + examTime.getDayName() + "\";\"" + examTime.getHourName() + "\"\n");
+			}
+		}
+		return content.toString();
+	}
+	
+	private String createString(Map<ExamTime, List<Course>> examTimeCourseList) {
+		StringBuilder result = new StringBuilder();
+		result.append(String.format("%-10s %-10s %-10s %s\n", "Day", "Hour", "Code", "Name"));
+		for (ExamTime examTime : examTimeCourseList.keySet()) {
+			for (Course course : examTimeCourseList.get(examTime)) {
+				result.append(String.format("%-10s %-10s %-10s %s\n", examTime.getDayName(), examTime.getHourName(), course.getCode(), course.getName()));
+			}
+		}
+		return result.toString();
+	}
+	
+	private Map<ExamTime, List<Course>> filterByCourse(List<String> courseList){
+		List<String> courseListClean = courseList.parallelStream().map(course -> course.substring(0, 8)).collect(Collectors.toList());
+		return examTimeListCourse.keySet()
+				.parallelStream()
+				.collect(Collectors.toMap(it -> it, it -> new ArrayList<>(examTimeListCourse.get(it)
+						.parallelStream()
+						.filter(course -> courseListClean.contains(course.getCode()))
+						.collect(Collectors.toList())
+						))
+				)
+				.entrySet()
+				.parallelStream()
+				.sorted(Map.Entry.comparingByKey())
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue,newValue) -> oldValue, LinkedHashMap::new));
+	}
+	
+	private Map<ExamTime, List<Course>> filterByGrade(String grade){
 		String gradeClean = grade.substring(0, 4);
 		
-		Map<ExamTime, List<Course>> examTimeCourseList = examTimeListCourse.keySet()
+		return examTimeListCourse.keySet()
 				.parallelStream()
 				.collect(Collectors.toMap(it -> it, it -> new ArrayList<>(examTimeListCourse.get(it)
 						.parallelStream()
@@ -55,37 +123,6 @@ public class DataUnedSchedule {
 				.parallelStream()
 				.sorted(Map.Entry.comparingByKey())
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue,newValue) -> oldValue, LinkedHashMap::new));
-		String content = createCsvString(examTimeCourseList);
-		createFile(filePath, content);
-	}	
-	
-	public void createCsvByListCourseSchedule(String filePath, List<String> courseList) {
-		List<String> courseListClean = courseList.parallelStream().map(course -> course.substring(0, 8)).collect(Collectors.toList());
-		Map<ExamTime, List<Course>> examTimeCourseList = examTimeListCourse.keySet()
-				.parallelStream()
-				.collect(Collectors.toMap(it -> it, it -> new ArrayList<>(examTimeListCourse.get(it)
-						.parallelStream()
-						.filter(course -> courseListClean.contains(course.getCode()))
-						.collect(Collectors.toList())
-						))
-				)
-				.entrySet()
-				.parallelStream()
-				.sorted(Map.Entry.comparingByKey())
-				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue,newValue) -> oldValue, LinkedHashMap::new));
-		String content = createCsvString(examTimeCourseList);
-		createFile(filePath, content);
-	}
-	
-	private String createCsvString(Map<ExamTime,List<Course>> examTimeCourseList) {
-		StringBuilder content = new StringBuilder();
-		content.append("\"Code\";\"Name\";\"Day\";\"Hour\"\n");
-		for (ExamTime examTime : examTimeCourseList.keySet()) {
-			for (Course course : examTimeCourseList.get(examTime)) {
-				content.append("\"" + course.getCode() + "\";\"" + course.getName() + "\";\"" + examTime.getDayName() + "\";\"" + examTime.getHourName() + "\"\n");
-			}
-		}
-		return content.toString();
 	}
 	
 	private void createFile(String filePath, String content) {

@@ -35,6 +35,10 @@ public class DataUnedController {
 		return optimalFitness;
 	}
 	
+	public FitnessUned getSolutionFitness() {
+		return unedSchedule.getFitnessSolution();
+	}
+	
 	public EvaluationFunction getEvaluationFunction() {
 		if (evaluationFunctionUned == null) {
 			throw new UnsupportedOperationException("DataUned must be parsed first");
@@ -62,6 +66,18 @@ public class DataUnedController {
 	
 	public List<String> getCodeCourses() {
 		return dataUned.getCodeNameCourseList();
+	}
+	
+	public String getAllScheduleString() {
+		return unedSchedule.getStringAllSchedule();
+	}
+	
+	public String getByGradeScheduleString(String grade) {
+		return unedSchedule.getStringByGradeSchedule(grade);
+	}
+	
+	public String getByCourseScheduleString(List<String> courseList) {
+		return unedSchedule.getStringByCourseSchedule(courseList);
 	}
 	
 	public void createAllSchedule(String filePath, FormatFileExtension format) {
@@ -102,8 +118,8 @@ public class DataUnedController {
 		this.percentagePresented = percentagePresented;
 	}
 	
-	public void setUnedSchedule(List<Integer> solution) {
-		unedSchedule = DataUnedFactory.getUnedSchedule(solution, dataUned);
+	public void setUnedSchedule(List<Integer> solution, FitnessUned fitnessSolution) {
+		unedSchedule = DataUnedFactory.getUnedSchedule(solution, fitnessSolution, dataUned);
 	}
 	
 	public void setOptimalFitness(int first, int second, int third) {

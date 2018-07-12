@@ -44,8 +44,8 @@ public final class DataUnedFactory {
 		return new DataUnedParser();
 	}
 	
-	public static DataUnedSchedule getUnedSchedule(List<Integer> solution, DataUned dataUned) {
-		return new DataUnedSchedule(solution, dataUned);
+	public static DataUnedSchedule getUnedSchedule(List<Integer> solution, FitnessUned fitnessSolution, DataUned dataUned) {
+		return new DataUnedSchedule(solution, fitnessSolution, dataUned);
 	}
 
 }
