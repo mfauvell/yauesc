@@ -9,6 +9,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -121,16 +123,37 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		
 		JLabel lblGenerations = new JLabel("Generations");
 		generations = new JTextField();
+		generations.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				//TODO
+				generations.setBackground(Color.WHITE);
+			}
+		});
 		generations.setColumns(5);		
 		
 		JLabel lblGenerationsToMigrate = new JLabel("Generations to Migrate");
 		generationsToMigrate = new JTextField();
+		generationsToMigrate.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				//TODO
+				generationsToMigrate.setBackground(Color.WHITE);
+			}
+		});
 		generationsToMigrate.setColumns(5);
 		lblGenerationsToMigrate.setVisible(false);
 		generationsToMigrate.setVisible(false);
 	
 		JLabel lblNumberMigrants = new JLabel("Number Migrants");
 		numberMigrants = new JTextField();
+		numberMigrants.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				//TODO
+				numberMigrants.setBackground(Color.WHITE);
+			}
+		});
 		numberMigrants.setColumns(5);
 		lblNumberMigrants.setVisible(false);
 		numberMigrants.setVisible(false);
@@ -236,6 +259,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		});
 		btnDefault.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				resetBackground();
 				if (GeneticAlgorithmDefaultConfig.isParallel) {
 					rdbtnParallel.setSelected(true);
 				} else {
@@ -272,13 +296,24 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 				//TODO
 				working.setVisible(true);
 				working.repaint();
-				@SuppressWarnings("rawtypes")
-				SwingWorker worker = new SwingWorker() {
+				
+				SwingWorker<Boolean, Object> worker = new SwingWorker<Boolean, Object>() {
 					@Override
-					protected Object doInBackground() throws Exception {
+					protected Boolean doInBackground() throws Exception {
 						mainFrame.resetFromGeneticAlgorithmConfig();
 						boolean parallel = rdbtnParallel.isSelected();
-						geneticAlgorithmController.setBasicOptions(Integer.parseInt(generations.getText()), parallel);
+						int generationsNumber = 0;
+						try {
+							generationsNumber = Integer.parseInt(generations.getText());
+							if (generationsNumber <= 0) {
+								generations.setBackground(Color.RED);
+								return false;
+							}
+						} catch (Exception e) {
+							generations.setBackground(Color.RED);
+							return false;
+						}
+						geneticAlgorithmController.setBasicOptions(generationsNumber, parallel);
 						try {
 							geneticAlgorithmController.setFirstGeneticAlgorithmSingle(firstGeneticAlgorithmPanel.getPopulationConfig(), firstGeneticAlgorithmPanel.getParentSelectorConfig(),
 							firstGeneticAlgorithmPanel.getRecombinationOperatorConfig(), firstGeneticAlgorithmPanel.getMutationOperatorConfig(), firstGeneticAlgorithmPanel.getSurvivorSelectorConfig());
@@ -288,18 +323,45 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 								geneticAlgorithmController.setThirdGeneticAlgorithmSingle(thirdGeneticAlgorithmPanel.getPopulationConfig(), thirdGeneticAlgorithmPanel.getParentSelectorConfig(),
 										thirdGeneticAlgorithmPanel.getRecombinationOperatorConfig(), thirdGeneticAlgorithmPanel.getMutationOperatorConfig(), thirdGeneticAlgorithmPanel.getSurvivorSelectorConfig());
 							}
-						} catch (IllegalParameterValueCheckedException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+						} catch (IllegalParameterValueCheckedException | IllegalArgumentException e1) {
+							return false;
 						}
 						if (parallel) {
-							geneticAlgorithmController.setMainGeneticAlgorithm(Integer.parseInt(generationsToMigrate.getText()), Integer.parseInt(numberMigrants.getText()));
+							int generationsToMigrateValor = 0;
+							try {
+								generationsToMigrateValor = Integer.parseInt(generationsToMigrate.getText());
+								if (generationsToMigrateValor <= 0) {
+									generationsToMigrate.setBackground(Color.RED);
+									return false;
+								}
+							} catch (Exception e) {
+								generationsToMigrate.setBackground(Color.RED);
+								return false;
+							}
+							int numberMigrantsValor = 0;
+							try {
+								numberMigrantsValor = Integer.parseInt(numberMigrants.getText());
+								if (numberMigrantsValor <= 0) {
+									numberMigrants.setBackground(Color.RED);
+									return false;
+								}
+							} catch (Exception e) {
+								numberMigrants.setBackground(Color.RED);
+								return false;
+							}
+							geneticAlgorithmController.setMainGeneticAlgorithm(generationsToMigrateValor, numberMigrantsValor);
 						} else {
 							geneticAlgorithmController.setMainGeneticAlgorithm();
 						}
-						working.setVisible(false);
+						
 						mainFrame.setGeneticAlgorithmExecutionTab();
-						return null;
+						
+						return true;
+					}
+					
+					@Override
+					protected void done() {
+						working.setVisible(false);
 					}
 				};
 				worker.execute();
@@ -312,6 +374,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 	}
 	
 	private void reset() {
+		resetBackground();
 		rdbtnSingle.setSelected(true);
 		generations.setText("");
 		generationsToMigrate.setText("");
@@ -319,6 +382,12 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		firstGeneticAlgorithmPanel.resetValues();
 		secondGeneticAlgorithmPanel.resetValues();
 		thirdGeneticAlgorithmPanel.resetValues();
+	}
+	
+	private void resetBackground() {
+		generations.setBackground(Color.WHITE);
+		generationsToMigrate.setBackground(Color.WHITE);
+		numberMigrants.setBackground(Color.WHITE);
 	}
 	
 	public void disableSetConfig() {
@@ -367,6 +436,13 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			
 			JLabel lblSParameter = new JLabel("S Parameter");
 			sParameter = new JTextField();
+			sParameter.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					//TODO
+					sParameter.setBackground(Color.WHITE);
+				}
+			});
 			sParameter.setColumns(5);
 			lblSParameter.setVisible(true);
 			sParameter.setVisible(true);
@@ -408,6 +484,13 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			JLabel lblRecombinationProbability = new JLabel("Probability");
 			
 			probabilityRecombination = new JTextField();
+			probabilityRecombination.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					//TODO
+					probabilityRecombination.setBackground(Color.WHITE);
+				}
+			});
 			probabilityRecombination.setColumns(10);
 			GroupLayout gl_panelRecombinationOperator = new GroupLayout(panelRecombinationOperator);
 			gl_panelRecombinationOperator.setHorizontalGroup(
@@ -447,6 +530,13 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			JLabel lblMutationProbability = new JLabel("Probability");
 			
 			probabilityMutation = new JTextField();
+			probabilityMutation.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					//TODO
+					probabilityMutation.setBackground(Color.WHITE);
+				}
+			});
 			probabilityMutation.setColumns(10);
 			GroupLayout gl_panelMutationOperator = new GroupLayout(panelMutationOperator);
 			gl_panelMutationOperator.setHorizontalGroup(
@@ -522,6 +612,13 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			JLabel lblNumberBattle = new JLabel("Number Battle");
 			
 			numberBattle = new JTextField();
+			numberBattle.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					//TODO
+					numberBattle.setBackground(Color.WHITE);
+				}
+			});
 			numberBattle.setColumns(10);
 			GroupLayout gl_panelRounRobin = new GroupLayout(panelRounRobin);
 			gl_panelRounRobin.setHorizontalGroup(
@@ -549,6 +646,13 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			JLabel lblSurvivor = new JLabel("Survivors");
 			
 			survivors = new JTextField();
+			survivors.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					//TODO
+					survivors.setBackground(Color.WHITE);
+				}
+			});
 			survivors.setColumns(10);
 			GroupLayout gl_panelSteadyState = new GroupLayout(panelSteadyState);
 			gl_panelSteadyState.setHorizontalGroup(
@@ -583,16 +687,37 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			JLabel lblPopulationSize = new JLabel("Size");
 			
 			populatonSize = new JTextField();
+			populatonSize.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					//TODO
+					populatonSize.setBackground(Color.WHITE);
+				}
+			});
 			populatonSize.setColumns(10);
 			
 			JLabel lblPopulationMaxSize = new JLabel("Max");
 			populationMaxSize = new JTextField();
-			populationMaxSize.setColumns(10);
+			populationMaxSize.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					//TODO
+					populationMaxSize.setBackground(Color.WHITE);
+				}
+			});
+			populationMaxSize.setColumns(10);					//TODO
 			lblPopulationMaxSize.setVisible(false);
 			populationMaxSize.setVisible(false);
 			
 			JLabel lblPopulationMinSize = new JLabel("Min");
 			populationMinSize = new JTextField();
+			populationMinSize.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					//TODO
+					populationMinSize.setBackground(Color.WHITE);
+				}
+			});
 			populationMinSize.setColumns(10);
 			lblPopulationMinSize.setVisible(false);
 			populationMinSize.setVisible(false);
@@ -676,6 +801,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		}
 		
 		public void resetValues() {
+			resetBackground();
 			sParameter.setText("");
 			probabilityRecombination.setText("");
 			probabilityMutation.setText("");
@@ -694,6 +820,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 				double probabilityRecombination, MutationOperatorType mutationOperator, double probabilityMutation,
 				SurvivorSelectorType survivorSelector, int survivors, int numberBattle, int populationSize, 
 				int maxPopulation, int minPopulation) {
+			resetBackground();
 			this.sParameter.setText("" + sParameter);
 			this.probabilityRecombination.setText("" + probabilityRecombination);
 			this.probabilityMutation.setText("" + probabilityMutation);
@@ -710,10 +837,62 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		
 		public int[] getPopulationConfig() {
 			if (survivorSelector.getSelectedItem().equals(SurvivorSelectorType.AgeBased)) {
-				int[] result = {Integer.parseInt(populationMaxSize.getText()),Integer.parseInt(populationMinSize.getText()),Integer.parseInt(populatonSize.getText())};
+				int maxSize = 0;
+				try {
+					maxSize = Integer.parseInt(populationMaxSize.getText());
+					if (maxSize <= 0) {
+						populationMaxSize.setBackground(Color.RED);
+						throw new IllegalArgumentException("Max size is not valid");
+					}
+				} catch (NumberFormatException e) {
+					populationMaxSize.setBackground(Color.RED);
+					throw new IllegalArgumentException("Max size is not valid");
+				}
+				int minSize = 0;
+				try {
+					minSize = Integer.parseInt(populationMinSize.getText());
+					if (minSize <= 0) {
+						populationMinSize.setBackground(Color.RED);
+						throw new IllegalArgumentException("Min size is not valid");
+					}
+				} catch (NumberFormatException e) {
+					populationMinSize.setBackground(Color.RED);
+					throw new IllegalArgumentException("Min size is not valid");
+				}
+				int size = 0;
+				try {
+					size = Integer.parseInt(populatonSize.getText());
+					if (size <= 0) {
+						populatonSize.setBackground(Color.RED);
+						throw new IllegalArgumentException("Size is not valid");
+					}
+				} catch (NumberFormatException e) {
+					populatonSize.setBackground(Color.RED);
+					throw new IllegalArgumentException("Size is not valid");
+				}
+				if (maxSize < size || maxSize < minSize) {
+					populationMaxSize.setBackground(Color.RED);
+					throw new IllegalArgumentException("Max size is not valid");
+				}
+				if (minSize > size) {
+					populationMinSize.setBackground(Color.RED);
+					throw new IllegalArgumentException("Min size is not valid");
+				}
+				int[] result = {maxSize, minSize,size};
 				return result;
 			} else {
-				int[] result = {Integer.parseInt(populatonSize.getText())};
+				int size = 0;
+				try {
+					size = Integer.parseInt(populatonSize.getText());
+					if (size <= 0) {
+						populatonSize.setBackground(Color.RED);
+						throw new IllegalArgumentException("Size is not valid");
+					}
+				} catch (NumberFormatException e) {
+					populatonSize.setBackground(Color.RED);
+					throw new IllegalArgumentException("Size is not valid");
+				}
+				int[] result = {size};
 				return result;
 			}
 		}
@@ -722,7 +901,18 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			Object[] result = new Object[2];
 			result[0] = parentSelector.getSelectedItem();
 			if (parentSelector.getSelectedItem().equals(ParentSelectorType.Ranking)) {
-				result[1] = Double.parseDouble(sParameter.getText());
+				double sParameterValor = 0.0;
+				try {
+					sParameterValor = Double.parseDouble(sParameter.getText());
+					if (sParameterValor <= 1 || sParameterValor > 2 ) {
+						sParameter.setBackground(Color.RED);
+						throw new IllegalArgumentException("sParameter is not valid");
+					}
+				} catch (NumberFormatException e) {
+					sParameter.setBackground(Color.RED);
+					throw new IllegalArgumentException("sParameter is not valid");
+				}
+				result[1] = sParameterValor;
 			}
 			return result;
 		}
@@ -730,14 +920,36 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		public Object[] getRecombinationOperatorConfig() {
 			Object[] result = new Object[2];
 			result[0] = recombinationOperator.getSelectedItem();
-			result[1] = Double.parseDouble(probabilityRecombination.getText());
+			double probability = 0.0;
+			try {
+				probability = Double.parseDouble(probabilityRecombination.getText());
+				if ( probability < 0 || probability > 1) {
+					probabilityRecombination.setBackground(Color.RED);
+					throw new IllegalArgumentException("Probability Recombination is not valid");
+				}
+			} catch (NumberFormatException e) {
+				probabilityRecombination.setBackground(Color.RED);
+				throw new IllegalArgumentException("Probability Recombination is not valid");
+			}
+			result[1] = probability;
 			return result;
 		}
 		
 		public Object[] getMutationOperatorConfig() {
 			Object[] result = new Object[2];
 			result[0] = mutationOperator.getSelectedItem();
-			result[1] = Double.parseDouble(probabilityMutation.getText());
+			double probability = 0.0;
+			try {
+				probability = Double.parseDouble(probabilityMutation.getText());
+				if ( probability < 0 || probability > 1) {
+					probabilityMutation.setBackground(Color.RED);
+					throw new IllegalArgumentException("Probability Mutation is not valid");
+				}
+			} catch (NumberFormatException e) {
+				probabilityMutation.setBackground(Color.RED);
+				throw new IllegalArgumentException("Probability Mutation is not valid");
+			}
+			result[1] = probability;
 			return result;
 		}
 		
@@ -745,11 +957,44 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			Object[] result = new Object[2];
 			result[0] = survivorSelector.getSelectedItem();
 			if (survivorSelector.getSelectedItem().equals(SurvivorSelectorType.SteadyState)) {
-				result[1] = Integer.parseInt(survivors.getText());
+				int survivorsValor = 0;
+				try {
+					survivorsValor = Integer.parseInt(survivors.getText());
+					if (survivorsValor < 0) {
+						survivors.setBackground(Color.RED);
+						throw new IllegalArgumentException("Survivors number is not valid");
+					}
+				} catch (NumberFormatException e) {
+					survivors.setBackground(Color.RED);
+					throw new IllegalArgumentException("Survivors number is not valid");
+				}
+				result[1] = survivorsValor;
 			} else if (survivorSelector.getSelectedItem().equals(SurvivorSelectorType.RoundRobin)) {
-				result[1] = Integer.parseInt(numberBattle.getText());
+				int numberBattleValor = 0;
+				try {
+					numberBattleValor = Integer.parseInt(numberBattle.getText());
+					if (numberBattleValor < 0) {
+						numberBattle.setBackground(Color.RED);
+						throw new IllegalArgumentException("Battle number is not valid");
+					}
+				} catch (NumberFormatException e) {
+					numberBattle.setBackground(Color.RED);
+					throw new IllegalArgumentException("Battle number is not valid");
+				}
+				result[1] = numberBattleValor;
 			}
 			return result;
+		}
+		
+		private void resetBackground() {
+			populatonSize.setBackground(Color.WHITE);
+			populationMaxSize.setBackground(Color.WHITE);
+			populationMinSize.setBackground(Color.WHITE);
+			sParameter.setBackground(Color.WHITE);
+			probabilityRecombination.setBackground(Color.WHITE);
+			probabilityMutation.setBackground(Color.WHITE);
+			survivors.setBackground(Color.WHITE);
+			numberBattle.setBackground(Color.WHITE);
 		}
 	}
 }

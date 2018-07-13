@@ -23,13 +23,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import es.uned.yauesc.dataUned.DataUnedController;
 import es.uned.yauesc.dataUned.DataUnedDefaultConfiguration;
+import es.uned.yauesc.dataUned.FileCentroAsociadoException;
+import es.uned.yauesc.dataUned.FileCourseException;
+import es.uned.yauesc.dataUned.FileEnrolmentException;
+import es.uned.yauesc.dataUned.FileExamTimeException;
+import es.uned.yauesc.dataUned.FileGradeException;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.io.IOException;
-
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
 
@@ -57,9 +60,6 @@ public class DataUnedGui extends JPanel {
 	 */
 	public DataUnedGui(DataUnedController dataUnedController, MainFrame mainFrame) {
 		
-		//this.dataUnedController = dataUnedController;
-		//this.mainFrame = mainFrame;
-		
 		setSize(new Dimension(1030, 600));
 		setLayout(new BorderLayout(0, 0));
 		
@@ -75,6 +75,7 @@ public class DataUnedGui extends JPanel {
 		JButton btnReset = new JButton("Reset Values");
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				resetBackground();
 				firstFitnessLevel.setText("");
 				secondFitnessLevel.setText("");
 				thirdFitnessLevel.setText("");
@@ -91,6 +92,7 @@ public class DataUnedGui extends JPanel {
 		JButton btnDefault = new JButton("Default Values");
 		btnDefault.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				resetBackground();
 				firstFitnessLevel.setText("" + DataUnedDefaultConfiguration.FIRST_LEVEL_OPTIMAL_FITNESS);
 				secondFitnessLevel.setText("" + DataUnedDefaultConfiguration.SECOND_LEVEL_OPTIMAL_FITNESS);
 				thirdFitnessLevel.setText("" + DataUnedDefaultConfiguration.THIRD_LEVEL_OPTIMAL_FITNESS);
@@ -144,14 +146,9 @@ public class DataUnedGui extends JPanel {
 		firstFitnessLevel = new JTextField();
 		firstFitnessLevel.addFocusListener(new FocusAdapter() {
 			@Override
-			public void focusLost(FocusEvent e) { 
-				//TODO
-
-			}
-			@Override
 			public void focusGained(FocusEvent e) {
 				//TODO
-				
+				firstFitnessLevel.setBackground(Color.WHITE);
 			}
 		});
 		panelBasicConfigurations.add(firstFitnessLevel);
@@ -163,14 +160,9 @@ public class DataUnedGui extends JPanel {
 		secondFitnessLevel = new JTextField();
 		secondFitnessLevel.addFocusListener(new FocusAdapter() {
 			@Override
-			public void focusLost(FocusEvent e) { 
-				//TODO
-
-			}
-			@Override
 			public void focusGained(FocusEvent e) {
 				//TODO
-				
+				secondFitnessLevel.setBackground(Color.WHITE);
 			}
 		});
 		panelBasicConfigurations.add(secondFitnessLevel);
@@ -182,14 +174,9 @@ public class DataUnedGui extends JPanel {
 		thirdFitnessLevel = new JTextField();
 		thirdFitnessLevel.addFocusListener(new FocusAdapter() {
 			@Override
-			public void focusLost(FocusEvent e) { 
-				//TODO
-
-			}
-			@Override
 			public void focusGained(FocusEvent e) {
 				//TODO
-				
+				thirdFitnessLevel.setBackground(Color.WHITE);
 			}
 		});
 		panelBasicConfigurations.add(thirdFitnessLevel);
@@ -202,20 +189,7 @@ public class DataUnedGui extends JPanel {
 		panelBasicConfigurations.add(presented);
 		presented.addFocusListener(new FocusAdapter() {
 			@Override
-			public void focusLost(FocusEvent e) { 
-				//TODO
-				if (!presented.getText().equals("")) {
-					double percentage = Double.parseDouble(presented.getText());
-					if ((percentage <= 0) || (percentage > 1.0)) {
-						presented.setBackground(Color.RED);
-					} else {
-						presented.setBackground(Color.WHITE);
-					}
-				}
-			}
-			@Override
 			public void focusGained(FocusEvent e) {
-				//TODO
 				presented.setBackground(Color.WHITE);
 			}
 		});
@@ -241,6 +215,13 @@ public class DataUnedGui extends JPanel {
 		panelDataFiles.add(lblfileGrade, gbc_lblfileGrade);
 		
 		fileGrade = new JTextField();
+		fileGrade.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				//TODO
+				fileGrade.setBackground(Color.WHITE);
+			}
+		});
 		GridBagConstraints gbc_fileGrade = new GridBagConstraints();
 		gbc_fileGrade.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_fileGrade.insets = new Insets(10, 0, 10, 5);
@@ -278,6 +259,13 @@ public class DataUnedGui extends JPanel {
 		panelDataFiles.add(lblFileCentroAsociado, gbc_lblFileCentroAsociado);
 		
 		fileCentroAsociado = new JTextField();
+		fileCentroAsociado.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				//TODO
+				fileCentroAsociado.setBackground(Color.WHITE);
+			}
+		});
 		GridBagConstraints gbc_fileCentroAsociado = new GridBagConstraints();
 		gbc_fileCentroAsociado.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_fileCentroAsociado.insets = new Insets(0, 0, 10, 5);
@@ -315,6 +303,13 @@ public class DataUnedGui extends JPanel {
 		panelDataFiles.add(lblFileExamTime, gbc_lblFileExamTime);
 		
 		fileExamTime = new JTextField();
+		fileExamTime.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				//TODO
+				fileExamTime.setBackground(Color.WHITE);
+			}
+		});
 		GridBagConstraints gbc_fileExamTime = new GridBagConstraints();
 		gbc_fileExamTime.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_fileExamTime.insets = new Insets(0, 0, 10, 5);
@@ -352,6 +347,13 @@ public class DataUnedGui extends JPanel {
 		panelDataFiles.add(lblFileCourse, gbc_lblFileCourse);
 		
 		fileCourse = new JTextField();
+		fileCourse.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				//TODO
+				fileCourse.setBackground(Color.WHITE);
+			}
+		});
 		GridBagConstraints gbc_fileCourse = new GridBagConstraints();
 		gbc_fileCourse.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_fileCourse.insets = new Insets(0, 0, 10, 5);
@@ -389,6 +391,13 @@ public class DataUnedGui extends JPanel {
 		panelDataFiles.add(lblFileEnrolment, gbc_lblFileEnrolment);
 		
 		fileEnrolment = new JTextField();
+		fileEnrolment.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				//TODO
+				fileEnrolment.setBackground(Color.WHITE);
+			}
+		});
 		GridBagConstraints gbc_fileEnrolment = new GridBagConstraints();
 		gbc_fileEnrolment.insets = new Insets(0, 0, 0, 5);
 		gbc_fileEnrolment.anchor = GridBagConstraints.SOUTHWEST;
@@ -418,28 +427,139 @@ public class DataUnedGui extends JPanel {
 		
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO Checks lacks
 				working.setVisible(true);
+				boolean fail = false;
 				mainFrame.resetFromLoadData();
-				dataUnedController.setOptimalFitness(Integer.parseInt(firstFitnessLevel.getText()), Integer.parseInt(secondFitnessLevel.getText()), Integer.parseInt(thirdFitnessLevel.getText()));
-				dataUnedController.setPercentagePresented(Double.parseDouble(presented.getText()));
-				dataUnedController.setFileGradePath(fileGrade.getText());
-				dataUnedController.setFileCentroAsociadoPath(fileCentroAsociado.getText());
-				dataUnedController.setFileExamTimePath(fileExamTime.getText());
-				dataUnedController.setFileCoursePath(fileCourse.getText());
-				dataUnedController.setFileEnrolmentPath(fileEnrolment.getText());
-				working.setVisible(false);
+				
+				int first = 0;
 				try {
-					dataUnedController.parseData();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					first = Integer.parseInt(firstFitnessLevel.getText());
+					if (first < 0) {
+						fail = true;
+						firstFitnessLevel.setBackground(Color.RED);
+					}
+				} catch (NumberFormatException e2) {
+					fail = true;
+					firstFitnessLevel.setBackground(Color.RED);
+				}			
+				int second = 0;
+				try {
+					second = Integer.parseInt(secondFitnessLevel.getText());
+					if (second < 0) {
+						fail = true;
+						secondFitnessLevel.setBackground(Color.RED);
+					}
+				} catch (NumberFormatException e2) {
+					fail = true;
+					secondFitnessLevel.setBackground(Color.RED);
+				} 
+				int third = 0;
+				try {
+					third = Integer.parseInt(thirdFitnessLevel.getText());
+					if (third < 0) {
+						fail = true;
+						thirdFitnessLevel.setBackground(Color.RED);
+					}
+				} catch (NumberFormatException e2) {
+					fail = true;
+					thirdFitnessLevel.setBackground(Color.RED);
+				} 
+				if (!fail) {
+					dataUnedController.setOptimalFitness(first, second, third);
 				}
 				
-				mainFrame.setGeneticAlgorithmConfigTab();
+				double presentedNumber = 0.0;
+				try {
+					presentedNumber = Double.parseDouble(presented.getText());
+					if ((presentedNumber <= 0) || (presentedNumber > 1.0)) {
+						fail = true;
+						secondFitnessLevel.setBackground(Color.RED);
+					}
+				} catch (NumberFormatException e2) {
+					fail = true;
+					presented.setBackground(Color.RED);
+				} 
+				if (!fail) {
+					dataUnedController.setPercentagePresented(presentedNumber);
+				}
+				
+				if (fileGrade.getText().equals("")) {
+					fail = true;
+					fileGrade.setBackground(Color.RED);
+				} else {
+					dataUnedController.setFileGradePath(fileGrade.getText());
+				}
+								
+				if (fileCentroAsociado.getText().equals("")) {
+					fail = true;
+					fileCentroAsociado.setBackground(Color.RED);
+				} else {
+					dataUnedController.setFileCentroAsociadoPath(fileCentroAsociado.getText());
+				}
+								
+				if (fileExamTime.getText().equals("")) {
+					fail = true;
+					fileExamTime.setBackground(Color.RED);
+				} else {
+					dataUnedController.setFileExamTimePath(fileExamTime.getText());
+				}
+				
+				if (fileCourse.getText().equals("")) {
+					fail = true;
+					fileCourse.setBackground(Color.RED);
+				} else {
+					dataUnedController.setFileCoursePath(fileCourse.getText());
+				}
+								
+				if (fileEnrolment.getText().equals("")) {
+					fail = true;
+					fileEnrolment.setBackground(Color.RED);
+				} else {
+					dataUnedController.setFileEnrolmentPath(fileEnrolment.getText());
+				}
+						
+				if (!fail) {
+					try {
+						dataUnedController.parseData();
+					} catch (FileGradeException e1) {
+						fail = true;
+						fileGrade.setBackground(Color.RED);
+					} catch (FileCentroAsociadoException e1) {
+						fail = true;
+						fileCentroAsociado.setBackground(Color.RED);
+					} catch (FileExamTimeException e1) {
+						fail = true;
+						fileExamTime.setBackground(Color.RED);
+					} catch (FileCourseException e1) {
+						fail = true;
+						fileCourse.setBackground(Color.RED);
+					} catch (FileEnrolmentException e1) {
+						fail = true;
+						fileEnrolment.setBackground(Color.RED);
+					} 
+				}
+				
+				working.setVisible(false);
+				
+				if (!fail) {
+					mainFrame.setGeneticAlgorithmConfigTab();
+				}
+				
 			}
 		});
 		
+	}
+	
+	private void resetBackground() {
+		firstFitnessLevel.setBackground(Color.WHITE);
+		secondFitnessLevel.setBackground(Color.WHITE);
+		thirdFitnessLevel.setBackground(Color.WHITE);
+		presented.setBackground(Color.WHITE);
+		fileGrade.setBackground(Color.WHITE);
+		fileCentroAsociado.setBackground(Color.WHITE);
+		fileExamTime.setBackground(Color.WHITE);
+		fileCourse.setBackground(Color.WHITE);
+		fileEnrolment.setBackground(Color.WHITE);
 	}
 	
 	public void disableLoadData() {

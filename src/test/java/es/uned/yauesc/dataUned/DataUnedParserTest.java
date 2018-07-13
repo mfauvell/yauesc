@@ -3,14 +3,12 @@ package es.uned.yauesc.dataUned;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 class DataUnedParserTest {
 
 	@Test
-	public void testObtainDataFromFiles() throws IOException {
+	public void testObtainDataFromFiles() throws FileGradeException, FileCentroAsociadoException, FileExamTimeException, FileCourseException, FileEnrolmentException {
 		ClassLoader classLoader = getClass().getClassLoader();
 		
 		String fileGradePath = classLoader.getResource("GradosSample.csv").getPath();

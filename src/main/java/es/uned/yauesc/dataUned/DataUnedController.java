@@ -1,6 +1,5 @@
 package es.uned.yauesc.dataUned;
 
-import java.io.IOException;
 import java.util.List;
 
 import es.uned.yauesc.geneticAlgorithm.EvaluationFunction;
@@ -107,7 +106,7 @@ public class DataUnedController {
 		}
 	}
 	
-	public void parseData() throws IOException {
+	public void parseData() throws FileGradeException, FileCentroAsociadoException, FileExamTimeException, FileCourseException, FileEnrolmentException {
 		dataUned = unedParser.parseData(fileGradePath, fileCentroAsociadoPath, fileExamTimePath, fileCoursePath, fileEnrolmentPath, dataUned);
 		setEvaluationFunction();
 		sizeGenotype = dataUned.getNumberCourses();
