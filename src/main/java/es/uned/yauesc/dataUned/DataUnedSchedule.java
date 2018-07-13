@@ -139,7 +139,6 @@ public class DataUnedSchedule {
 		} catch (IOException e) {
 			System.out.print("I/O error, check your data\n");
 			System.exit(1);
-			//e.printStackTrace();
 		} finally {
 			if (fw != null) {
 				try {
@@ -147,7 +146,6 @@ public class DataUnedSchedule {
 				} catch (IOException e) {
 					System.out.print("I/O error, check your data\n");
 					System.exit(1);
-					//e.printStackTrace();
 				}
 			}
 		}

@@ -128,8 +128,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 				try {
 					geneticAlgorithmController.resetGeneticAlgorithm();
 				} catch (IllegalParameterValueCheckedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					System.exit(ERROR);
 				}
 				mainFrame.disableExecutionButtons();
 				mainFrame.resetFromGeneticAlgorithmExecution();
@@ -162,12 +161,11 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 				geneticAlgorithmController.registerObserver(panelWorkingIcon);
 				working.setVisible(true);
 				
-				@SuppressWarnings("rawtypes")
-				SwingWorker worker = new SwingWorker() {
+				SwingWorker<Boolean, Object> worker = new SwingWorker<Boolean, Object>() {
 					@Override
-					protected Object doInBackground() throws Exception {
+					protected Boolean doInBackground() throws Exception {
 						geneticAlgorithmController.startExecution();
-						return null;
+						return true;
 					}
 				};
 				worker.execute();
