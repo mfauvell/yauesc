@@ -87,6 +87,9 @@ public class ObtainResultGui extends JPanel {
 		panelNorth.add(panelNorthEast, BorderLayout.EAST);
 		panelNorthEast.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 20));
 		
+		JButton btnExportXML = new JButton("Export XML");
+		panelNorthEast.add(btnExportXML);
+		
 		JButton btnExportCSV = new JButton("Export CSV");
 		panelNorthEast.add(btnExportCSV);
 		
@@ -359,6 +362,35 @@ public class ObtainResultGui extends JPanel {
 				working.setVisible(true);
 				
 				FormatFileExtension formatFile = FormatFileExtension.CSV;
+				
+				String filePath = null;
+				
+				JFileChooser filePathChooser = new JFileChooser(DataUnedDefaultConfiguration.EXPORT_PATH);
+				int returnValor = filePathChooser.showSaveDialog(new Frame());
+				if (returnValor == JFileChooser.APPROVE_OPTION) {
+					filePath = filePathChooser.getSelectedFile().getAbsolutePath();
+					
+					if (chckbxGradeEnable.isSelected()) {
+						String grade = (String) comboBoxGrade.getSelectedItem();
+						dataUnedController.createByGradeSchedule(filePath, grade, formatFile);
+					} else if (chckbxCourseEnable.isSelected()) {
+						List<String> courses = new ArrayList<>(listCourse.getSelectedValuesList());
+						dataUnedController.createByCourseSchedule(filePath, courses, formatFile);
+					} else {
+						dataUnedController.createAllSchedule(filePath, formatFile);
+					}
+				}
+				
+				working.setVisible(false);
+			}
+		});
+		
+		btnExportXML.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO
+				working.setVisible(true);
+				
+				FormatFileExtension formatFile = FormatFileExtension.XML;
 				
 				String filePath = null;
 				

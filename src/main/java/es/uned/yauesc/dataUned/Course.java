@@ -3,11 +3,23 @@ package es.uned.yauesc.dataUned;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlRootElement(name = "course")
+@XmlType(propOrder = {"code", "name"})
 public class Course {
 	
+	@XmlElement(name = "code")
 	private String code;
+	@XmlElement(name = "name")
 	private String name;
 	private List<DataCourse> dataCourseList;
+	
+	public Course() {
+		
+	}
 
 	public Course(String code, String name) {
 		this.code = code;

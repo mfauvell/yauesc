@@ -85,6 +85,8 @@ public class DataUnedController {
 		}
 		if (format.equals(FormatFileExtension.CSV)) {
 			unedSchedule.createCsvAllSchedule(filePath);
+		} else if (format.equals(FormatFileExtension.XML)) {
+			unedSchedule.createXMLAllSchedule(filePath);
 		}
 	}
 	
@@ -94,6 +96,8 @@ public class DataUnedController {
 		}
 		if (format.equals(FormatFileExtension.CSV)) {
 			unedSchedule.createCsvByGradeSchedule(filePath, grade);
+		} else if (format.equals(FormatFileExtension.XML)) {
+			unedSchedule.createXMLByGradeSchedule(filePath, grade);
 		}
 	}
 	
@@ -103,6 +107,8 @@ public class DataUnedController {
 		}
 		if (format.equals(FormatFileExtension.CSV)) {
 			unedSchedule.createCsvByListCourseSchedule(filePath, courseList);
+		} else if (format.equals(FormatFileExtension.XML)) {
+			unedSchedule.createXMLByListCourseSchedule(filePath, courseList);
 		}
 	}
 	
