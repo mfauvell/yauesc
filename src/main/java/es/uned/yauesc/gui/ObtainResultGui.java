@@ -60,11 +60,17 @@ public class ObtainResultGui extends JPanel {
 	private JTextField third;
 	private JTextArea textAreaResult;
 
+	private boolean filterGrade;
+	private boolean filterCourse;
+	
 	/**
 	 * Create the panel.
 	 */
 	public ObtainResultGui(DataUnedController dataUnedController) {
 		this.dataUnedController = dataUnedController;
+		
+		filterGrade = false;
+		filterCourse = false;
 		
 		setLayout(new BorderLayout(0, 0));
 		
@@ -312,6 +318,8 @@ public class ObtainResultGui extends JPanel {
 		
 		btnSetFilterCourse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				filterCourse = true;
+				filterGrade = false;
 				List<String> courses = new ArrayList<>(listCourse.getSelectedValuesList());
 				textAreaResult.setText(dataUnedController.getByCourseScheduleString(courses));
 			}
@@ -335,6 +343,8 @@ public class ObtainResultGui extends JPanel {
 		
 		btnSetFilterGrade.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				filterCourse = false;
+				filterGrade = true;
 				String grade = (String) comboBoxGrade.getSelectedItem();
 				textAreaResult.setText(dataUnedController.getByGradeScheduleString(grade));
 			}
@@ -358,65 +368,46 @@ public class ObtainResultGui extends JPanel {
 		
 		btnExportCSV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO
 				working.setVisible(true);
-				
 				FormatFileExtension formatFile = FormatFileExtension.CSV;
-				
-				String filePath = null;
-				
-				JFileChooser filePathChooser = new JFileChooser(DataUnedDefaultConfiguration.EXPORT_PATH);
-				int returnValor = filePathChooser.showSaveDialog(new Frame());
-				if (returnValor == JFileChooser.APPROVE_OPTION) {
-					filePath = filePathChooser.getSelectedFile().getAbsolutePath();
-					
-					if (chckbxGradeEnable.isSelected()) {
-						String grade = (String) comboBoxGrade.getSelectedItem();
-						dataUnedController.createByGradeSchedule(filePath, grade, formatFile);
-					} else if (chckbxCourseEnable.isSelected()) {
-						List<String> courses = new ArrayList<>(listCourse.getSelectedValuesList());
-						dataUnedController.createByCourseSchedule(filePath, courses, formatFile);
-					} else {
-						dataUnedController.createAllSchedule(filePath, formatFile);
-					}
-				}
-				
+				exportToFile(formatFile);	
 				working.setVisible(false);
 			}
 		});
 		
 		btnExportXML.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO
 				working.setVisible(true);
-				
 				FormatFileExtension formatFile = FormatFileExtension.XML;
-				
-				String filePath = null;
-				
-				JFileChooser filePathChooser = new JFileChooser(DataUnedDefaultConfiguration.EXPORT_PATH);
-				int returnValor = filePathChooser.showSaveDialog(new Frame());
-				if (returnValor == JFileChooser.APPROVE_OPTION) {
-					filePath = filePathChooser.getSelectedFile().getAbsolutePath();
-					
-					if (chckbxGradeEnable.isSelected()) {
-						String grade = (String) comboBoxGrade.getSelectedItem();
-						dataUnedController.createByGradeSchedule(filePath, grade, formatFile);
-					} else if (chckbxCourseEnable.isSelected()) {
-						List<String> courses = new ArrayList<>(listCourse.getSelectedValuesList());
-						dataUnedController.createByCourseSchedule(filePath, courses, formatFile);
-					} else {
-						dataUnedController.createAllSchedule(filePath, formatFile);
-					}
-				}
-				
+				exportToFile(formatFile);							
 				working.setVisible(false);
 			}
 		});
 
 	}
 	
+	private void exportToFile(FormatFileExtension formatFile) {
+		String filePath = null;
+		JFileChooser filePathChooser = new JFileChooser(DataUnedDefaultConfiguration.EXPORT_PATH);
+		int returnValor = filePathChooser.showSaveDialog(new Frame());
+		if (returnValor == JFileChooser.APPROVE_OPTION) {
+			filePath = filePathChooser.getSelectedFile().getAbsolutePath();
+			
+			if (filterGrade) {
+				String grade = (String) comboBoxGrade.getSelectedItem();
+				dataUnedController.createByGradeSchedule(filePath, grade, formatFile);
+			} else if (filterCourse) {
+				List<String> courses = new ArrayList<>(listCourse.getSelectedValuesList());
+				dataUnedController.createByCourseSchedule(filePath, courses, formatFile);
+			} else {
+				dataUnedController.createAllSchedule(filePath, formatFile);
+			}
+		}
+	}
+	
 	private void reset() {
+		filterCourse = false;
+		filterGrade = false;
 		chckbxGradeEnable.setSelected(false);
 		chckbxCourseEnable.setSelected(false);
 		comboBoxGrade.setSelectedIndex(-1);
@@ -425,6 +416,8 @@ public class ObtainResultGui extends JPanel {
 	
 	private void clearFilter() {
 		textAreaResult.setText(dataUnedController.getAllScheduleString());
+		filterCourse = false;
+		filterGrade = false;
 	}
 	
 	public void initialize() {

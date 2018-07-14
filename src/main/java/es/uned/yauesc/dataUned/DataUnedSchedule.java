@@ -125,6 +125,7 @@ public class DataUnedSchedule {
 				)
 				.entrySet()
 				.parallelStream()
+				.filter(it -> !it.getValue().isEmpty())
 				.sorted(Map.Entry.comparingByKey())
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue,newValue) -> oldValue, LinkedHashMap::new));
 	}
@@ -155,6 +156,7 @@ public class DataUnedSchedule {
 				)
 				.entrySet()
 				.parallelStream()
+				.filter(it -> !it.getValue().isEmpty())
 				.sorted(Map.Entry.comparingByKey())
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue,newValue) -> oldValue, LinkedHashMap::new));
 	}
@@ -215,6 +217,7 @@ public class DataUnedSchedule {
 	}
 	
 	private void createXMLData(Map<ExamTime, List<Course>> examTimeCourseList) {
+		listXML = new ArrayList<>();
 		for (ExamTime examTime : examTimeCourseList.keySet()) {
 			int day = examTime.getDay();
 			int hour = examTime.getHour();
