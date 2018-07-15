@@ -195,8 +195,8 @@ public class DataUnedSchedule {
 			marshall.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			marshall.marshal(this, new File(filePath));
 		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.print("I/O error, check your data\n");
+			System.exit(1);
 		}
 	}
 	

@@ -123,10 +123,10 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		
 		JLabel lblGenerations = new JLabel("Generations");
 		generations = new JTextField();
+		generations.setToolTipText("Number of generations of genetic algorithm. Must be a positive intger withou zero");
 		generations.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				//TODO
 				generations.setBackground(Color.WHITE);
 			}
 		});
@@ -134,10 +134,10 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		
 		JLabel lblGenerationsToMigrate = new JLabel("Generations to Migrate");
 		generationsToMigrate = new JTextField();
+		generationsToMigrate.setToolTipText("Number of generations to make a migration. Must be a positive integer with zero");
 		generationsToMigrate.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				//TODO
 				generationsToMigrate.setBackground(Color.WHITE);
 			}
 		});
@@ -147,10 +147,10 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 	
 		JLabel lblNumberMigrants = new JLabel("Number Migrants");
 		numberMigrants = new JTextField();
+		numberMigrants.setToolTipText("Number of individuals migrants in each migration. Must be a positive integer with zero");
 		numberMigrants.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				//TODO
 				numberMigrants.setBackground(Color.WHITE);
 			}
 		});
@@ -293,7 +293,6 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		});
 		btnSetConfig.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO
 				working.setVisible(true);
 				working.repaint();
 				
@@ -436,10 +435,10 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			
 			JLabel lblSParameter = new JLabel("S Parameter");
 			sParameter = new JTextField();
+			sParameter.setToolTipText("S parameter to ranking parent selector. Must be in interval: 1 < x <= 2");
 			sParameter.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusGained(FocusEvent e) {
-					//TODO
 					sParameter.setBackground(Color.WHITE);
 				}
 			});
@@ -484,10 +483,10 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			JLabel lblRecombinationProbability = new JLabel("Probability");
 			
 			probabilityRecombination = new JTextField();
+			probabilityRecombination.setToolTipText("The probability of recombination. Must be between 0 and 1");
 			probabilityRecombination.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusGained(FocusEvent e) {
-					//TODO
 					probabilityRecombination.setBackground(Color.WHITE);
 				}
 			});
@@ -530,10 +529,10 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			JLabel lblMutationProbability = new JLabel("Probability");
 			
 			probabilityMutation = new JTextField();
+			probabilityMutation.setToolTipText("The probability of mutation. Must be between 0 and 1");
 			probabilityMutation.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusGained(FocusEvent e) {
-					//TODO
 					probabilityMutation.setBackground(Color.WHITE);
 				}
 			});
@@ -612,10 +611,10 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			JLabel lblNumberBattle = new JLabel("Number Battle");
 			
 			numberBattle = new JTextField();
+			numberBattle.setToolTipText("Number of battles in RoundRobin selector. Must be a positive integer without zero.");
 			numberBattle.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusGained(FocusEvent e) {
-					//TODO
 					numberBattle.setBackground(Color.WHITE);
 				}
 			});
@@ -646,10 +645,10 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			JLabel lblSurvivor = new JLabel("Survivors");
 			
 			survivors = new JTextField();
+			survivors.setToolTipText("Number of best individuals survived to next generations. Must be a positive integer or zero.");
 			survivors.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusGained(FocusEvent e) {
-					//TODO
 					survivors.setBackground(Color.WHITE);
 				}
 			});
@@ -687,10 +686,10 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			JLabel lblPopulationSize = new JLabel("Size");
 			
 			populatonSize = new JTextField();
+			populatonSize.setToolTipText("Size of population. Must be a positive integer without zero");
 			populatonSize.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusGained(FocusEvent e) {
-					//TODO
 					populatonSize.setBackground(Color.WHITE);
 				}
 			});
@@ -698,23 +697,23 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			
 			JLabel lblPopulationMaxSize = new JLabel("Max");
 			populationMaxSize = new JTextField();
+			populationMaxSize.setToolTipText("Max size of population. Must be a positive integer without zero but it must be greater or equal than size.");
 			populationMaxSize.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusGained(FocusEvent e) {
-					//TODO
 					populationMaxSize.setBackground(Color.WHITE);
 				}
 			});
-			populationMaxSize.setColumns(10);					//TODO
+			populationMaxSize.setColumns(10);					
 			lblPopulationMaxSize.setVisible(false);
 			populationMaxSize.setVisible(false);
 			
 			JLabel lblPopulationMinSize = new JLabel("Min");
 			populationMinSize = new JTextField();
+			populationMinSize.setToolTipText("Min size of population. Must be a positive integer without zero but it must be lower or equal than size.");
 			populationMinSize.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusGained(FocusEvent e) {
-					//TODO
 					populationMinSize.setBackground(Color.WHITE);
 				}
 			});

@@ -144,10 +144,10 @@ public class DataUnedGui extends JPanel {
 		panelBasicConfigurations.add(lblFirst);
 		
 		firstFitnessLevel = new JTextField();
+		firstFitnessLevel.setToolTipText("The first level of fitness, must be a 0 or positive integer");
 		firstFitnessLevel.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				//TODO
 				firstFitnessLevel.setBackground(Color.WHITE);
 			}
 		});
@@ -158,10 +158,10 @@ public class DataUnedGui extends JPanel {
 		panelBasicConfigurations.add(lblSecond);
 		
 		secondFitnessLevel = new JTextField();
+		secondFitnessLevel.setToolTipText("The second level of fitness, must be a 0 or positive integer");
 		secondFitnessLevel.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				//TODO
 				secondFitnessLevel.setBackground(Color.WHITE);
 			}
 		});
@@ -172,10 +172,10 @@ public class DataUnedGui extends JPanel {
 		panelBasicConfigurations.add(lblThird);
 		
 		thirdFitnessLevel = new JTextField();
+		thirdFitnessLevel.setToolTipText("The third level of fitness, must be a 0 or positive integer");
 		thirdFitnessLevel.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				//TODO
 				thirdFitnessLevel.setBackground(Color.WHITE);
 			}
 		});
@@ -186,6 +186,7 @@ public class DataUnedGui extends JPanel {
 		panelBasicConfigurations.add(lblPresented);
 		
 		presented = new JTextField();
+		presented.setToolTipText("Expectes percentage of studenst presented to exams. Must be in interval: 0 < x <= 1.0");
 		panelBasicConfigurations.add(presented);
 		presented.addFocusListener(new FocusAdapter() {
 			@Override
@@ -215,10 +216,10 @@ public class DataUnedGui extends JPanel {
 		panelDataFiles.add(lblfileGrade, gbc_lblfileGrade);
 		
 		fileGrade = new JTextField();
+		fileGrade.setToolTipText("The path to grade-data file, the file must be exist and it must contain correctly formatted data.");
 		fileGrade.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				//TODO
 				fileGrade.setBackground(Color.WHITE);
 			}
 		});
@@ -236,7 +237,7 @@ public class DataUnedGui extends JPanel {
 		btnFileGrade.setMinimumSize(new Dimension(87, 20));
 		btnFileGrade.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fileGradeChooser = new JFileChooser();
+				JFileChooser fileGradeChooser = new JFileChooser("./data/");
 				fileGradeChooser.setFileFilter(filter);
 				int returnValor = fileGradeChooser.showOpenDialog(new Frame());
 				if (returnValor == JFileChooser.APPROVE_OPTION) {
@@ -259,10 +260,10 @@ public class DataUnedGui extends JPanel {
 		panelDataFiles.add(lblFileCentroAsociado, gbc_lblFileCentroAsociado);
 		
 		fileCentroAsociado = new JTextField();
+		fileCentroAsociado.setToolTipText("The path to CentroAsociado-data file, the file must be exist and it must contain correctly formatted data.");
 		fileCentroAsociado.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				//TODO
 				fileCentroAsociado.setBackground(Color.WHITE);
 			}
 		});
@@ -280,7 +281,7 @@ public class DataUnedGui extends JPanel {
 		btnFileCentroAsociado.setMaximumSize(new Dimension(87, 20));
 		btnFileCentroAsociado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fileGradeChooser = new JFileChooser();
+				JFileChooser fileGradeChooser = new JFileChooser("./data/");
 				fileGradeChooser.setFileFilter(filter);
 				int returnValor = fileGradeChooser.showOpenDialog(new Frame());
 				if (returnValor == JFileChooser.APPROVE_OPTION) {
@@ -303,10 +304,10 @@ public class DataUnedGui extends JPanel {
 		panelDataFiles.add(lblFileExamTime, gbc_lblFileExamTime);
 		
 		fileExamTime = new JTextField();
+		fileExamTime.setToolTipText("The path to ExamTime-data file, the file must be exist and it must contain correctly formatted data.");
 		fileExamTime.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				//TODO
 				fileExamTime.setBackground(Color.WHITE);
 			}
 		});
@@ -324,7 +325,7 @@ public class DataUnedGui extends JPanel {
 		btnFileExamTime.setMaximumSize(new Dimension(87, 20));
 		btnFileExamTime.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fileGradeChooser = new JFileChooser();
+				JFileChooser fileGradeChooser = new JFileChooser("./data/");
 				fileGradeChooser.setFileFilter(filter);
 				int returnValor = fileGradeChooser.showOpenDialog(new Frame());
 				if (returnValor == JFileChooser.APPROVE_OPTION) {
@@ -347,10 +348,10 @@ public class DataUnedGui extends JPanel {
 		panelDataFiles.add(lblFileCourse, gbc_lblFileCourse);
 		
 		fileCourse = new JTextField();
+		fileCourse.setToolTipText("The path to Course-data file, the file must be exist and it must contain correctly formatted data.");
 		fileCourse.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				//TODO
 				fileCourse.setBackground(Color.WHITE);
 			}
 		});
@@ -368,7 +369,7 @@ public class DataUnedGui extends JPanel {
 		btnFileCourse.setMaximumSize(new Dimension(87, 20));
 		btnFileCourse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fileGradeChooser = new JFileChooser();
+				JFileChooser fileGradeChooser = new JFileChooser("./data/");
 				fileGradeChooser.setFileFilter(filter);
 				int returnValor = fileGradeChooser.showOpenDialog(new Frame());
 				if (returnValor == JFileChooser.APPROVE_OPTION) {
@@ -391,10 +392,10 @@ public class DataUnedGui extends JPanel {
 		panelDataFiles.add(lblFileEnrolment, gbc_lblFileEnrolment);
 		
 		fileEnrolment = new JTextField();
+		fileEnrolment.setToolTipText("The path to Enrolment-data file, the file must be exist and it must contain correctly formatted data.");
 		fileEnrolment.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				//TODO
 				fileEnrolment.setBackground(Color.WHITE);
 			}
 		});
@@ -412,7 +413,7 @@ public class DataUnedGui extends JPanel {
 		btnFileEnrolment.setMaximumSize(new Dimension(87, 20));
 		btnFileEnrolment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fileGradeChooser = new JFileChooser();
+				JFileChooser fileGradeChooser = new JFileChooser("./data/");
 				fileGradeChooser.setFileFilter(filter);
 				int returnValor = fileGradeChooser.showOpenDialog(new Frame());
 				if (returnValor == JFileChooser.APPROVE_OPTION) {
@@ -473,7 +474,7 @@ public class DataUnedGui extends JPanel {
 					presentedNumber = Double.parseDouble(presented.getText());
 					if ((presentedNumber <= 0) || (presentedNumber > 1.0)) {
 						fail = true;
-						secondFitnessLevel.setBackground(Color.RED);
+						presented.setBackground(Color.RED);
 					}
 				} catch (NumberFormatException e2) {
 					fail = true;

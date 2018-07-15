@@ -257,6 +257,7 @@ public class ObtainResultGui extends JPanel {
 		panelList.setViewportView(listCourse);
 		listCourse.setEnabled(false);
 		panelList.getVerticalScrollBar().setEnabled(false);
+		panelList.getHorizontalScrollBar().setEnabled(false);
 		panelList.getViewport().getView().setEnabled(false);
 		panelList.setWheelScrollingEnabled(false);
 		
@@ -301,6 +302,7 @@ public class ObtainResultGui extends JPanel {
 					lblCourse.setEnabled(true);
 					listCourse.setEnabled(true);
 					panelList.getVerticalScrollBar().setEnabled(true);
+					panelList.getHorizontalScrollBar().setEnabled(true);
 					panelList.getViewport().getView().setEnabled(true);
 					panelList.setWheelScrollingEnabled(true);
 					btnSetFilterCourse.setEnabled(true);
@@ -309,6 +311,7 @@ public class ObtainResultGui extends JPanel {
 					lblCourse.setEnabled(false);
 					listCourse.setEnabled(false);
 					panelList.getVerticalScrollBar().setEnabled(false);
+					panelList.getHorizontalScrollBar().setEnabled(false);
 					panelList.getViewport().getView().setEnabled(false);
 					panelList.setWheelScrollingEnabled(false);
 					btnSetFilterCourse.setEnabled(false);
