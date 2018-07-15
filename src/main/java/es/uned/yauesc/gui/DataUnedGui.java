@@ -9,8 +9,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import java.awt.FlowLayout;
-import java.awt.Frame;
-
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.GridBagLayout;
