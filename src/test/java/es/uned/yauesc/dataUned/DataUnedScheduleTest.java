@@ -11,15 +11,15 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-class UnedScheduleTest {
+class DataUnedScheduleTest {
 
 	@Test
-	public void testGetAllScheduleCSVFile() {
+	public void testGetAllScheduleCsvFileAndString() {
 		ClassLoader classLoader = getClass().getClassLoader();
 		
-		String newFileName = "filenew.csv";
-		String newFilePath = "./src/test/resources/filenew.csv";
-		String expectedFileName = "fileexpected.csv";
+		String newFileNameCsv = "filenew.csv";
+		String newFilePathCsv = "./src/test/resources/filenew.csv";
+		String expectedFileNameCsv = "fileexpected.csv";
 		
 		List<Integer> solution = new ArrayList<Integer>(Arrays.asList(0,2,3,1)); 
 		DataUned dataUned = mock(DataUned.class);
@@ -40,6 +40,13 @@ class UnedScheduleTest {
 		examTimeList.add(examTimeSecond);
 		examTimeList.add(examTimeThird);
 		examTimeList.add(examTimeFourth);
+		
+		StringBuilder stringAllSchedule = new StringBuilder();
+		stringAllSchedule.append(String.format("%-10s %-10s %-10s %s\n", "Day", "Hour", "Code", "Name"));
+		stringAllSchedule.append(String.format("%-10s %-10s %-10s %s\n", "Day one", "Hour one", "10011111", "First Course"));
+		stringAllSchedule.append(String.format("%-10s %-10s %-10s %s\n", "Day two", "Hour two", "10011114", "Fourth Course"));
+		stringAllSchedule.append(String.format("%-10s %-10s %-10s %s\n", "Day three", "Hour three", "10011112", "Second Course"));
+		stringAllSchedule.append(String.format("%-10s %-10s %-10s %s\n", "Day four", "Hour four", "10011113", "Third Course"));
 		
 		when(dataUned.getExamTimeList()).thenReturn(examTimeList);
 		when(dataUned.getCourse(0)).thenReturn(courseFirst);
@@ -82,20 +89,22 @@ class UnedScheduleTest {
 		when(examTimeFourth.compareTo(examTimeSecond)).thenReturn(1);
 		when(examTimeFourth.compareTo(examTimeThird)).thenReturn(1);
 		
-		
 		DataUnedSchedule unedSchedule = new DataUnedSchedule(solution, solutionFitness, dataUned);
 		
-		unedSchedule.createCsvAllSchedule(newFilePath);
+		assertThat(unedSchedule.getStringAllSchedule()).isEqualTo(stringAllSchedule.toString());
 		
-		File newFile = new File(classLoader.getResource(newFileName).getPath());
-		File expectedFile = new File(classLoader.getResource(expectedFileName).getPath());
+		unedSchedule.createCsvAllSchedule(newFilePathCsv);
 		
-		assertThat(newFile).hasSameContentAs(expectedFile);
+		File newFileCsv = new File(classLoader.getResource(newFileNameCsv).getPath());
+		File expectedFileCsv = new File(classLoader.getResource(expectedFileNameCsv).getPath());
+		
+		assertThat(newFileCsv).hasSameContentAs(expectedFileCsv);
+		
 	}
 	
 	@Test
-	public void testGetByGradeCsvFile() {
-ClassLoader classLoader = getClass().getClassLoader();
+	public void testGetByGradeCsvFileAndString() {
+		ClassLoader classLoader = getClass().getClassLoader();
 		
 		String newFileName = "filenewgrade.csv";
 		String newFilePath = "./src/test/resources/filenewgrade.csv";
@@ -138,6 +147,11 @@ ClassLoader classLoader = getClass().getClassLoader();
 		examTimeList.add(examTimeSecond);
 		examTimeList.add(examTimeThird);
 		examTimeList.add(examTimeFourth);
+		
+		StringBuilder stringByGradeSchedule = new StringBuilder();
+		stringByGradeSchedule.append(String.format("%-10s %-10s %-10s %s\n", "Day", "Hour", "Code", "Name"));
+		stringByGradeSchedule.append(String.format("%-10s %-10s %-10s %s\n", "Day one", "Hour one", "10011111", "First Course"));
+		stringByGradeSchedule.append(String.format("%-10s %-10s %-10s %s\n", "Day four", "Hour four", "10011113", "Third Course"));
 		
 		when(dataUned.getExamTimeList()).thenReturn(examTimeList);
 		when(dataUned.getCourse(0)).thenReturn(courseFirst);
@@ -190,6 +204,8 @@ ClassLoader classLoader = getClass().getClassLoader();
 				
 		DataUnedSchedule unedSchedule = new DataUnedSchedule(solution, solutionFitness, dataUned);
 		
+		assertThat(unedSchedule.getStringByGradeSchedule(gradeWithName)).isEqualTo(stringByGradeSchedule.toString());
+		
 		unedSchedule.createCsvByGradeSchedule(newFilePath, gradeWithName);
 		
 		File newFile = new File(classLoader.getResource(newFileName).getPath());
@@ -199,8 +215,8 @@ ClassLoader classLoader = getClass().getClassLoader();
 	}
 	
 	@Test
-	public void testGetByCourseCsv() {
-ClassLoader classLoader = getClass().getClassLoader();
+	public void testGetByCourseCsvAndString() {
+		ClassLoader classLoader = getClass().getClassLoader();
 		
 		String newFileName = "filenewcourse.csv";
 		String newFilePath = "./src/test/resources/filenewcourse.csv";
@@ -233,6 +249,11 @@ ClassLoader classLoader = getClass().getClassLoader();
 		examTimeList.add(examTimeSecond);
 		examTimeList.add(examTimeThird);
 		examTimeList.add(examTimeFourth);
+		
+		StringBuilder stringByCourseSchedule = new StringBuilder();
+		stringByCourseSchedule.append(String.format("%-10s %-10s %-10s %s\n", "Day", "Hour", "Code", "Name"));
+		stringByCourseSchedule.append(String.format("%-10s %-10s %-10s %s\n", "Day three", "Hour three", "10011112", "Second Course"));
+		stringByCourseSchedule.append(String.format("%-10s %-10s %-10s %s\n", "Day four", "Hour four", "10011113", "Third Course"));
 		
 		List<String> courseCodeList = new ArrayList<>();
 		courseCodeList.add(secondCourseCodeWithName);
@@ -280,6 +301,8 @@ ClassLoader classLoader = getClass().getClassLoader();
 		when(examTimeFourth.compareTo(examTimeThird)).thenReturn(1);
 		
 		DataUnedSchedule unedSchedule = new DataUnedSchedule(solution, solutionFitness, dataUned);
+		
+		assertThat(unedSchedule.getStringByCourseSchedule(courseCodeList)).isEqualTo(stringByCourseSchedule.toString());
 		
 		unedSchedule.createCsvByListCourseSchedule(newFilePath, courseCodeList);
 		

@@ -1,6 +1,7 @@
 package es.uned.yauesc.dataUned;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.Test;
@@ -44,5 +45,89 @@ class DataUnedParserTest {
 		verify(dataUned).addEnrolment("City 2", "10011111", 4);
 		verify(dataUned).addEnrolment("City 2", "10020001", 23);
 	}
+	
+	@Test
+	public void testFileGradeNotExistThrowFileGradeException() {
+		ClassLoader classLoader = getClass().getClassLoader();
+		
+		String fileGradePath = "Error";
+		String fileCentroAsociadoPath = classLoader.getResource("centroAsociadoCapacidadSample.csv").getPath();
+		String fileExamTimePath = classLoader.getResource("ExamTimeSample.csv").getPath();
+		String fileCoursePath = classLoader.getResource("AsignaturaGradosSample.csv").getPath();
+		String fileEnrolmentPath = classLoader.getResource("MatriculasCentroAsignaturaSample.csv").getPath();
+		
+		DataUned dataUned = mock(DataUned.class);
+		
+		DataUnedParser unedParser = new DataUnedParser();
+		
+		assertThrows(FileGradeException.class, () -> unedParser.parseData(fileGradePath, fileCentroAsociadoPath, fileExamTimePath, fileCoursePath, fileEnrolmentPath, dataUned));
+	}
+	
+	@Test
+	public void testFileGradeNotExistThrowFileCentroAsociadoException() {
+		ClassLoader classLoader = getClass().getClassLoader();
+		
+		String fileGradePath = classLoader.getResource("GradosSample.csv").getPath();
+		String fileCentroAsociadoPath = "Error";
+		String fileExamTimePath = classLoader.getResource("ExamTimeSample.csv").getPath();
+		String fileCoursePath = classLoader.getResource("AsignaturaGradosSample.csv").getPath();
+		String fileEnrolmentPath = classLoader.getResource("MatriculasCentroAsignaturaSample.csv").getPath();
+		
+		DataUned dataUned = mock(DataUned.class);
+		
+		DataUnedParser unedParser = new DataUnedParser();
+		
+		assertThrows(FileCentroAsociadoException.class, () -> unedParser.parseData(fileGradePath, fileCentroAsociadoPath, fileExamTimePath, fileCoursePath, fileEnrolmentPath, dataUned));
+	}
+	
+	@Test
+	public void testFileGradeNotExistThrowFileExamTimeException() {
+		ClassLoader classLoader = getClass().getClassLoader();
+		
+		String fileGradePath = classLoader.getResource("GradosSample.csv").getPath();
+		String fileCentroAsociadoPath = classLoader.getResource("centroAsociadoCapacidadSample.csv").getPath();
+		String fileExamTimePath = "Error";
+		String fileCoursePath = classLoader.getResource("AsignaturaGradosSample.csv").getPath();
+		String fileEnrolmentPath = classLoader.getResource("MatriculasCentroAsignaturaSample.csv").getPath();
+		
+		DataUned dataUned = mock(DataUned.class);
+		
+		DataUnedParser unedParser = new DataUnedParser();
+		
+		assertThrows(FileExamTimeException.class, () -> unedParser.parseData(fileGradePath, fileCentroAsociadoPath, fileExamTimePath, fileCoursePath, fileEnrolmentPath, dataUned));
+	}
+	
+	@Test
+	public void testFileGradeNotExistThrowFileCourseException() {
+		ClassLoader classLoader = getClass().getClassLoader();
+		
+		String fileGradePath = classLoader.getResource("GradosSample.csv").getPath();
+		String fileCentroAsociadoPath = classLoader.getResource("centroAsociadoCapacidadSample.csv").getPath();
+		String fileExamTimePath = classLoader.getResource("ExamTimeSample.csv").getPath();
+		String fileCoursePath = "Error";
+		String fileEnrolmentPath = classLoader.getResource("MatriculasCentroAsignaturaSample.csv").getPath();
+		
+		DataUned dataUned = mock(DataUned.class);
+		
+		DataUnedParser unedParser = new DataUnedParser();
+		
+		assertThrows(FileCourseException.class, () -> unedParser.parseData(fileGradePath, fileCentroAsociadoPath, fileExamTimePath, fileCoursePath, fileEnrolmentPath, dataUned));
+	}
 
+	@Test
+	public void testFileGradeNotExistThrowFileEnrolmentException() {
+		ClassLoader classLoader = getClass().getClassLoader();
+		
+		String fileGradePath = classLoader.getResource("GradosSample.csv").getPath();
+		String fileCentroAsociadoPath = classLoader.getResource("centroAsociadoCapacidadSample.csv").getPath();
+		String fileExamTimePath = classLoader.getResource("ExamTimeSample.csv").getPath();
+		String fileCoursePath = classLoader.getResource("AsignaturaGradosSample.csv").getPath();
+		String fileEnrolmentPath = "Error";
+		
+		DataUned dataUned = mock(DataUned.class);
+		
+		DataUnedParser unedParser = new DataUnedParser();
+		
+		assertThrows(FileEnrolmentException.class, () -> unedParser.parseData(fileGradePath, fileCentroAsociadoPath, fileExamTimePath, fileCoursePath, fileEnrolmentPath, dataUned));
+	}
 }

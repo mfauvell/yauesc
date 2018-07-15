@@ -13,7 +13,7 @@ import org.mockito.stubbing.Answer;
 public class GeneticAlgorithmSingleTest {
 	
 	@Test
-	public void testConstructorMustEvaluatePopulationInitialAndSetInitialSolutionAndDefaultOptimalAndFinishedValues() {
+	public void testConstructorMustEvaluatePopulationInitialAndSetInitialSolutionAndDefaultOptimalAndFinishedValuesAndRemoveSolution() {
 		Population population = mock(Population.class);
 		EvaluationFunction evaluationFunction = mock(EvaluationFunction.class);
 		ParentSelector parentSelector = mock(ParentSelector.class);
@@ -47,11 +47,16 @@ public class GeneticAlgorithmSingleTest {
 		assertThat(geneticAlgorithmSingle.getSolution()).isEqualTo(firstIndividual);
 		assertThat(geneticAlgorithmSingle.isFinished()).isFalse();
 		assertThat(geneticAlgorithmSingle.foundOptimal()).isFalse();
+		
+		geneticAlgorithmSingle.removeSolution();
+		
+		assertThat(geneticAlgorithmSingle.getSolution()).isNull();
 	}
 	
 	@Test
-	public void testConstructorWithPopulationAgedMustBeThisPopulationAgedAndIsSetCorrectlyAll() {
+	public void testConstructorWithPopulationAgedMustBeThisPopulationAgedAndIsSetCorrectlyAllAndSetPopulation() {
 		Population population = mock(Population.class);
+		Population secondPopulation = mock(Population.class);
 		EvaluationFunction evaluationFunction = mock(EvaluationFunction.class);
 		ParentSelector parentSelector = mock(ParentSelector.class);
 		RecombinationOperator recombinationOperator = mock(RecombinationOperator.class);
@@ -73,9 +78,19 @@ public class GeneticAlgorithmSingleTest {
 		initialPopulation.add(thirdIndividual);
 		initialPopulation.add(fourthIndividual);
 		
+		Collection<Individual> posteriorPopulation = new ArrayList<>();
+		posteriorPopulation.add(firstIndividual);
+		posteriorPopulation.add(secondIndividual);
+		posteriorPopulation.add(thirdIndividual);
+		posteriorPopulation.add(firstIndividual);
+		
 		when(population.getAllIndividual()).thenReturn(initialPopulation);
 		when(population.getBestIndividual()).thenReturn(firstIndividual);
 		when(population.isAged()).thenReturn(true);
+		
+		when(secondPopulation.getAllIndividual()).thenReturn(posteriorPopulation);
+		when(secondPopulation.getBestIndividual()).thenReturn(secondIndividual);
+		when(secondPopulation.isAged()).thenReturn(true);
 		
 		GeneticAlgorithmSingle geneticAlgorithmSingle = new GeneticAlgorithmSingle(population, evaluationFunction, parentSelector, recombinationOperator, 
 				mutationOperator, survivorSelector, 1, optimalFitness, initialPopulation.size());
@@ -83,6 +98,13 @@ public class GeneticAlgorithmSingleTest {
 		verify(evaluationFunction).evaluate(initialPopulation);
 		verify(evaluationFunction).setAge(optimalFitness, optimalFitness, initialPopulation);
 		assertThat(geneticAlgorithmSingle.getSolution()).isEqualTo(firstIndividual);
+		assertThat(geneticAlgorithmSingle.isFinished()).isFalse();
+		assertThat(geneticAlgorithmSingle.foundOptimal()).isFalse();
+		
+		geneticAlgorithmSingle.setPopulation(secondPopulation);
+		verify(evaluationFunction).evaluate(posteriorPopulation);
+		verify(evaluationFunction).setAge(optimalFitness, optimalFitness, posteriorPopulation);
+		assertThat(geneticAlgorithmSingle.getSolution()).isEqualTo(secondIndividual);
 		assertThat(geneticAlgorithmSingle.isFinished()).isFalse();
 		assertThat(geneticAlgorithmSingle.foundOptimal()).isFalse();
 	}

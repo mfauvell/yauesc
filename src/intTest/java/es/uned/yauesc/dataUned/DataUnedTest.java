@@ -1,6 +1,7 @@
 package es.uned.yauesc.dataUned;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
@@ -8,13 +9,16 @@ import org.junit.jupiter.api.Test;
 class DataUnedTest {
 	
 	@Test
-	public void testAddGrade() {
+	public void testAddGradeAndObtainCodeNameGradeString() {
 		String codeFirst = "73";
 		String nameFirst = "First";
 		int yearsFirst = 4;
 		String codeSecond = "74";
 		String nameSecond = "Second";
 		int yearsSecond = 4;
+		
+		String codeNameFirst = codeFirst + " - " + nameFirst;
+		String codeNameSecond = codeSecond + " - " + nameSecond;
 		
 		DataUned dataUned = new DataUned();
 		
@@ -33,26 +37,34 @@ class DataUnedTest {
 		assertThat(gradeSecond.getCode()).isEqualTo(codeSecond);
 		assertThat(gradeSecond.getName()).isEqualTo(nameSecond);
 		assertThat(gradeSecond.getYears()).isEqualTo(yearsSecond);
+		
+		assertThat(dataUned.getCodeNameGradeList()).hasSize(2).contains(codeNameFirst, codeNameSecond);
 	}
 
 	@Test
-	public void testAddCourseAndDataCourseAndGetNumberCoursesAndSetCourseOnGradesThatExistsAndTestNotRepeat() {
+	public void testAddCourseAndDataCourseAndGetNumberCoursesGetCodeNamberCourseAndSetCourseOnGradesThatExistsAndTestNotRepeat() {
 		String codeFirstGrade = "73";
 		String codeSecondGrade = "74";
 		
 		String codeFirstCourse = "7300";
 		String codeSecondCourse = "7400";
 		
+		String nameFirstCourse = "First";
+		String nameSecondCourse = "Second";
+		
+		String codeNameFirst = codeFirstCourse + " - " + nameFirstCourse;
+		String codeNameSecond = codeSecondCourse + " - " + nameSecondCourse;
+		
 		DataUned dataUned = new DataUned();
 		
 		dataUned.addGrade(codeFirstGrade, "First", 4);
 		dataUned.addGrade(codeSecondGrade, "Second", 4);
 		
-		dataUned.addCourse(codeFirstCourse, "First", codeFirstGrade, 2, true );
-		dataUned.addCourse(codeFirstCourse, "First", codeSecondGrade, 2, false);
-		dataUned.addCourse(codeSecondCourse, "Second", codeSecondGrade, 2, true);
-		dataUned.addCourse(codeSecondCourse, "Second", codeFirstGrade, 2, false);
-		dataUned.addCourse(codeSecondCourse, "Second", codeSecondGrade, 2, true);
+		dataUned.addCourse(codeFirstCourse, nameFirstCourse, codeFirstGrade, 2, true );
+		dataUned.addCourse(codeFirstCourse, nameFirstCourse, codeSecondGrade, 2, false);
+		dataUned.addCourse(codeSecondCourse, nameSecondCourse, codeSecondGrade, 2, true);
+		dataUned.addCourse(codeSecondCourse, nameSecondCourse, codeFirstGrade, 2, false);
+		dataUned.addCourse(codeSecondCourse, nameSecondCourse, codeSecondGrade, 2, true);
 		
 		Course courseFirst = dataUned.getCourse(0);
 		Course courseSecond = dataUned.getCourse(1);
@@ -63,6 +75,8 @@ class DataUnedTest {
 		assertThat(courseSecond.getDataCourseList()).hasSize(2);
 		assertThat(dataUned.getCourse(2)).isNull();
 		assertThat(dataUned.getNumberCourses()).isEqualTo(2);
+		
+		assertThat(dataUned.getCodeNameCourseList()).hasSize(2).contains(codeNameFirst, codeNameSecond);
 	}
 	
 	@Test

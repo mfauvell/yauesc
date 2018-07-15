@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class GeneticAlgorithmParallelTest {
 
 	@Test
-	public void testConstructorSetInitialSolution() {
+	public void testConstructorSetInitialSolutionAndTestRemoveSolution() {
 		GeneticAlgorithmSingle firstGeneticAlgorithmSingle = mock(GeneticAlgorithmSingle.class);
 		GeneticAlgorithmSingle secondGeneticAlgorithmSingle = mock(GeneticAlgorithmSingle.class);
 		GeneticAlgorithmSingle thirdGeneticAlgorithmSingle = mock(GeneticAlgorithmSingle.class);
@@ -39,6 +39,10 @@ class GeneticAlgorithmParallelTest {
 				generations, migration, numberMigration);
 		
 		assertThat(geneticAlgorithmParallel.getSolution()).isEqualTo(secondSolution);
+		
+		geneticAlgorithmParallel.removeSolution();
+		
+		assertThat(geneticAlgorithmParallel.getSolution()).isNull();
 	}
 	
 	@Test
