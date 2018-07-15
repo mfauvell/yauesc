@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -62,6 +63,10 @@ public class DataUnedGui extends JPanel {
 		
 		setSize(new Dimension(1030, 600));
 		setLayout(new BorderLayout(0, 0));
+		
+		ImageIcon icon = new ImageIcon("./images/logo.png");
+		JFrame frame = new JFrame();
+		frame.setIconImage(icon.getImage());
 		
 		JPanel panelNorth = new JPanel();
 		panelNorth.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -239,7 +244,7 @@ public class DataUnedGui extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileGradeChooser = new JFileChooser("./data/");
 				fileGradeChooser.setFileFilter(filter);
-				int returnValor = fileGradeChooser.showOpenDialog(new Frame());
+				int returnValor = fileGradeChooser.showOpenDialog(frame);
 				if (returnValor == JFileChooser.APPROVE_OPTION) {
 					fileGrade.setText(fileGradeChooser.getSelectedFile().getAbsolutePath());
 				}
@@ -283,7 +288,7 @@ public class DataUnedGui extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileGradeChooser = new JFileChooser("./data/");
 				fileGradeChooser.setFileFilter(filter);
-				int returnValor = fileGradeChooser.showOpenDialog(new Frame());
+				int returnValor = fileGradeChooser.showOpenDialog(frame);
 				if (returnValor == JFileChooser.APPROVE_OPTION) {
 					fileCentroAsociado.setText(fileGradeChooser.getSelectedFile().getAbsolutePath());
 				}
@@ -327,7 +332,7 @@ public class DataUnedGui extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileGradeChooser = new JFileChooser("./data/");
 				fileGradeChooser.setFileFilter(filter);
-				int returnValor = fileGradeChooser.showOpenDialog(new Frame());
+				int returnValor = fileGradeChooser.showOpenDialog(frame);
 				if (returnValor == JFileChooser.APPROVE_OPTION) {
 					fileExamTime.setText(fileGradeChooser.getSelectedFile().getAbsolutePath());
 				}
@@ -371,7 +376,7 @@ public class DataUnedGui extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileGradeChooser = new JFileChooser("./data/");
 				fileGradeChooser.setFileFilter(filter);
-				int returnValor = fileGradeChooser.showOpenDialog(new Frame());
+				int returnValor = fileGradeChooser.showOpenDialog(frame);
 				if (returnValor == JFileChooser.APPROVE_OPTION) {
 					fileCourse.setText(fileGradeChooser.getSelectedFile().getAbsolutePath());
 				}
@@ -415,7 +420,7 @@ public class DataUnedGui extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileGradeChooser = new JFileChooser("./data/");
 				fileGradeChooser.setFileFilter(filter);
-				int returnValor = fileGradeChooser.showOpenDialog(new Frame());
+				int returnValor = fileGradeChooser.showOpenDialog(frame);
 				if (returnValor == JFileChooser.APPROVE_OPTION) {
 					fileEnrolment.setText(fileGradeChooser.getSelectedFile().getAbsolutePath());
 				}

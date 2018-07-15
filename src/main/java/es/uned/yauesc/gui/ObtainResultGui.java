@@ -33,6 +33,7 @@ import java.awt.Color;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -390,9 +391,13 @@ public class ObtainResultGui extends JPanel {
 	}
 	
 	private void exportToFile(FormatFileExtension formatFile) {
+		ImageIcon icon = new ImageIcon("./images/logo.png");
+		JFrame frame = new JFrame();
+		frame.setIconImage(icon.getImage());
+		
 		String filePath = null;
 		JFileChooser filePathChooser = new JFileChooser(DataUnedDefaultConfiguration.EXPORT_PATH);
-		int returnValor = filePathChooser.showSaveDialog(new Frame());
+		int returnValor = filePathChooser.showSaveDialog(frame);
 		if (returnValor == JFileChooser.APPROVE_OPTION) {
 			filePath = filePathChooser.getSelectedFile().getAbsolutePath();
 			

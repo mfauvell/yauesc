@@ -1,5 +1,6 @@
 package es.uned.yauesc.gui;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import es.uned.yauesc.dataUned.DataUnedController;
@@ -39,6 +40,8 @@ public class MainFrame {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		ImageIcon icon = new ImageIcon("./images/logo.png");
+		frame.setIconImage(icon.getImage());
 		frame.setTitle("Yet Another UNED Exam Schedule Creator");
 		frame.setBounds(100, 100, 1050 , 705);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
