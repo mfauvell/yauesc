@@ -14,16 +14,18 @@ class RecombinationOperatorSimpleTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testRecombinationSimpleToAllPairsAllMade() {
+	public void testRecombinationSimpleToAllPairsAllMadeOddParents() {
 		Individual firstIndividual = mock(Individual.class);
 		Individual secondIndividual = mock(Individual.class);
 		Individual thirdIndividual = mock(Individual.class);
 		Individual fourthIndividual = mock(Individual.class);
+		Individual fifthIndividual = mock(Individual.class);
 		
 		List<Integer> genotypeFirst = new ArrayList<Integer>(Arrays.asList(0, 5, 9, 3, 5));
 		List<Integer> genotypeSecond = new ArrayList<Integer>(Arrays.asList(4, 3, 2, 1, 0));
 		List<Integer> genotypeThird = new ArrayList<Integer>(Arrays.asList(3, 4, 8, 9, 2));
 		List<Integer> genotypeFourth = new ArrayList<Integer>(Arrays.asList(6, 9, 7, 7, 2));
+		List<Integer> genotypeFifth = new ArrayList<>(Arrays.asList(1,2,3,4,5));
 		
 		List<Integer> genotypeFirstSon = new ArrayList<Integer>(Arrays.asList(0, 5, 9, 1, 0));
 		List<Integer> genotypeSecondSon = new ArrayList<Integer>(Arrays.asList(4, 3, 2, 3, 5));
@@ -34,12 +36,14 @@ class RecombinationOperatorSimpleTest {
 		when(secondIndividual.getGenotype()).thenReturn(genotypeSecond);
 		when(thirdIndividual.getGenotype()).thenReturn(genotypeThird);
 		when(fourthIndividual.getGenotype()).thenReturn(genotypeFourth);
+		when(fifthIndividual.getGenotype()).thenReturn(genotypeFifth);
 		
 		Collection<Individual> parents = new ArrayList<Individual>();
 		parents.add(firstIndividual);
 		parents.add(secondIndividual);
 		parents.add(thirdIndividual);
 		parents.add(fourthIndividual);
+		parents.add(fifthIndividual);
 		
         GeneticAlgorithmUtils geneticAlgorithmUtils = mock(GeneticAlgorithmUtils.class);
         when(geneticAlgorithmUtils.getProbability()).thenReturn(0.1);
@@ -49,8 +53,8 @@ class RecombinationOperatorSimpleTest {
 		
 		RecombinationOperatorSimple recombinationOperatorSimple = new RecombinationOperatorSimple(probability, geneticAlgorithmUtils);
 		
-		assertThat(recombinationOperatorSimple.recombine(parents)).hasSize(4).extracting(individual->individual.getGenotype()).
-			contains(genotypeFirstSon, genotypeSecondSon, genotypeThirdSon, genotypeFourthSon);
+		assertThat(recombinationOperatorSimple.recombine(parents)).hasSize(5).extracting(individual->individual.getGenotype()).
+			contains(genotypeFirstSon, genotypeSecondSon, genotypeThirdSon, genotypeFourthSon, genotypeFifth);
 	}
 
 	@Test
