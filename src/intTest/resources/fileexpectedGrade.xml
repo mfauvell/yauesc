@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<schedule>
+    <day>
+        <id>1</id>
+        <name>Day one</name>
+        <hourList>
+            <hour>
+                <id>1</id>
+                <name>Hour one</name>
+                <examList>
+                    <course>
+                        <code>10011111</code>
+                        <name>First Course</name>
+                    </course>
+                </examList>
+            </hour>
+        </hourList>
+    </day>
+    <day>
+        <id>4</id>
+        <name>Day four</name>
+        <hourList>
+            <hour>
+                <id>4</id>
+                <name>Hour four</name>
+                <examList>
+                    <course>
+                        <code>10011113</code>
+                        <name>Third Course</name>
+                    </course>
+                </examList>
+            </hour>
+        </hourList>
+    </day>
+</schedule>
