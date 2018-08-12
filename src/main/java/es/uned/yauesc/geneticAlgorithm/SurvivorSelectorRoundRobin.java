@@ -29,7 +29,7 @@ public class SurvivorSelectorRoundRobin implements SurvivorSelector {
 		return IntStream.range(0, fightResult.size())
 				.parallel()
 				.boxed()
-				.collect(Collectors.toMap(it -> it, it -> fightResult.get(it))).entrySet()
+				.collect(Collectors.toMap(index-> index, index -> fightResult.get(index))).entrySet()
 				.parallelStream()
 				.sorted(Map.Entry.<Integer,Integer>comparingByValue().reversed())
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue,newValue) -> oldValue, LinkedHashMap::new)).keySet()

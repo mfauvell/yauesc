@@ -158,6 +158,5 @@ public class GeneticAlgorithmController implements GeneticAlgorithmObserver {
 	public void stopExecution() {
 		mainGeneticAlgorithm.stop();
 	}
-	
-	
+		
 }

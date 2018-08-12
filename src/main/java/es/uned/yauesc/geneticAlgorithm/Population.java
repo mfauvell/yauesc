@@ -40,7 +40,7 @@ public class Population {
 	
 	public Collection<Individual> getBestIndividual(int number) {
 		if (number > size) {
-			throw new IllegalArgumentException("Asked for more individuals that the population has");
+			throw new IllegalArgumentException("Asked for more individuals that the population have");
 		} else {
 			return individuals.subList(0, number);
 		}

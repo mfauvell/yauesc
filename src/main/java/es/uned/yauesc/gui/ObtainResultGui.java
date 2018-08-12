@@ -86,9 +86,6 @@ public class ObtainResultGui extends JPanel {
 		JButton btnReset = new JButton("Reset Values");
 		panelNorthWest.add(btnReset);
 		
-		JButton btnDefault = new JButton("Default Values");
-		panelNorthWest.add(btnDefault);
-		
 		JPanel panelNorthEast = new JPanel();
 		panelNorth.add(panelNorthEast, BorderLayout.EAST);
 		panelNorthEast.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 20));
@@ -357,15 +354,6 @@ public class ObtainResultGui extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				reset();
 				clearFilter();
-			}
-		});
-		
-		btnDefault.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				chckbxGradeEnable.setSelected(false);
-				chckbxCourseEnable.setSelected(false);
-				comboBoxGrade.setSelectedIndex(-1);
-				listCourse.clearSelection();
 			}
 		});
 		

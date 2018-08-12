@@ -207,6 +207,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		public void updateGeneticAlgorithmControllerObserver(GeneticAlgorithmController geneticAlgorithmController) {
 			working.setVisible(false);
 			btnStart.setEnabled(true);
+			btnStop.setEnabled(false);
 			mainFrame.enableExecutionButtons();
 			mainFrame.setObtainResultsTab();
 		}

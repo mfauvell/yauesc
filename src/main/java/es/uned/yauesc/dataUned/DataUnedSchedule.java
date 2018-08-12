@@ -117,7 +117,7 @@ public class DataUnedSchedule {
 		List<String> courseListClean = courseList.parallelStream().map(course -> course.substring(0, 8)).collect(Collectors.toList());
 		return examTimeListCourse.keySet()
 				.parallelStream()
-				.collect(Collectors.toMap(it -> it, it -> new ArrayList<>(examTimeListCourse.get(it)
+				.collect(Collectors.toMap(examTime -> examTime, examTime -> new ArrayList<>(examTimeListCourse.get(examTime)
 						.parallelStream()
 						.filter(course -> courseListClean.contains(course.getCode()))
 						.collect(Collectors.toList())
@@ -135,7 +135,7 @@ public class DataUnedSchedule {
 		
 		return examTimeListCourse.keySet()
 				.parallelStream()
-				.collect(Collectors.toMap(it -> it, it -> new ArrayList<>(examTimeListCourse.get(it)
+				.collect(Collectors.toMap(examTime -> examTime, examTime -> new ArrayList<>(examTimeListCourse.get(examTime)
 						.parallelStream()
 						.filter(course -> {
 							int result = course.getDataCourseList().parallelStream().mapToInt(dataCourse ->  { 
