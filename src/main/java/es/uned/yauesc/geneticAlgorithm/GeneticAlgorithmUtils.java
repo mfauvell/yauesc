@@ -17,7 +17,7 @@ public class GeneticAlgorithmUtils {
 
 	public double getProbability() {
 		Double result = randomGenerator.nextDouble();
-		return ((Math.round(result)*10000.0)/10000.0);
+		return ((Math.round(result)*100000.0)/100000.0);
 	}
 
 	public int getNewGenValue() {
