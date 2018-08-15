@@ -32,14 +32,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
 
+/**
+ * Clase que encapsula la gui que permite al usuario especificar el origen de los datos sobre los que trabajará la UNED
+ */
 public class DataUnedGui extends JPanel {
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -1293442390136906606L;
 	
 	private JButton btnLoad;
@@ -54,10 +58,15 @@ public class DataUnedGui extends JPanel {
 	private JTextField fileCourse;
 	private JTextField fileEnrolment;
 
+	//This class log
+	private final static Logger LOGGER = Logger.getLogger(DataUnedGui.class.getName());
+	
 	/**
-	 * Create the panel.
+	 * Crea el panel que permite la carga de datos sobre la uned en la aplicación
 	 */
 	public DataUnedGui(DataUnedController dataUnedController, MainFrame mainFrame) {
+		
+		LOGGER.log(Level.INFO, "DataUnedGui created");
 		
 		setSize(new Dimension(1030, 600));
 		setLayout(new BorderLayout(0, 0));
@@ -88,6 +97,7 @@ public class DataUnedGui extends JPanel {
 				fileExamTime.setText("");
 				fileCourse.setText("");
 				fileEnrolment.setText("");
+				LOGGER.log(Level.INFO, "Reset values");
 			}
 		});
 		panelNorthWest.add(btnReset);
@@ -105,6 +115,7 @@ public class DataUnedGui extends JPanel {
 				fileExamTime.setText(DataUnedDefaultConfiguration.FILE_EXAMTIME);
 				fileCourse.setText(DataUnedDefaultConfiguration.FILE_COURSE);
 				fileEnrolment.setText(DataUnedDefaultConfiguration.FILE_ENROLMENT);
+				LOGGER.log(Level.INFO, "Load default values");
 			}
 		});
 		panelNorthWest.add(btnDefault);
@@ -441,8 +452,10 @@ public class DataUnedGui extends JPanel {
 					if (first < 0) {
 						fail = true;
 						firstFitnessLevel.setBackground(Color.RED);
+						LOGGER.log(Level.WARNING, "First value: " + firstFitnessLevel.getText() + " is not correct");
 					}
 				} catch (NumberFormatException e2) {
+					LOGGER.log(Level.WARNING, "First value: " + firstFitnessLevel.getText() + " is not correct");
 					fail = true;
 					firstFitnessLevel.setBackground(Color.RED);
 				}			
@@ -450,10 +463,12 @@ public class DataUnedGui extends JPanel {
 				try {
 					second = Integer.parseInt(secondFitnessLevel.getText());
 					if (second < 0) {
+						LOGGER.log(Level.WARNING, "Second value: " + secondFitnessLevel.getText() + " is not correct");
 						fail = true;
 						secondFitnessLevel.setBackground(Color.RED);
 					}
 				} catch (NumberFormatException e2) {
+					LOGGER.log(Level.WARNING, "Second value: " + secondFitnessLevel.getText() + " is not correct");
 					fail = true;
 					secondFitnessLevel.setBackground(Color.RED);
 				} 
@@ -461,10 +476,12 @@ public class DataUnedGui extends JPanel {
 				try {
 					third = Integer.parseInt(thirdFitnessLevel.getText());
 					if (third < 0) {
+						LOGGER.log(Level.WARNING, "Third value: " + thirdFitnessLevel.getText() + " is not correct");
 						fail = true;
 						thirdFitnessLevel.setBackground(Color.RED);
 					}
 				} catch (NumberFormatException e2) {
+					LOGGER.log(Level.WARNING, "Third value: " + thirdFitnessLevel.getText() + " is not correct");
 					fail = true;
 					thirdFitnessLevel.setBackground(Color.RED);
 				} 
@@ -476,10 +493,12 @@ public class DataUnedGui extends JPanel {
 				try {
 					presentedNumber = Double.parseDouble(presented.getText());
 					if ((presentedNumber <= 0) || (presentedNumber > 1.0)) {
+						LOGGER.log(Level.WARNING, "Presented value: " + presented.getText() + " is not correct");
 						fail = true;
 						presented.setBackground(Color.RED);
 					}
 				} catch (NumberFormatException e2) {
+					LOGGER.log(Level.WARNING, "Presented value: " + presented.getText() + " is not correct");
 					fail = true;
 					presented.setBackground(Color.RED);
 				} 
@@ -488,6 +507,7 @@ public class DataUnedGui extends JPanel {
 				}
 				
 				if (fileGrade.getText().equals("")) {
+					LOGGER.log(Level.WARNING, "File grade path value is not set");
 					fail = true;
 					fileGrade.setBackground(Color.RED);
 				} else {
@@ -495,6 +515,7 @@ public class DataUnedGui extends JPanel {
 				}
 								
 				if (fileCentroAsociado.getText().equals("")) {
+					LOGGER.log(Level.WARNING, "File centro asociado path value is not set");
 					fail = true;
 					fileCentroAsociado.setBackground(Color.RED);
 				} else {
@@ -502,6 +523,7 @@ public class DataUnedGui extends JPanel {
 				}
 								
 				if (fileExamTime.getText().equals("")) {
+					LOGGER.log(Level.WARNING, "File exam time path value is not set");
 					fail = true;
 					fileExamTime.setBackground(Color.RED);
 				} else {
@@ -509,6 +531,7 @@ public class DataUnedGui extends JPanel {
 				}
 				
 				if (fileCourse.getText().equals("")) {
+					LOGGER.log(Level.WARNING, "File course path value is not set");
 					fail = true;
 					fileCourse.setBackground(Color.RED);
 				} else {
@@ -516,6 +539,7 @@ public class DataUnedGui extends JPanel {
 				}
 								
 				if (fileEnrolment.getText().equals("")) {
+					LOGGER.log(Level.WARNING, "File enrolment path value is not set");
 					fail = true;
 					fileEnrolment.setBackground(Color.RED);
 				} else {
@@ -526,18 +550,23 @@ public class DataUnedGui extends JPanel {
 					try {
 						dataUnedController.parseData();
 					} catch (FileGradeException e1) {
+						LOGGER.log(Level.WARNING, "File grade: " + fileGrade.getText() + " is not correct");
 						fail = true;
 						fileGrade.setBackground(Color.RED);
 					} catch (FileCentroAsociadoException e1) {
+						LOGGER.log(Level.WARNING, "File centro asociado: " + fileCentroAsociado.getText() + " is not correct");
 						fail = true;
 						fileCentroAsociado.setBackground(Color.RED);
 					} catch (FileExamTimeException e1) {
+						LOGGER.log(Level.WARNING, "File exam time: " + fileExamTime.getText() + " is not correct");
 						fail = true;
 						fileExamTime.setBackground(Color.RED);
 					} catch (FileCourseException e1) {
+						LOGGER.log(Level.WARNING, "File course: " + fileCourse.getText() + " is not correct");
 						fail = true;
 						fileCourse.setBackground(Color.RED);
 					} catch (FileEnrolmentException e1) {
+						LOGGER.log(Level.WARNING, "File enrolment: " + fileEnrolment.getText() + " is not correct");
 						fail = true;
 						fileEnrolment.setBackground(Color.RED);
 					} 
@@ -546,6 +575,7 @@ public class DataUnedGui extends JPanel {
 				working.setVisible(false);
 				
 				if (!fail) {
+					LOGGER.log(Level.INFO, "Data Uned data load succesfully");
 					mainFrame.setGeneticAlgorithmConfigTab();
 				}
 				
@@ -566,10 +596,16 @@ public class DataUnedGui extends JPanel {
 		fileEnrolment.setBackground(Color.WHITE);
 	}
 	
+	/**
+	 * Desactiva el botón load
+	 */
 	public void disableLoadData() {
 		btnLoad.setEnabled(false);
 	}
 	
+	/**
+	 * Activa el botón load
+	 */
 	public void enableLoadData() {
 		btnLoad.setEnabled(true);
 	}

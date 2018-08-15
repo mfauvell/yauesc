@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,11 +30,11 @@ import es.uned.yauesc.geneticAlgorithm.IllegalParameterValueCheckedException;
 
 import java.awt.CardLayout;
 
+/**
+ * Clase que encapsula la gui que permite al usuario seguir la ejecución del algoritmo usado en la aplicación
+ */
 public class GeneticAlgorithmExecutionGui extends JPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1920379278298666697L;
 
 	private MainFrame mainFrame;
@@ -48,10 +50,14 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 	private SingleExecutionGui panelThirdAlgorithmSingle;
 	private JPanelObserverGeneticAlgorithmController panelWorkingIcon;
 
+	private final static Logger LOGGER = Logger.getLogger(GeneticAlgorithmExecutionGui.class.getName());
+	
 	/**
-	 * Create the panel.
+	 * Crea el panel donde el usuario puede iniciar y seguir la ejecución del algoritmo genético
 	 */
 	public GeneticAlgorithmExecutionGui(GeneticAlgorithmController geneticAlgorithmController, MainFrame mainFrame) {
+		LOGGER.log(Level.INFO, "GeneticAlgorithmExecution gui created");
+		
 		this.mainFrame = mainFrame;
 		
 		setLayout(new BorderLayout(0, 0));
@@ -164,6 +170,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 				SwingWorker<Boolean, Object> worker = new SwingWorker<Boolean, Object>() {
 					@Override
 					protected Boolean doInBackground() throws Exception {
+						LOGGER.log(Level.INFO, "Algorithm genetic execution started");
 						geneticAlgorithmController.startExecution();
 						return true;
 					}
@@ -180,6 +187,9 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		});
 	}
 	
+	/**
+	 * Inicializa el panel
+	 */
 	public void initialize() {
 		reset();
 	}
@@ -197,6 +207,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 		panelSecondAlgorithmSingle.reset();
 		panelThirdAlgorithmSingle.setVisible(false);
 		panelThirdAlgorithmSingle.reset();
+		LOGGER.log(Level.INFO, "Reset executions panels");
 	}
 	
 	private class JPanelObserverGeneticAlgorithmController extends JPanel implements GeneticAlgorithmControllerObserver {
@@ -209,6 +220,7 @@ public class GeneticAlgorithmExecutionGui extends JPanel {
 			btnStart.setEnabled(true);
 			btnStop.setEnabled(false);
 			mainFrame.enableExecutionButtons();
+			LOGGER.log(Level.INFO, "Genétic algorithm execution finalized");
 			mainFrame.setObtainResultsTab();
 		}
 		

@@ -13,6 +13,8 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
@@ -41,10 +43,11 @@ import java.awt.Color;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
 
+/**
+ * Clase que encapsula la gui que permite al usuario configurar el algoritmo usado en la aplicación
+ */
 public class GeneticAlgorithmConfigGui extends JPanel {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 9045072862616129261L;
 	
 	private JTextField generations;
@@ -56,11 +59,15 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 	private PanelAlgorithmSingle firstGeneticAlgorithmPanel;
 	private PanelAlgorithmSingle secondGeneticAlgorithmPanel;
 	private PanelAlgorithmSingle thirdGeneticAlgorithmPanel;
+	
+	private final static Logger LOGGER = Logger.getLogger(GeneticAlgorithmConfigGui.class.getName());
 
 	/**
-	 * Create the panel.
+	 * Crea el panel que permite la configuración del algoritmo genético en la aplicación por parte del usuario
 	 */
 	public GeneticAlgorithmConfigGui(GeneticAlgorithmController geneticAlgorithmController, MainFrame mainFrame) {
+		LOGGER.log(Level.INFO, "GeneticAlgorithmConfig gui created");
+		
 		setSize(new Dimension(1000, 600));
 		setLayout(new BorderLayout(0, 0));
 		
@@ -289,6 +296,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 						GeneticAlgorithmDefaultConfig.survivorsThird, GeneticAlgorithmDefaultConfig.numberBattleThird, 
 						GeneticAlgorithmDefaultConfig.populationSizeThird, GeneticAlgorithmDefaultConfig.maxPopulationThird, 
 						GeneticAlgorithmDefaultConfig.minPopulationThird);
+				LOGGER.log(Level.INFO, "Loaded default values");
 			}
 		});
 		btnSetConfig.addActionListener(new ActionListener() {
@@ -305,10 +313,12 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 						try {
 							generationsNumber = Integer.parseInt(generations.getText());
 							if (generationsNumber <= 0) {
+								LOGGER.log(Level.WARNING, "Generations value: " + generations.getText() + " is not correct");
 								generations.setBackground(Color.RED);
 								return false;
 							}
 						} catch (Exception e) {
+							LOGGER.log(Level.WARNING, "Generations value: " + generations.getText() + " is not correct");
 							generations.setBackground(Color.RED);
 							return false;
 						}
@@ -323,6 +333,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 										thirdGeneticAlgorithmPanel.getRecombinationOperatorConfig(), thirdGeneticAlgorithmPanel.getMutationOperatorConfig(), thirdGeneticAlgorithmPanel.getSurvivorSelectorConfig());
 							}
 						} catch (IllegalParameterValueCheckedException | IllegalArgumentException e1) {
+							LOGGER.log(Level.WARNING, "Genetic algorithm was not created");
 							return false;
 						}
 						if (parallel) {
@@ -330,10 +341,12 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 							try {
 								generationsToMigrateValor = Integer.parseInt(generationsToMigrate.getText());
 								if (generationsToMigrateValor <= 0) {
+									LOGGER.log(Level.WARNING, "Generations to migrate value: " + generationsToMigrate.getText() + " is not correct");
 									generationsToMigrate.setBackground(Color.RED);
 									return false;
 								}
 							} catch (Exception e) {
+								LOGGER.log(Level.WARNING, "Generations to migrate value: " + generationsToMigrate.getText() + " is not correct");
 								generationsToMigrate.setBackground(Color.RED);
 								return false;
 							}
@@ -341,10 +354,12 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 							try {
 								numberMigrantsValor = Integer.parseInt(numberMigrants.getText());
 								if (numberMigrantsValor <= 0) {
+									LOGGER.log(Level.WARNING, "Number of migrants value: " + numberMigrants.getText() + " is not correct");
 									numberMigrants.setBackground(Color.RED);
 									return false;
 								}
 							} catch (Exception e) {
+								LOGGER.log(Level.WARNING, "Number of migrants value: " + numberMigrants.getText() + " is not correct");
 								numberMigrants.setBackground(Color.RED);
 								return false;
 							}
@@ -354,6 +369,8 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 						}
 						
 						mainFrame.setGeneticAlgorithmExecutionTab();
+						
+						LOGGER.log(Level.INFO, "Genetic Algorithm created succesfully");
 						
 						return true;
 					}
@@ -368,7 +385,11 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		});
 	}
 	
+	/**
+	 * Inicializa el panel
+	 */
 	public void initialize() {
+		LOGGER.log(Level.INFO, "Initializate Panel");
 		reset();
 	}
 	
@@ -381,6 +402,7 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		firstGeneticAlgorithmPanel.resetValues();
 		secondGeneticAlgorithmPanel.resetValues();
 		thirdGeneticAlgorithmPanel.resetValues();
+		LOGGER.log(Level.INFO, "Reset values");
 	}
 	
 	private void resetBackground() {
@@ -389,19 +411,22 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 		numberMigrants.setBackground(Color.WHITE);
 	}
 	
+	/**
+	 * Desactiva el botón Set Config
+	 */
 	public void disableSetConfig() {
 		btnSetConfig.setEnabled(false);
 	}
 	
+	/**
+	 * Activa el botón Set Config
+	 */
 	public void enableSetConfig() {
 		btnSetConfig.setEnabled(true);
 	}
 	
 	private class PanelAlgorithmSingle extends JPanel {
 		
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = -5288395881259277815L;
 		
 		private JTextField sParameter;
@@ -840,10 +865,12 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 				try {
 					maxSize = Integer.parseInt(populationMaxSize.getText());
 					if (maxSize <= 0) {
+						LOGGER.log(Level.WARNING, "Max Population size: " + populationMaxSize.getText() + " is not correct");
 						populationMaxSize.setBackground(Color.RED);
 						throw new IllegalArgumentException("Max size is not valid");
 					}
 				} catch (NumberFormatException e) {
+					LOGGER.log(Level.WARNING, "Max Population size: " + populationMaxSize.getText() + " is not correct");
 					populationMaxSize.setBackground(Color.RED);
 					throw new IllegalArgumentException("Max size is not valid");
 				}
@@ -851,10 +878,12 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 				try {
 					minSize = Integer.parseInt(populationMinSize.getText());
 					if (minSize <= 0) {
+						LOGGER.log(Level.WARNING, "Min Population size: " + populationMinSize.getText() + " is not correct");
 						populationMinSize.setBackground(Color.RED);
 						throw new IllegalArgumentException("Min size is not valid");
 					}
 				} catch (NumberFormatException e) {
+					LOGGER.log(Level.WARNING, "Min Population size: " + populationMinSize.getText() + " is not correct");
 					populationMinSize.setBackground(Color.RED);
 					throw new IllegalArgumentException("Min size is not valid");
 				}
@@ -862,18 +891,22 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 				try {
 					size = Integer.parseInt(populatonSize.getText());
 					if (size <= 0) {
+						LOGGER.log(Level.WARNING, "Population size: " + populatonSize.getText() + " is not correct");
 						populatonSize.setBackground(Color.RED);
 						throw new IllegalArgumentException("Size is not valid");
 					}
 				} catch (NumberFormatException e) {
+					LOGGER.log(Level.WARNING, "Population size: " + populatonSize.getText() + " is not correct");
 					populatonSize.setBackground(Color.RED);
 					throw new IllegalArgumentException("Size is not valid");
 				}
 				if (maxSize < size || maxSize < minSize) {
+					LOGGER.log(Level.WARNING, "Max Population size: " + populationMaxSize.getText() + " is not correct");
 					populationMaxSize.setBackground(Color.RED);
 					throw new IllegalArgumentException("Max size is not valid");
 				}
 				if (minSize > size) {
+					LOGGER.log(Level.WARNING, "Min Population size: " + populationMinSize.getText() + " is not correct");
 					populationMinSize.setBackground(Color.RED);
 					throw new IllegalArgumentException("Min size is not valid");
 				}
@@ -884,10 +917,12 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 				try {
 					size = Integer.parseInt(populatonSize.getText());
 					if (size <= 0) {
+						LOGGER.log(Level.WARNING, "Population size: " + populatonSize.getText() + " is not correct");
 						populatonSize.setBackground(Color.RED);
 						throw new IllegalArgumentException("Size is not valid");
 					}
 				} catch (NumberFormatException e) {
+					LOGGER.log(Level.WARNING, "Population size: " + populatonSize.getText() + " is not correct");
 					populatonSize.setBackground(Color.RED);
 					throw new IllegalArgumentException("Size is not valid");
 				}
@@ -904,10 +939,12 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 				try {
 					sParameterValor = Double.parseDouble(sParameter.getText());
 					if (sParameterValor <= 1 || sParameterValor > 2 ) {
+						LOGGER.log(Level.WARNING, "S parameter value: " + sParameter.getText() + " is not correct");
 						sParameter.setBackground(Color.RED);
 						throw new IllegalArgumentException("sParameter is not valid");
 					}
 				} catch (NumberFormatException e) {
+					LOGGER.log(Level.WARNING, "S parameter value: " + sParameter.getText() + " is not correct");
 					sParameter.setBackground(Color.RED);
 					throw new IllegalArgumentException("sParameter is not valid");
 				}
@@ -923,10 +960,12 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			try {
 				probability = Double.parseDouble(probabilityRecombination.getText());
 				if ( probability < 0 || probability > 1) {
+					LOGGER.log(Level.WARNING, "Recombination probability value: " + probabilityRecombination.getText() + " is not correct");
 					probabilityRecombination.setBackground(Color.RED);
 					throw new IllegalArgumentException("Probability Recombination is not valid");
 				}
 			} catch (NumberFormatException e) {
+				LOGGER.log(Level.WARNING, "Recombination probability value: " + probabilityRecombination.getText() + " is not correct");
 				probabilityRecombination.setBackground(Color.RED);
 				throw new IllegalArgumentException("Probability Recombination is not valid");
 			}
@@ -941,10 +980,12 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 			try {
 				probability = Double.parseDouble(probabilityMutation.getText());
 				if ( probability < 0 || probability > 1) {
+					LOGGER.log(Level.WARNING, "Mutation probability value: " + probabilityMutation.getText() + " is not correct");
 					probabilityMutation.setBackground(Color.RED);
 					throw new IllegalArgumentException("Probability Mutation is not valid");
 				}
 			} catch (NumberFormatException e) {
+				LOGGER.log(Level.WARNING, "Mutation probability value: " + probabilityMutation.getText() + " is not correct");
 				probabilityMutation.setBackground(Color.RED);
 				throw new IllegalArgumentException("Probability Mutation is not valid");
 			}
@@ -960,10 +1001,12 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 				try {
 					survivorsValor = Integer.parseInt(survivors.getText());
 					if (survivorsValor < 0) {
+						LOGGER.log(Level.WARNING, "Survivors value: " + survivors.getText() + " is not correct");
 						survivors.setBackground(Color.RED);
 						throw new IllegalArgumentException("Survivors number is not valid");
 					}
 				} catch (NumberFormatException e) {
+					LOGGER.log(Level.WARNING, "Survivors value: " + survivors.getText() + " is not correct");
 					survivors.setBackground(Color.RED);
 					throw new IllegalArgumentException("Survivors number is not valid");
 				}
@@ -973,10 +1016,12 @@ public class GeneticAlgorithmConfigGui extends JPanel {
 				try {
 					numberBattleValor = Integer.parseInt(numberBattle.getText());
 					if (numberBattleValor < 0) {
+						LOGGER.log(Level.WARNING, "Number battles value: " + numberBattle.getText() + " is not correct");
 						numberBattle.setBackground(Color.RED);
 						throw new IllegalArgumentException("Battle number is not valid");
 					}
 				} catch (NumberFormatException e) {
+					LOGGER.log(Level.WARNING, "Number battles value: " + numberBattle.getText() + " is not correct");
 					numberBattle.setBackground(Color.RED);
 					throw new IllegalArgumentException("Battle number is not valid");
 				}

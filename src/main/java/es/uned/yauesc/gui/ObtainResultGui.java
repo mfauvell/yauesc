@@ -37,15 +37,17 @@ import javax.swing.JList;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.awt.event.ItemEvent;
 import javax.swing.ScrollPaneConstants;
 import java.awt.Font;
 
+/**
+ * Clase que encapasula la gui que permite al usuario exportar los resultados obtenidos aplicando diferentes filtros
+ */
 public class ObtainResultGui extends JPanel {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4350197841151246760L;
 	
 	private DataUnedController dataUnedController;
@@ -63,10 +65,14 @@ public class ObtainResultGui extends JPanel {
 	private boolean filterGrade;
 	private boolean filterCourse;
 	
+	private final static Logger LOGGER = Logger.getLogger(ObtainResultGui.class.getName());
+	
 	/**
-	 * Create the panel.
+	 * Crea el panel donde el usuario puede interactuar y extraer los resultados de la aplicación
 	 */
 	public ObtainResultGui(DataUnedController dataUnedController) {
+		LOGGER.log(Level.INFO, "ObtainResult gui created");
+		
 		this.dataUnedController = dataUnedController;
 		
 		filterGrade = false;
@@ -321,6 +327,8 @@ public class ObtainResultGui extends JPanel {
 				filterCourse = true;
 				filterGrade = false;
 				List<String> courses = new ArrayList<>(listCourse.getSelectedValuesList());
+				LOGGER.log(Level.INFO, "Course filter applied");
+				LOGGER.log(Level.INFO, "Applied courses: " + courses);
 				textAreaResult.setText(dataUnedController.getByCourseScheduleString(courses));
 			}
 		});
@@ -346,6 +354,8 @@ public class ObtainResultGui extends JPanel {
 				filterCourse = false;
 				filterGrade = true;
 				String grade = (String) comboBoxGrade.getSelectedItem();
+				LOGGER.log(Level.INFO, "Grade filter applied");
+				LOGGER.log(Level.INFO, "Applied grade: " + grade);
 				textAreaResult.setText(dataUnedController.getByGradeScheduleString(grade));
 			}
 		});
@@ -388,6 +398,9 @@ public class ObtainResultGui extends JPanel {
 		if (returnValor == JFileChooser.APPROVE_OPTION) {
 			filePath = filePathChooser.getSelectedFile().getAbsolutePath();
 			
+			LOGGER.log(Level.INFO, "Export " + formatFile + " file.");
+			LOGGER.log(Level.INFO, "Export path: " + filePath);
+			
 			if (filterGrade) {
 				String grade = (String) comboBoxGrade.getSelectedItem();
 				dataUnedController.createByGradeSchedule(filePath, grade, formatFile);
@@ -407,15 +420,21 @@ public class ObtainResultGui extends JPanel {
 		chckbxCourseEnable.setSelected(false);
 		comboBoxGrade.setSelectedIndex(-1);
 		listCourse.clearSelection();
+		LOGGER.log(Level.INFO, "Reset panel");
 	}
 	
 	private void clearFilter() {
 		textAreaResult.setText(dataUnedController.getAllScheduleString());
 		filterCourse = false;
 		filterGrade = false;
+		LOGGER.log(Level.INFO, "Filter cleared");
 	}
 	
+	/**
+	 * Inicializa el panel
+	 */
 	public void initialize() {
+		LOGGER.log(Level.INFO, "Initialize panel");
 		reset();
 		comboBoxGrade.removeAllItems();
 		listCourse.removeAll();
@@ -425,7 +444,14 @@ public class ObtainResultGui extends JPanel {
 		third.setText("");
 	}
 	
+	/**
+	 * Prepara el panel y configura los desplegables y la solución incial
+	 * 
+	 * @param gradeCodeList 	contenido del desplegable grade
+	 * @param courseCodeList	contenido del desplegable course
+	 */
 	public void preparePanel(List<String> gradeCodeList, List<String> courseCodeList) {
+		LOGGER.log(Level.INFO, "Prepare panel");
 		textAreaResult.setText(dataUnedController.getAllScheduleString());
 		FitnessUned fitnessSolution = dataUnedController.getSolutionFitness();
 		first.setText("" +fitnessSolution.getFirstLevel());
