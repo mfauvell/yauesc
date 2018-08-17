@@ -24,9 +24,6 @@ public class App {
 	
 	//General log
 	private final static Logger ROOT_LOG = Logger.getLogger("es.uned.yauesc");
-//	private final static Logger GENETICALGORITHM_LOG = Logger.getLogger("es.uned.yauesc.geneticAlgorithm");
-//	private final static Logger DATAUNED_LOG = Logger.getLogger("es.uned.yauesc.dataUned");
-//	private final static Logger GUI_LOG = Logger.getLogger("es.uned.yauesc.gui");
 	
 	//This class log
 	private final static Logger LOGGER = Logger.getLogger(App.class.getName());

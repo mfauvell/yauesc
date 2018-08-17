@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -18,6 +20,9 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+/**
+ * Clase que encapsula la transformación de una solución en el calendario asociado y que permite la exportación del calendario en varios formatos
+ */
 @XmlRootElement(name = "schedule")
 public class DataUnedSchedule {
 	
@@ -30,61 +35,133 @@ public class DataUnedSchedule {
 	@XmlElement(name = "day")
 	private List<XMLDay> listXML;
 	
+	private final static Logger LOGGER = Logger.getLogger(DataUnedSchedule.class.getName());
+	
+	/**
+	 * Constructor básico de DataUnedSchedule
+	 */
 	public DataUnedSchedule() {
 		listXML = new ArrayList<>();
 	}
 	
+	/**
+	 * Constructor que inicializa la solución de DataUnedSchedule
+	 * 
+	 * @param solution			el genotipo solución
+	 * @param fitnessSolution	la adecuación de la solución
+	 * @param dataUned			una instancia de DataUned con todos los datos necesarios
+	 */
 	public DataUnedSchedule(List<Integer> solution, FitnessUned fitnessSolution, DataUned dataUned) {
 		this();
 		this.fitnessSolution = fitnessSolution;
 		this.dataUned = dataUned;
 		parseSolution(solution);
+		LOGGER.log(Level.INFO, "Created Schedule");
+		LOGGER.log(Level.INFO, getStringAllSchedule());
 	}
 
+	/**
+	 * Obtiene la adecuación de la solución
+	 * 
+	 * @return	fitnessSolution
+	 */
 	public FitnessUned getFitnessSolution() {
 		return fitnessSolution;
 	}
 	
+	/**
+	 * Obtiene el calendario sin filtro en forma de string
+	 * 
+	 * @return un string con el calendario
+	 */
 	public String getStringAllSchedule() {
 		return createString(examTimeListCourse);
 	}
 	
+	/**
+	 * Obtiene el caldenadario filtrado por grado en forma de string
+	 * 
+	 * @param grade	el grado por el cual se filtra
+	 * 
+	 * @return	un string con el calendario filtrado
+	 */
 	public String getStringByGradeSchedule(String grade) {
 		return createString(filterByGrade(grade));
 	}
 	
+	/**
+	 * Obtiene el calendario filtrado por una lista de asignaturas en forma de string
+	 * 
+	 * @param courseList	la lista de asignaturas para realizar el filtro
+	 * 
+	 * @return	un strin con el calendario filtrado
+	 */
 	public String getStringByCourseSchedule(List<String> courseList) {
 		return createString(filterByCourse(courseList));
 	}
 	
+	/**
+	 * Obtiene un archivo en formato XML con el calendario sin filtrar
+	 * 
+	 * @param filePath	la ruta al archivo destino
+	 */
 	public void createXMLAllSchedule(String filePath) {
 		createXMLData(examTimeListCourse);
 		createXmlFile(filePath);
 	}
 	
+	/**
+	 * Obtiente un archivo en formato XML con el calenario filtrado por grado
+	 * 
+	 * @param filePath	la ruta al archivo destino
+	 * @param grade		el grado por el cual se filtra
+	 */
 	public void createXMLByGradeSchedule(String filePath, String grade) {
 		Map<ExamTime, List<Course>> examTimeCourseList = filterByGrade(grade);
 		createXMLData(examTimeCourseList);
 		createXmlFile(filePath);
 	}
 	
+	/**
+	 * Obtiene un archivo en formato XML con el calendario filtrado por una lista de asignaturas
+	 * 
+	 * @param filePath		la ruta al archivo destino
+	 * @param courseList	la lista de asignaturas por la cula filtrar
+	 */
 	public void createXMLByListCourseSchedule(String filePath, List<String> courseList) {
 		Map<ExamTime, List<Course>> examTimeCourseList = filterByCourse(courseList);
 		createXMLData(examTimeCourseList);
 		createXmlFile(filePath);
 	}
 	
+	/**
+	 * Obtiente un archivo en formato CSV con el calendario sin filtrar
+	 * 
+	 * @param filePath	la ruta al archivo destino
+	 */
 	public void createCsvAllSchedule(String filePath) {
 		String content = createCsvString(examTimeListCourse);
 		createFile(filePath, content);
 	}
 	
+	/**
+	 * Obtiene un archivo en formato CSV con el calendario filtrado por grado
+	 * 
+	 * @param filePath	la ruta al archivo destino
+	 * @param grade		el grado por el cual filtrar
+	 */
 	public void createCsvByGradeSchedule(String filePath, String grade) {
 		Map<ExamTime, List<Course>> examTimeCourseList = filterByGrade(grade);
 		String content = createCsvString(examTimeCourseList);
 		createFile(filePath, content);
 	}	
 	
+	/**
+	 * Obtiene un archivo en formato CSV con el calendario filtrado por lista de asignaturas
+	 * 
+	 * @param filePath		la ruta al archivo destino
+	 * @param courseList	la lista de asignaturas por la cual filtrar
+	 */
 	public void createCsvByListCourseSchedule(String filePath, List<String> courseList) {
 		Map<ExamTime, List<Course>> examTimeCourseList = filterByCourse(courseList);
 		String content = createCsvString(examTimeCourseList);
@@ -173,15 +250,17 @@ public class DataUnedSchedule {
 			fw = new FileWriter(file);
 			fw.write(content);
 		} catch (IOException e) {
-			System.out.print("I/O error, check your data\n");
-			System.exit(1);
+			LOGGER.log(Level.SEVERE, "It is not posible create file");
+			//System.out.print("I/O error, check your data\n");
+			//System.exit(1);
 		} finally {
 			if (fw != null) {
 				try {
 					fw.close();
 				} catch (IOException e) {
-					System.out.print("I/O error, check your data\n");
-					System.exit(1);
+					LOGGER.log(Level.SEVERE, "It is not posible create file");
+					//System.out.print("I/O error, check your data\n");
+					//System.exit(1);
 				}
 			}
 		}
@@ -195,8 +274,9 @@ public class DataUnedSchedule {
 			marshall.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			marshall.marshal(this, new File(filePath));
 		} catch (JAXBException e) {
-			System.out.print("I/O error, check your data\n");
-			System.exit(1);
+			LOGGER.log(Level.SEVERE, "It is not posible create file");
+			//System.out.print("I/O error, check your data\n");
+			//System.exit(1);
 		}
 	}
 	

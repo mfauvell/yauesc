@@ -1,5 +1,8 @@
 package es.uned.yauesc.dataUned;
 
+/**
+ * Clase que encapsula una fecha de examen
+ */
 public class ExamTime implements Comparable<ExamTime> {
 	
 	private int day;
@@ -7,6 +10,14 @@ public class ExamTime implements Comparable<ExamTime> {
 	private String dayName;
 	private String hourName;
 
+	/**
+	 * Constructor por defecto que asigna un día con su nombre y una hora con su nombre
+	 * 
+	 * @param day
+	 * @param dayName
+	 * @param hour
+	 * @param hourName
+	 */
 	public ExamTime(int day, String dayName, int hour, String hourName) {
 		this.day = day;
 		this.hour = hour;
@@ -14,18 +25,38 @@ public class ExamTime implements Comparable<ExamTime> {
 		this.hourName = hourName;
 	}
 
+	/**
+	 * Devuelve el día numérico que al que pertenece la fecha de examen
+	 * 
+	 * @return day
+	 */
 	public int getDay() {
 		return day;
 	}
 
+	/**
+	 * Devuelve el texto asociado al día numérico
+	 * 
+	 * @return dayName
+	 */
 	public String getDayName() {
 		return dayName;
 	}
 
+	/**
+	 * Devuelve la hora numérica a la que se realizará el examen
+	 * 
+	 * @return	hour
+	 */
 	public int getHour() {
 		return hour;
 	}
 
+	/**
+	 * Devuelve el texto asociado a la hora numérica 
+	 * 
+	 * @return
+	 */
 	public String getHourName() {
 		return hourName;
 	}

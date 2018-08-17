@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import es.uned.yauesc.geneticAlgorithm.EvaluationFunction;
 import es.uned.yauesc.geneticAlgorithm.Fitness;
 import es.uned.yauesc.geneticAlgorithm.Individual;
 
+/**
+ * Clase que evalua soluciones encontradas por el algoritmo genético desde el punto de vista de la UNED
+ */
 public class EvaluationFunctionUned implements EvaluationFunction {
 
 	private DataUned dataUned;
@@ -20,6 +25,14 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 	private long thirdAgeDivisor;
 	private long fourthAgeDivisor;
 	
+	private final static Logger LOGGER = Logger.getLogger(EvaluationFunctionUned.class.getName());
+	
+	/**
+	 * Constructor por defecto de EvaluationFunctionUned
+	 * 
+	 * @param dataUned				una instancia de DataUned con todos los datos de la UNED necesarios
+	 * @param percentagePresented	el porcentaje previsto de alumnos presentados en los exámenes
+	 */
 	public EvaluationFunctionUned(DataUned dataUned, double percentagePresented) {
 		this.dataUned = dataUned;
 		this.percentagePresented = percentagePresented;
@@ -27,19 +40,20 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 	
 	@Override
 	public Collection<Individual> evaluate(Collection<Individual> individualPopulation) {
+		LOGGER.log(Level.INFO, "Initiated evaluation");
 		return individualPopulation
 				.parallelStream()
 				.map(individual -> { 
 					if (!individual.isEvaluated()) {
 						individual.setFitness(calculateFitness(individual.getGenotype()));
 					}
+					LOGGER.log(Level.INFO, "Result of evaluate: " + individual.toString());
 					return individual;
 				})
 				.collect(Collectors.toList());
 	}
 
 	private Fitness calculateFitness(List<Integer> genotype) {
-		//TODO Refactor and test
 		String obligatory = "Obligatory"; //Text to Obligatory courses.
 		String optional = "Optional"; //Text to Obligatory courses.
 		LinkedHashMap<ExamTime, List<Course>> examTimeCourseListMap = new LinkedHashMap<>();
@@ -281,6 +295,7 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 					}).
 					sum()).
 			sum();
+		LOGGER.log(Level.INFO, "For genotype: " + genotype + " assignet fitness: " + firstLevel + " " + secondLevel + " " + thirdLevel );
 		return DataUnedFactory.getFitnessUned(firstLevel, secondLevel, thirdLevel);
 	}
 
@@ -291,6 +306,8 @@ public class EvaluationFunctionUned implements EvaluationFunction {
 			.forEach(individual -> {
 				int age = getAge((FitnessUned) individual.getFitness());
 				individual.setAge(age);
+				LOGGER.log(Level.INFO, "Set Age: " + individual.toString());
+				LOGGER.log(Level.INFO, "New age: " + age);
 		});
 		return offspring;
 	}

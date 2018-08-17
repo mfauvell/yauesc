@@ -35,3 +35,4 @@ gradlew.bat
 #Data from thirds
 #/data/
 /export/*
+/log/*

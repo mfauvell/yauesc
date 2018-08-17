@@ -1,5 +1,8 @@
 package es.uned.yauesc.dataUned;
 
+/**
+ * Data Uned default configuration
+ */
 public final class DataUnedDefaultConfiguration {
 	
 	public static final int FIRST_LEVEL_OPTIMAL_FITNESS = 0;
