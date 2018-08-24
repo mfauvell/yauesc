@@ -4,14 +4,28 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Clase que representa el operador de selección de supervivientes por roundrobin donde se realizan una
+ * competición con un número de combates todos contra todos y sobreviven los que más batallas venzan.
+ */
 public class SurvivorSelectorRoundRobin implements SurvivorSelector {
 
 	private int battleNumber;
 	private GeneticAlgorithmUtils geneticAlgorithmUtils;
 	
+	private final static Logger LOGGER = Logger.getLogger(SurvivorSelectorRoundRobin.class.getName());
+	
+	/**
+	 * Constructor del operador de selección de supervivientes utilizando roundRobin
+	 * 
+	 * @param geneticAlgorithmUtils		utilidades auxiliares de caracter estocástico
+	 * @param battleNumber				número de batallas
+	 */
 	public SurvivorSelectorRoundRobin(GeneticAlgorithmUtils geneticAlgorithmUtils, int battleNumber) {
 		this.battleNumber = battleNumber;
 		this.geneticAlgorithmUtils = geneticAlgorithmUtils;
@@ -26,7 +40,7 @@ public class SurvivorSelectorRoundRobin implements SurvivorSelector {
 				.mapToInt(individual ->  doFight(individual, fighters))
 				.boxed()
 				.collect(Collectors.toList()));
-		return IntStream.range(0, fightResult.size())
+		Collection<Individual> survivor = IntStream.range(0, fightResult.size())
 				.parallel()
 				.boxed()
 				.collect(Collectors.toMap(index-> index, index -> fightResult.get(index))).entrySet()
@@ -38,6 +52,8 @@ public class SurvivorSelectorRoundRobin implements SurvivorSelector {
 				.parallelStream()
 				.map(index -> fighters.get(index))
 				.collect(Collectors.toList());
+		LOGGER.log(Level.INFO, "Survivors: " + survivor.toString());
+		return survivor;
 	}
 
 	private int doFight(Individual individual, ArrayList<Individual> fighters) {

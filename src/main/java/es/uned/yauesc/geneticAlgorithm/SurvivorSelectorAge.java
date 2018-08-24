@@ -3,12 +3,25 @@ package es.uned.yauesc.geneticAlgorithm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * Clase que representa el operador de selección de supervivientes por la edad. Reduce la edad de cada individuo por la edad y
+ * los que llegan a 0 son eleiminados.
+ */
 public class SurvivorSelectorAge implements SurvivorSelector {
 	
 	private EvaluationFunction evaluationFunction;
 
+	private final static Logger LOGGER = Logger.getLogger(SurvivorSelectorAge.class.getName());
+	
+	/**
+	 * Constructor del operardor de selección de supervivientes por edad
+	 * 
+	 * @param evaluationFunction	función de evaluación que configura la edad de los individuos
+	 */
 	public SurvivorSelectorAge(EvaluationFunction evaluationFunction) {
 		this.evaluationFunction = evaluationFunction;
 	}
@@ -42,6 +55,7 @@ public class SurvivorSelectorAge implements SurvivorSelector {
 			offspringAged = new ArrayList<Individual>(offspringAged.subList(0, gap));
 		}
 		survivor.addAll(offspringAged);
+		LOGGER.log(Level.INFO, "Survivors: " + survivor.toString());
 		return survivor;
 	}
 

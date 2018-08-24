@@ -2,14 +2,27 @@ package es.uned.yauesc.geneticAlgorithm;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Clase que representa a un selector de padres para un algoritmo genético utilizando la selección por ranking
+ */
 public class ParentSelectorRanking implements ParentSelector {
 	
 	private GeneticAlgorithmUtils geneticAlgorithmUtils;
 	private double sParameter;
+	
+	private final static Logger LOGGER = Logger.getLogger(ParentSelectorRanking.class.getName());
 
+	/**
+	 * Constructor para el selector de padres por ranking
+	 * 
+	 * @param geneticAlgorithmUtils		utilidades auxiliares de caracter estocástico
+	 * @param sParameter				Parámetro S
+	 */
 	public ParentSelectorRanking(GeneticAlgorithmUtils geneticAlgorithmUtils, double sParameter) {
 		this.geneticAlgorithmUtils = geneticAlgorithmUtils;
 		if (sParameter <= 1.0 || sParameter > 2) {
@@ -22,10 +35,12 @@ public class ParentSelectorRanking implements ParentSelector {
 	public Collection<Individual> selectParents(Collection<Individual> individualsPopulation, int number) {
 		ArrayList<Individual> individuals = new ArrayList<Individual>(individualsPopulation);
 		ArrayList<Double> probabilities = new ArrayList<Double>(calculateAcumulatedProbabilities(individuals));
-		return IntStream.range(0, number)
+		Collection<Individual> result = IntStream.range(0, number)
 				.parallel()
 				.mapToObj(i -> getParent(individuals, probabilities, geneticAlgorithmUtils.getProbability()))
 				.collect(Collectors.toList());
+		LOGGER.log(Level.INFO, "Parent selected: " + result.toString());
+		return result;
 	}
 	
 	private Individual getParent(ArrayList<Individual> individuals, ArrayList<Double> probabilities, double probability) {

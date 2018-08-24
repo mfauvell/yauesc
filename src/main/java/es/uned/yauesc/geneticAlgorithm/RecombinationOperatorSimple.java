@@ -3,14 +3,28 @@ package es.uned.yauesc.geneticAlgorithm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Clase que representa el operador de recombinacion simple de un algoritmo genético donde se crean dos hijos a partir de dos padres mezclando
+ * genotipo en un punto de corte dado.
+ */
 public class RecombinationOperatorSimple implements RecombinationOperator{
 
 	private double probability;
 	private GeneticAlgorithmUtils geneticAlgorithmUtils;
 	
+	private final static Logger LOGGER = Logger.getLogger(RecombinationOperatorSimple.class.getName());
+	
+	/**
+	 * Constructor para el operador de recombinación simple
+	 * 
+	 * @param probability				probabilidad de que se produzca una recombinación
+	 * @param geneticAlgorithmUtils		utilidades auxiliares de caracter estocástico
+	 */
 	public RecombinationOperatorSimple(double probability, GeneticAlgorithmUtils geneticAlgorithmUtils) {
 		this.probability = probability;
 		this.geneticAlgorithmUtils = geneticAlgorithmUtils;
@@ -41,7 +55,6 @@ public class RecombinationOperatorSimple implements RecombinationOperator{
 			List<Integer> firstSonGenotype = new ArrayList<Integer>();
 			List<Integer> secondSonGenotype = new ArrayList<Integer>();
 			int size = firstGenotype.size();
-			//TODO inefficient, best with streams but I don't see how
 			for (int i = 0; i< size; i++) {
 				if (i <= crossPoint) {
 					firstSonGenotype.add(firstGenotype.get(i));
@@ -51,6 +64,7 @@ public class RecombinationOperatorSimple implements RecombinationOperator{
 					secondSonGenotype.add(firstGenotype.get(i));
 				}
 			}
+			LOGGER.log(Level.INFO, "Recombine first genotype: " + firstGenotype + " with second genotype: " + secondGenotype + " at crosspoint: " + crossPoint);
 			result.add(new Individual(firstSonGenotype));
 			result.add(new Individual(secondSonGenotype));
 		} else {

@@ -1,16 +1,31 @@
 package es.uned.yauesc.geneticAlgorithm;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Clase que representa al operador de recombinación uniforme del algoritmo genético, donde se realiza la mezcla
+ * de dos genotipos de dos padres siguiendo una mascara binaria donde un 0 representa un padre y un 1 otro en un
+ * descendiente y viceversa en el otro
+ */
 public class RecombinationOperatorUniform implements RecombinationOperator {
 	
 	private double probability;
 	private GeneticAlgorithmUtils geneticAlgorithmUtils;
+	
+	private final static Logger LOGGER = Logger.getLogger(RecombinationOperatorUniform.class.getName());
 
+	/**
+	 * Constructor para el operador de recombinación uniforme
+	 * 
+	 * @param probability				probabilidad de que se produzca una recombinación
+	 * @param geneticAlgorithmUtils		utilidades auxiliares de caracter estocástico
+	 */
 	public RecombinationOperatorUniform(double probability, GeneticAlgorithmUtils geneticAlgorithmUtils) {
 		this.probability = probability;
 		this.geneticAlgorithmUtils = geneticAlgorithmUtils;
@@ -41,7 +56,6 @@ public class RecombinationOperatorUniform implements RecombinationOperator {
 			List<Integer> firstSonGenotype = new ArrayList<Integer>();
 			List<Integer> secondSonGenotype = new ArrayList<Integer>();
 			int size = firstGenotype.size();
-			//TODO inefficient, best with streams but I don't see how
 			for (int i = 0; i< size; i++) {
 				if (mask.get(i) == 1) {
 					firstSonGenotype.add(firstGenotype.get(i));
@@ -51,6 +65,7 @@ public class RecombinationOperatorUniform implements RecombinationOperator {
 					secondSonGenotype.add(firstGenotype.get(i));
 				}
 			}
+			LOGGER.log(Level.INFO, "Recombine first genotype: " + firstGenotype + " with second genotype: " + secondGenotype + " with mask: " + mask.toString());
 			result.add(new Individual(firstSonGenotype));
 			result.add(new Individual(secondSonGenotype));
 		} else {
