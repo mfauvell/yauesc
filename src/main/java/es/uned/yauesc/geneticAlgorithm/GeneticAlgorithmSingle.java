@@ -3,7 +3,12 @@ package es.uned.yauesc.geneticAlgorithm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+/**
+ * Clase que encapsula la ejecución de un algoritmo genético simple
+ */
 public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 	
 	private Population population;
@@ -20,7 +25,22 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 	private Individual solution;
 	
 	private Collection<GeneticAlgorithmObserver> observers;
+	
+	private final static Logger LOGGER = Logger.getLogger(GeneticAlgorithmSingle.class.getName());
 
+	/**
+	 * Constructor que crea por defecto un algoritmo genético conlos operadores pasados como argumento
+	 * 
+	 * @param population				la población inicial del algoritmo
+	 * @param evaluationFunction		la función de evaluación a utilizar
+	 * @param parentSelector			el operador selector de padres
+	 * @param recombinationOperator		el operador de cruce
+	 * @param mutationOperator			el operador de mutación
+	 * @param survivorSelector			el selector de supervivientes
+	 * @param generations				el número de generaciones a realizar
+	 * @param optimalFitness			la adecaución optima para detener el agoritmo
+	 * @param sizeOffspring				el tamaño de la descendencia a generar en cada iteración
+	 */
 	public GeneticAlgorithmSingle(Population population, EvaluationFunction evaluationFunction,
 			ParentSelector parentSelector, RecombinationOperator recombinationOperator,
 			MutationOperator mutationOperator, SurvivorSelector survivorSelector, int generations, Fitness optimalFitness, int sizeOffspring) {
@@ -46,14 +66,31 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 		return solution;
 	}
 
+	/**
+	 * Obtiene los mejores individuos en el número pasado como argumento
+	 * 
+	 * @param number	el número de inviduos a obtener
+	 * 
+	 * @return	una colección de individuos
+	 */
 	public Collection<Individual> getBestIndividual(int number) {
 		return population.getBestIndividual(number);
 	}
 	
+	/**
+	 * Configura el número de generaciones
+	 * 
+	 * @param number	el número de generaciones a configurar
+	 */
 	public void setGenerations(int number) {
 		generations = number;	
 	}
 	
+	/**
+	 * Configura una nueva población en el algoritmo
+	 * 
+	 * @param newPopulation	la nueva población
+	 */
 	public void setPopulation(Population newPopulation) {
 		population = newPopulation;
 		
@@ -67,6 +104,8 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 		}
 		
 		solution = population.getBestIndividual();
+		
+		LOGGER.log(Level.INFO, "New population set: " + population.toString());
 	}
 	
 	@Override
@@ -77,6 +116,8 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 		else
 			finished = false;
 		while (!finished) {
+			
+			LOGGER.log(Level.INFO, "Iteration number: " + index);
 			
 			Collection<Individual> parents = parentSelector.selectParents(population.getAllIndividual(), sizeOffspring);
 			
@@ -92,6 +133,7 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 			int compareSolution = bestOfGeneration.compareTo(solution);
 			if (compareSolution > 0) {
 				solution = bestOfGeneration;
+				LOGGER.log(Level.INFO, "Set new solution: " + solution);
 			}
 			
 			int comparedFitness = solution.getFitness().compareTo(optimalFitness);
@@ -107,6 +149,7 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 			
 			notifyObservers();
 		}
+		LOGGER.log(Level.INFO, "Finished genetic algorithm execution");
 	}
 	
 	@Override
@@ -119,6 +162,11 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 		finished = true;
 	}
 
+	/**
+	 * Indica si se ha encontrado la solución óptima
+	 * 
+	 * @return	foundOptimal
+	 */
 	public boolean foundOptimal() {
 		return foundOptimal;
 	}
@@ -128,6 +176,11 @@ public class GeneticAlgorithmSingle implements GeneticAlgorithm {
 		solution = null;
 	}
 	
+	/**
+	 * Substituye los peores individuos por los pasados como argumento
+	 * 
+	 * @param newIndividual	los nuevos individuos a añadir
+	 */
 	public void substituteWorstIndividual(Collection<Individual> newIndividual) {
 		population.substituteWorstIndividual(newIndividual);
 	}

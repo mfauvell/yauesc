@@ -1,5 +1,8 @@
 package es.uned.yauesc.geneticAlgorithm;
 
+/**
+ * Configuración por defecto del algoritmo genético
+ */
 public class GeneticAlgorithmDefaultConfig {
 
 	public static final boolean isParallel = true;

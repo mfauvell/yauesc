@@ -64,7 +64,7 @@ public class App {
 			SimpleFormatter simpleFormatter = new SimpleFormatter();
 			fileHandler.setFormatter(simpleFormatter);
 			ROOT_LOG.addHandler(fileHandler);
-			ROOT_LOG.setLevel(Level.INFO);
+			ROOT_LOG.setLevel(Level.WARNING);
 		} catch (SecurityException | IOException e) {
 			System.out.println("It is not posible create log file");
 			System.exit(1);

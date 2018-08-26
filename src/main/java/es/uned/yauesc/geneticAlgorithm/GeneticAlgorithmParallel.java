@@ -5,7 +5,12 @@ import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+/**
+ * Clase que encapsula la ejecución de un algoritmo genético compuesto
+ */
 public class GeneticAlgorithmParallel implements GeneticAlgorithm {
 	
 	private GeneticAlgorithmSingle firstGeneticAlgorithmSingle;
@@ -22,7 +27,19 @@ public class GeneticAlgorithmParallel implements GeneticAlgorithm {
 	private boolean finished;
 	
 	private Collection<GeneticAlgorithmObserver> observers;
+	
+	private final static Logger LOGGER = Logger.getLogger(GeneticAlgorithmParallel.class.getName());
 
+	/**
+	 * Consgructor por defecto un algoritmo genético compuesto
+	 * 
+	 * @param firstGeneticAlgorithmSingle	un algoritmo genético simple
+	 * @param secondGeneticAlgorithmSingle	un algoritmo genético simple
+	 * @param thirdGeneticAlgorithmSingle	un algoritmo genético simple
+	 * @param generations					generaciones a realizar
+	 * @param migrationGenerations			frecuencia para realizar migraciones
+	 * @param numberMigration				numéro de individuos a intercambiar
+	 */
 	public GeneticAlgorithmParallel(GeneticAlgorithmSingle firstGeneticAlgorithmSingle,
 			GeneticAlgorithmSingle secondGeneticAlgorithmSingle, GeneticAlgorithmSingle thirdGeneticAlgorithmSingle,
 			int generations, int migrationGenerations, int numberMigration) {
@@ -51,6 +68,7 @@ public class GeneticAlgorithmParallel implements GeneticAlgorithm {
 		else
 			finished = false;
 		while (!finished) {
+			LOGGER.log(Level.INFO, "Parallel iteration: " + index);
 			if (index == times -1) {
 				int lastGenerations = generations - (index * migrationGenerations);
 				firstGeneticAlgorithmSingle.setGenerations(lastGenerations);
@@ -74,6 +92,7 @@ public class GeneticAlgorithmParallel implements GeneticAlgorithm {
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 				System.out.println("Failed execution of algorithm");
+				LOGGER.log(Level.SEVERE, "Thread interrupted");
 			}
 			
 			setSolution();
@@ -81,6 +100,10 @@ public class GeneticAlgorithmParallel implements GeneticAlgorithm {
 			Collection<Individual> firstBest = firstGeneticAlgorithmSingle.getBestIndividual(numberMigration);
 			Collection<Individual> secondBest = secondGeneticAlgorithmSingle.getBestIndividual(numberMigration);
 			Collection<Individual> thirdBest = thirdGeneticAlgorithmSingle.getBestIndividual(numberMigration);
+			
+			LOGGER.log(Level.INFO, "First genetic algorithm migration: " + firstBest.toString());
+			LOGGER.log(Level.INFO, "Second genetic algorithm migration: " + secondBest.toString());
+			LOGGER.log(Level.INFO, "Third genetic algorithm migration: " + thirdBest.toString());
 			
 			firstGeneticAlgorithmSingle.substituteWorstIndividual(thirdBest);
 			secondGeneticAlgorithmSingle.substituteWorstIndividual(firstBest);
@@ -97,7 +120,7 @@ public class GeneticAlgorithmParallel implements GeneticAlgorithm {
 			
 			notifyObservers();
 		}
-
+		LOGGER.log(Level.INFO, "Finished parallel execution");
 	}
 	
 	@Override
@@ -149,6 +172,7 @@ public class GeneticAlgorithmParallel implements GeneticAlgorithm {
 		}
 		if (solution == null || candidateSolution.compareTo(solution)>0) {
 			solution = candidateSolution;
+			LOGGER.log(Level.INFO, "Set new solution: " + solution);
 		}
 	}
 
