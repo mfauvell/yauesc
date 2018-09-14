@@ -47,7 +47,7 @@ configurations {
 }
 
 sourceCompatibility = 1.8
-version = '0.9'
+version = '1.1'
 jar {
     manifest {
         attributes 'Implementation-Title': 'yauesc',
